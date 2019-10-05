@@ -17,8 +17,10 @@ public class InitActivity extends AppCompatActivity {
         // hide status bar
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
+
         // hide title bar
         getSupportActionBar().hide();
+
 
         setContentView(R.layout.activity_init);
 

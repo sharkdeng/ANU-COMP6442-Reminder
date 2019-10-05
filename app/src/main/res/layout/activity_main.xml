@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,11 +8,52 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <ListView
-        android:id="@+id/listView"
-        android:layout_width="395dp"
-        android:layout_height="715dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        android:id="@+id/main_lv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/main_nav_frame"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+
+    <!-- Bottom Nav Menu -->
+    <FrameLayout
+        android:id="@+id/main_nav_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_lv"
+        tools:context=".ui.Sample_BottomNavActivity">
+
+
+
+
+        <!-- Bottom Nav Menu -->
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/main_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/controlNormal"
+            app:itemIconTint="@color/white"
+            app:itemTextColor="@color/white"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/main_bottom_nav"
+            >
+
+        </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    </FrameLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

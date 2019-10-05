@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -24,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
 
     static ArrayList<String> list = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
-    /*
-    @author: u6734521
-     */
 
+
+    /** Add menu items to toolbar
+     * author: u6734521
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences to store data
          */
 
-        ListView listView = findViewById(R.id.listView);
+        ListView listView = findViewById(R.id.main_lv);
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 
@@ -115,5 +118,40 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
+
+        /**
+         * author: Limin Deng(u6849956)
+         * FIXME: why selected callback is not done
+         */
+        // callback when item on BottomNavigationView is selected
+        BottomNavigationView bnv = findViewById(R.id.main_nav);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                System.out.println("good");
+                switch (menuItem.getItemId()) {
+                    case R.id.main_item_1:
+                        System.out.println("First item is selected");
+                        break;
+                    case R.id.main_item_2:
+                        System.out.println("Second item is selected");
+                        break;
+                    case R.id.main_item_3:
+                        System.out.println("Third item is selected");
+                        break;
+                }
+
+                // update selecte state
+                return true;
+            }
+        });
+        bnv.setSelectedItemId(R.id.main_item_1);
+
+
+
+
+
     }
 }
