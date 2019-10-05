@@ -4,6 +4,6 @@
     <string name="init_btn_content">Welcome</string>
     <string name="init_authors">Supriya Kamble(),\nLimin Deng(u6849956),\n presents @2019</string>
     <string name="main_item_2">Calendar</string>
-    <string name="main_item_3">item3</string>
-    <string name="main_item_1">item1</string>
+    <string name="main_item_3">Location</string>
+    <string name="main_item_1">ToDoList</string>
 </resources>

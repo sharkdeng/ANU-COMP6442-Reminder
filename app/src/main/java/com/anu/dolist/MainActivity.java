@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CalendarView;
 import android.widget.ListView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -28,8 +29,9 @@ public class MainActivity extends AppCompatActivity {
     static ArrayAdapter arrayAdapter;
 
 
-    /** Add menu items to toolbar
-     * author: u6734521
+    /**
+     * Add menu items to toolbar
+     * @author: u6734521
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -38,6 +40,12 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    /**
+     * callback for menu
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -50,16 +58,18 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+
+
+    /**
+     * @author: u6734521
+     * listView for notes taking with an example note
+     * SharedPreferences to store data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        @author: u6734521
-        listView for notes taking with an example note
-        SharedPreferences to store data
-         */
 
         ListView listView = findViewById(R.id.main_lv);
 
@@ -122,8 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         * author: Limin Deng(u6849956)
-         * FIXME: why selected callback is not done
+         * @author: Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
         BottomNavigationView bnv = findViewById(R.id.main_nav);
@@ -131,15 +140,22 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                 System.out.println("good");
+
                 switch (menuItem.getItemId()) {
                     case R.id.main_item_1:
-                        System.out.println("First item is selected");
+                        System.out.println("Do nothing");
                         break;
+
                     case R.id.main_item_2:
-                        System.out.println("Second item is selected");
+
+                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                        finish();
                         break;
+
                     case R.id.main_item_3:
-                        System.out.println("Third item is selected");
+                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
+                        startActivity(go3);
+                        finish();
                         break;
                 }
 
@@ -148,9 +164,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bnv.setSelectedItemId(R.id.main_item_1);
-
-
-
 
 
     }

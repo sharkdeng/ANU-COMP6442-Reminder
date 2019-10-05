@@ -7,6 +7,9 @@ import android.view.WindowManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * author: Limin Deng(u6849956)
+ */
 public class InitActivity extends AppCompatActivity {
 
     @Override

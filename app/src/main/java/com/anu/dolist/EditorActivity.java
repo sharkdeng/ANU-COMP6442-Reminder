@@ -1,5 +1,6 @@
 package com.anu.dolist;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -20,11 +21,10 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        /*
-        @author: u6734521
-        get the intent id from MainActivity and put it here
-        extra caution of -1 is put, to avoid getting wrong id
-
+        /**
+         * @author: u6734521
+         * get the intent id from MainActivity and put it here
+         * extra caution of -1 is put, to avoid getting wrong id
          */
 
         EditText editText = findViewById(R.id.editText);
@@ -69,5 +69,9 @@ public class EditorActivity extends AppCompatActivity {
 
             }
         });
+
+
+        ActionBar ab = getSupportActionBar();
+        ab.setTitle("Edit Event");
     }
 }
