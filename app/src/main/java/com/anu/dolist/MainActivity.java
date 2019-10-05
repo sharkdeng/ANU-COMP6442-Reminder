@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     static ArrayList<String> list = new ArrayList<>();
     static ArrayAdapter arrayAdapter;
-
+    public static String PACKAGE_NAME;
 
     /**
      * Add menu items to toolbar
@@ -70,6 +70,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // get package name
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+        System.out.println(PACKAGE_NAME);
 
         ListView listView = findViewById(R.id.main_lv);
 
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
 
 
 

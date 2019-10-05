@@ -75,7 +75,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        
+
 
         // set selected date 22 May 2016 in milliseconds
         cv.setDate(1463918226920L);

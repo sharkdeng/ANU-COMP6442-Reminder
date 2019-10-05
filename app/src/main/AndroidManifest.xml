@@ -21,6 +21,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".InitActivity" />
+
+        <!-- map api -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAWmtG6idRoKm1FA45s7OlYImda0QXHnc4"/>
     </application>
+
+    <!-- map permission -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 </manifest>
