@@ -35,13 +35,13 @@ public class Item extends SQLiteOpenHelper {
     public Context context;
     private static final String Table_name = "item";//name of table
     public static final long one_day = 1000*60*60*24;
-    public String content;
-    public int complete;
-    public int categorize;
-    public String date;
-    public String location;
+    public String content;//name of column
+    public int complete;//name of column
+    public int categorize;//name of column
+    public String date;//name of column
+    public String location;//name of column
     public int when;
-    public int id;
+    public int id;//name of column
 
 
     public Item(Context context,int id,String content,int complete,int categorize,String date/*,String locatoion*/){
@@ -173,7 +173,7 @@ public class Item extends SQLiteOpenHelper {
         return db != null ? true : false;
 
     }
-    public String ReadContent(int i)//Used to read the data from the item.db file where id is given and we choose id randomly
+    public String ReadContent(int i)//Used to read the content from the item.db file where id is given and we choose id randomly
     {
         String cont = "";
         Cursor c = sqlite.rawQuery("SELECT content FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
@@ -183,7 +183,7 @@ public class Item extends SQLiteOpenHelper {
             cont = "";
         return cont;
     }
-    public int ReadComplete(int i)//Used to read the data from the item.db file where id is given and we choose id randomly
+    public int ReadComplete(int i)//Used to read whether the task is complete from the item.db file where id is given and we choose id randomly
     {
         int compl = -1;
         Cursor c = sqlite.rawQuery("SELECT complete FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
@@ -194,7 +194,7 @@ public class Item extends SQLiteOpenHelper {
         return compl;
     }
 
-    public int ReadCategorize(int i)//Used to read the data from the item.db file where id is given and we choose id randomly
+    public int ReadCategorize(int i)//Used to read the categorize from the item.db file where id is given and we choose id randomly
     {
         int categ = -1;
         Cursor c = sqlite.rawQuery("SELECT categorize FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
@@ -204,7 +204,7 @@ public class Item extends SQLiteOpenHelper {
             categ = -1;
         return categ;
     }
-    public String ReadDate(int i)//Used to read the data from the item.db file where id is given and we choose id randomly
+    public String ReadDate(int i)//Used to read the date from the item.db file where id is given and we choose id randomly
     {
         String da = "";
         Cursor c = sqlite.rawQuery("SELECT content FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
