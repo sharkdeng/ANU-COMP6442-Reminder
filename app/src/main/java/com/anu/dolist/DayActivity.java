@@ -1,5 +1,6 @@
 package com.anu.dolist;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,13 +8,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
 
 /**
- * author: Limin Deng(u6849956)
+ * @author: Limin Deng(u6849956)
  */
 public class DayActivity extends AppCompatActivity {
 
@@ -25,6 +28,52 @@ public class DayActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_day);
+
+
+        /**
+         * @author: Limin Deng(u6849956)
+         *
+         */
+
+        ImageButton btn_back = findViewById(R.id.day_tb_back);
+        btn_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+//        TextView month =
+//
+//        ImageButton btn_select = findViewById(R.id.day_tb_select);
+//        btn_select.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
+
+
+        ImageButton btn_search = findViewById(R.id.day_tb_search);
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
+
+        ImageButton btn_add = findViewById(R.id.day_tb_add);
+        btn_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DayActivity.this, EditorActivity.class));
+            }
+        });
+
+
+
 
 
         // change textview content

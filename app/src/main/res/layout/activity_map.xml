@@ -8,6 +8,35 @@
     tools:context=".MapActivity">
 
 
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/map_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolbarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/map_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white">
+
+
+        <!-- customized title -->
+        <TextView
+            android:id="@+id/map_tb_title"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/map_tb_title"
+            android:textAlignment="center"
+            android:textColor="@android:color/white" />
+    </androidx.appcompat.widget.Toolbar>
+
+
     <com.google.android.gms.maps.MapView
         android:id="@+id/map_view"
         android:layout_width="0dp"
@@ -15,7 +44,9 @@
         app:layout_constraintBottom_toTopOf="@+id/map_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></com.google.android.gms.maps.MapView>
+        app:layout_constraintTop_toBottomOf="@id/map_toolbar">
+
+    </com.google.android.gms.maps.MapView>
 
 
     <!-- Bottom Nav Menu -->

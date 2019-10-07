@@ -3,9 +3,7 @@
     <item
         android:id="@+id/add_note"
         android:icon="@android:drawable/ic_input_add"
-        android:title="Add Note">
-
+        android:title="@string/note_add">
     </item>
-
 
 </menu>

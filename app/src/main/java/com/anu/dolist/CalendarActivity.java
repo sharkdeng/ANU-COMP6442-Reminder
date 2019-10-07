@@ -28,10 +28,12 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
+
         // getActionBar() return null
         // this works
+        // original actionbat
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 //        actionBar.setCustomView(R.layout.abs_layout);
         actionBar.setTitle("Calendar");
 
@@ -52,7 +54,11 @@ public class CalendarActivity extends AppCompatActivity {
                 // get selected date
                 // working
                 String selectedDate = date + "/" + month + "/" + year;
+
+                // pop up window
                 Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();
+
+
                 Calendar c = Calendar.getInstance();
                 c.set(year, month, date);
                 long eventOccursOn = c.getTimeInMillis(); //this is what you want to use later
@@ -64,14 +70,54 @@ public class CalendarActivity extends AppCompatActivity {
 //                long selectedDate = calendarView.getDate();
 //                Date sd = new Date(selectedDate);
 
+                String monthString = "";
+                switch (month) {
+                    case 1:
+                        monthString = "January";
+                        break;
+                    case 2:
+                        monthString = "February";
+                        break;
+                    case 3:
+                        monthString = "March";
+                        break;
+                    case 4:
+                        monthString = "April";
+                        break;
+                    case 5:
+                        monthString = "May";
+                        break;
+                    case 6:
+                        monthString = "June";
+                        break;
+                    case 7:
+                        monthString = "July";
+                        break;
+                    case 8:
+                        monthString = "August";
+                        break;
+                    case 9:
+                        monthString = "September";
+                        break;
+                    case 10:
+                        monthString = "October";
+                        break;
+                    case 11:
+                        monthString = "November";
+                        break;
+                    case 12:
+                        monthString = "December";
+                        break;
+                }
                 // pass data to next activity first
                 go.putExtra("SelectedDate", selectedDate);
+                go.putExtra("Month", monthString);
 
                 // then transit
                 startActivity(go);
 
                 // close current activity
-                finish();
+//                finish();
             }
         });
 
@@ -94,36 +140,36 @@ public class CalendarActivity extends AppCompatActivity {
          * @author: Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
-//        BottomNavigationView bnv = findViewById(R.id.cal_nav);
-//        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                System.out.println("good");
-//
-//                switch (menuItem.getItemId()) {
-//                    case R.id.main_item_1:
-//                        Intent go1 = new Intent(CalendarActivity.this, MainActivity.class);
-//                        startActivity(go1);
-//                        finish();
-//                        break;
-//
-//                    case R.id.main_item_2:
-//
-//                        System.out.println("Do nothing");
-//                        break;
-//
-//                    case R.id.main_item_3:
-//                        Intent go3 = new Intent(CalendarActivity.this, MapActivity.class);
-//                        startActivity(go3);
-//                        finish();
-//                        break;
-//                }
-//
-//                // update selecte state
-//                return true;
-//            }
-//        });
-//        bnv.setSelectedItemId(R.id.main_item_1);
+        BottomNavigationView bnv = findViewById(R.id.cal_nav);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                System.out.println("good");
+
+                switch (menuItem.getItemId()) {
+                    case R.id.main_item_1:
+                        Intent go1 = new Intent(CalendarActivity.this, MainActivity.class);
+                        startActivity(go1);
+                        finish();
+                        break;
+
+                    case R.id.main_item_2:
+
+                        System.out.println("Do nothing");
+                        break;
+
+                    case R.id.main_item_3:
+                        Intent go3 = new Intent(CalendarActivity.this, MapActivity.class);
+                        startActivity(go3);
+                        finish();
+                        break;
+                }
+
+                // update selecte state
+                return true;
+            }
+        });
+        bnv.setSelectedItemId(R.id.main_item_2);
 
 
     }

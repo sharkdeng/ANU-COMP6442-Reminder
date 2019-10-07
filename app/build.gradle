@@ -29,5 +29,14 @@ dependencies {
 
     // BottomNavigationView
     implementation 'com.google.android.material:material:1.0.0'
+
+    // Google map
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
+
+    // Dao
+    implementation 'androidx.room:room-runtime:2.1.0'
+    annotationProcessor 'androidx.room:room-compiler:2.1.0'
+
+    // @NotNull
+    implementation 'org.jetbrains:annotations-java5:15.0'
 }

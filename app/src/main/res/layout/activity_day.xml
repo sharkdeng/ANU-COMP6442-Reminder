@@ -6,6 +6,87 @@
     android:layout_height="match_parent"
     tools:context=".DayActivity">
 
+
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/day_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolbarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/day_day"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white">
+
+
+        <LinearLayout
+            android:id="@+id/day_tb_wrap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+
+
+            <ImageButton
+                android:id="@+id/day_tb_back"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:src="@android:drawable/ic_media_rew" />
+
+            <TextView
+                android:id="@+id/day_tb_month"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:text="@string/map_tb_title"
+                android:textColor="@android:color/white"
+                android:layout_weight="6"
+                />
+
+
+            <!-- show selection -->
+            <ImageButton
+                android:id="@+id/day_tb_select"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:src="@android:drawable/arrow_up_float" />
+
+            <!-- search -->
+            <ImageButton
+                android:id="@+id/day_tb_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:src="@android:drawable/ic_menu_zoom" />
+
+            <!-- add -->
+            <ImageButton
+                android:id="@+id/day_tb_add"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:src="@android:drawable/ic_menu_add"
+                />
+
+        </LinearLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+
     <LinearLayout
         android:id="@+id/day_day"
         android:layout_width="0dp"
@@ -14,7 +95,7 @@
         app:layout_constraintBottom_toTopOf="@id/day_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/day_toolbar">
 
         <TextView
             android:id="@+id/day_1"

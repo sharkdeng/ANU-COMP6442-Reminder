@@ -1,163 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<TableLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditorActivity"
-    android:stretchColumns="*"
-    android:shrinkColumns="*"
     >
 
-    <!-- 1 -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <!-- toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/edit_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolbarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/edit_table"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
+        app:titleTextColor="@android:color/white"
         >
-        <EditText
-            android:layout_width="178dp"
-            android:layout_height="match_parent"
-            android:hint="Title"
-            android:textSize="18sp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            />
-
-    </TableRow>
 
 
-    <!-- 2 -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Location"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            />
+            android:gravity="center"
+            android:orientation="horizontal"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="14dp">
 
-    </TableRow>
+            <!-- customized left butotn -->
+            <TextView
+                android:id="@+id/edit_tb_left"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="@string/edit_tb_left"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
-    <!-- space -->
-    <View
-        android:layout_height="20dip"
-        android:background="#FFF"
-        />
+            <!-- customized title -->
+            <TextView
+                android:id="@+id/edit_tb_middle"
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:text="@string/edit_tb_center"
+                android:textAlignment="center"
+                android:textColor="@android:color/black" />
 
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <TextView
-            android:text="Starts"
-            android:padding="10dp"
-            android:textSize="18sp"
-            />
-        <Button
-            android:text="1:00 AM"
-            />
-    </TableRow>
+            <!-- customized right button -->
+            <TextView
+                android:id="@+id/edit_tb_right"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/edit_tb_right"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
+        </LinearLayout>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <TextView
-            android:text="Ends"
-            android:padding="10dp"
-            android:textSize="18sp"
-            />
-        <Button
-            android:text="3:00 AM"
-            />
-    </TableRow>
+    </androidx.appcompat.widget.Toolbar>
 
-    <!-- space -->
-    <View
-        android:layout_height="20dip"
-        android:background="#FFF"
-        />
 
-    <!-- 3 -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <TextView
+    <TableLayout
+        android:id="@+id/edit_table"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_toolbar"
+        tools:context=".EditorActivity">
+
+        <!-- 1 -->
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Alert"
-            android:textSize="18sp"
-            android:padding="10dp"
-            />
-        <Button
-            android:hint="None"
-            />
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="178dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Title"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+        </TableRow>
 
 
-
-    </TableRow>
-
-
-    <!-- space -->
-    <View
-        android:layout_height="20dip"
-        android:background="#FFF"
-        />
-
-
-
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <EditText
+        <!-- 2 -->
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="URL"
-            android:textSize="20sp"
-            android:layout_weight="1"
-            android:padding="10dp"
-            />
-    </TableRow>
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Location"
+                android:padding="10dp"
+                android:textSize="20sp" />
+
+        </TableRow>
+
+        <!-- space -->
+        <View
+            android:layout_height="20dip"
+            android:background="#FFF" />
 
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-        <EditText
-            android:id="@+id/editText"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:ems="10"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:padding="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="-1dp"
-            tools:layout_editor_absoluteY="27dp"
-            android:hint="Notes"
-            android:layout_weight="1"
-            />
+            android:layout_height="match_parent">
 
-    </TableRow>
+            <TextView
+                android:padding="10dp"
+                android:text="Starts"
+                android:textSize="18sp" />
+
+            <Button android:text="1:00 AM" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:padding="10dp"
+                android:text="Ends"
+                android:textSize="18sp" />
+
+            <Button android:text="3:00 AM" />
+        </TableRow>
+
+        <!-- space -->
+        <View
+            android:layout_height="20dip"
+            android:background="#FFF" />
+
+        <!-- 3 -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Alert"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <Button android:hint="None" />
+
+
+        </TableRow>
+
+
+        <!-- space -->
+        <View
+            android:layout_height="20dip"
+            android:background="#FFF" />
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="URL"
+                android:padding="10dp"
+                android:textSize="20sp" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/editText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:ems="10"
+                android:gravity="top|left"
+                android:hint="Notes"
+                android:inputType="textMultiLine"
+                android:padding="0dp"
+                android:paddingStart="0dp"
+                android:paddingLeft="0dp"
+                android:paddingTop="0dp"
+                android:paddingEnd="0dp"
+                android:paddingRight="0dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="-1dp"
+                tools:layout_editor_absoluteY="27dp" />
+
+        </TableRow>
+
+
+    </TableLayout>
 
 
 
-
-</TableLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
