@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_3:
                         Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
-                        go3.putExtra("placeNumber",1);
+                        go3.putExtra("placeNumber",1); //Supriya
                         startActivity(go3);
                         finish();
                         break;
