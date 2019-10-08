@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.main_item_3:
-                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
+                        Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
                         startActivity(go3);
                         finish();
                         break;
