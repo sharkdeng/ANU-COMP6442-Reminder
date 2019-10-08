@@ -29,6 +29,7 @@ public class EditorActivity extends AppCompatActivity {
 
         /**
          * @author: Limin Deng(u6849956)
+         * 
          */
         // toolbar
         Toolbar tb = findViewById(R.id.edit_toolbar);
