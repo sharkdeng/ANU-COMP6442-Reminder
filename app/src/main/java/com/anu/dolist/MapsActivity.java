@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * @author Supriya (u6734521)
+ *
+ */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;

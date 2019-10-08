@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
+        /**
         @author: u6734521
         when the list is long pressed, pop up delete alert confirmation.
         if opted yes, delete else keep data as such.

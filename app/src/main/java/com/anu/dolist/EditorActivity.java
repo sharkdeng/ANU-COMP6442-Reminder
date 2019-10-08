@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 public class EditorActivity extends AppCompatActivity {
 
     int noteId;
+    int notes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +78,9 @@ public class EditorActivity extends AppCompatActivity {
          * get the intent id from MainActivity and put it here
          * extra caution of -1 is put, to avoid getting wrong id
          */
+//        TableLayout tblLayout = (TableLayout)findViewById(R.id.edit_table);
+//        Intent intent1 = getIntent();
+//        notes = intent1.getIntExtra("notes",-1);
 
         EditText editText = findViewById(R.id.editText);
 
