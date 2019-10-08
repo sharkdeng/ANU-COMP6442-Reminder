@@ -11,7 +11,7 @@ This file is about the meeting time
 
 ## group member
 
-Ran Zhang, u6760490
-Limin Deng, u6849956
-Yun Guan, u6472601
-Supriya Kamble, u6734521
+Ran Zhang u6760490, 
+Limin Deng u6849956, 
+Yun Guan u6472601, 
+Supriya Kamble u6734521
