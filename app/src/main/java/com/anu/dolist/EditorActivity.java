@@ -14,6 +14,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventDb;
+
 import org.w3c.dom.Text;
 
 import java.util.HashSet;
@@ -65,6 +68,7 @@ public class EditorActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // insert one record
             }
         });
