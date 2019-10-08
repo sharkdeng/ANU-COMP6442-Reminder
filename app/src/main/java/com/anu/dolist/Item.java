@@ -101,7 +101,9 @@ public class Item extends SQLiteOpenHelper {
             return 3;
         }
     }
-
+/**
+ * part of the code based on https://github.com/vikesh8860/QuizBook/blob/master/app/src/main/java/com/kvikesh800gmail/relativlayoutjava/books.java
+ **/
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
