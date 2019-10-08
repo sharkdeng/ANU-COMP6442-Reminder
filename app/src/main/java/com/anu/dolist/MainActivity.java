@@ -71,20 +71,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // get package name
-        PACKAGE_NAME = getApplicationContext().getPackageName();
-        System.out.println(PACKAGE_NAME);
+//        PACKAGE_NAME = getApplicationContext().getPackageName();
+//        System.out.println(PACKAGE_NAME);
 
         ListView listView = findViewById(R.id.main_lv);
 
         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 
         HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
-        if(set == null){
-            list.add("Example note");
-        }else{
+//        if(set == null){
+//            list.add("Example note");
+//        }else{
             list = new ArrayList(set);
 
-        }
+ //       }
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdapter);
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_3:
                         Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
+                        go3.putExtra("placeNumber",1);
                         startActivity(go3);
                         finish();
                         break;

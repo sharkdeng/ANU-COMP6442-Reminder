@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <!-- map permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
 
     <application
         android:allowBackup="true"
@@ -35,9 +35,6 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
-        <activity
-            android:name=".MapActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity
             android:name=".DayActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
