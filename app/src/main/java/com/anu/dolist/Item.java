@@ -216,7 +216,16 @@ public class Item extends SQLiteOpenHelper {
             da = "";
         return da;
     }
-
+    public String ReadLocation(int i)//Used to read the location from the item.db file where id is given and we choose id randomly
+    {
+        String da = "";
+        Cursor c = sqlite.rawQuery("SELECT location FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
+        if (c.moveToFirst())
+            da = c.getString(0);
+        else
+            da = "";
+        return da;
+    }
 
 }
 
