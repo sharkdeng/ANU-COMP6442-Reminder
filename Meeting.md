@@ -9,7 +9,8 @@ This file is about the meeting time
 | 8 | Satursday 12am - 1pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| deal with the problem and do assignment|
 | 9 | Satursday 12am - 1pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| deal with the problem and do assignment|
 
-group member
+##group member
+
 Ran Zhang, u6760490
 Limin Deng, u6849956
 Yun Guan, u6472601
