@@ -93,6 +93,7 @@
             android:layout_height="match_parent">
 
             <EditText
+                android:id="@+id/edit_event_title"
                 android:layout_width="178dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -109,6 +110,7 @@
             android:layout_height="match_parent">
 
             <EditText
+                android:id="@+id/edit_event_location"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

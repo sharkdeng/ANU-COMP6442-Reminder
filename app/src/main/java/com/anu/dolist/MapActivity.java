@@ -98,7 +98,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
 
-        // FIXME: how to avoid duplicate
+        // Done: how to avoid conflicts
+        // because setSelectedItem is not changed
         /**
          * @author: Limin Deng(u6849956)
          */

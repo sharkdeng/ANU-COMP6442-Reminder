@@ -3,6 +3,7 @@ package com.anu.dolist;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,18 +11,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ListView;
 
+import com.anu.dolist.db.Event;
+
+
+import com.anu.dolist.db.EventDao;
+import com.anu.dolist.db.EventDatabase;
+import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,13 +36,20 @@ public class MainActivity extends AppCompatActivity {
     public static String PACKAGE_NAME;
 
     /**
+     * attributes for database
+     * @author: Limin Deng u6849956
+     */
+    private List<Event> events;
+
+
+
+    /**
      * Add menu items to toolbar
      * @author: u6734521
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_note,menu);
+        getMenuInflater().inflate(R.menu.add_note,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -76,21 +89,20 @@ public class MainActivity extends AppCompatActivity {
 
         ListView listView = findViewById(R.id.main_lv);
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
-
-        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
-        if(set == null){
-            list.add("Example note");
-        }else{
-            list = new ArrayList(set);
-
-        }
-
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(arrayAdapter);
-        /*
-        @author: u6734521
-         to jump to editor activity when the list item is pressed.
+//        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
+//        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
+//        if(set == null){
+//            list.add("Example note");
+//        }else{
+//            list = new ArrayList(set);
+//
+//        }
+//
+//        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+//        listView.setAdapter(arrayAdapter);
+        /**
+         * @author: u6734521
+         * to jump to editor activity when the list item is pressed.
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
+         * BottomNavigationView
          * @author: Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
@@ -168,6 +181,45 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bnv.setSelectedItemId(R.id.main_item_1);
+
+
+        /**
+         * Database
+         * @author: Limin Deng(u6849956)
+         */
+        // get the database to do insert, update, and delete
+        EventRepository er = new EventRepository(getApplication());
+
+        // access instance method, now the onCreate and onOpen methods in Callback can be called
+        Event e2 = new Event("COMP2220");
+        Event e3 = new Event("COMP3330");
+
+        er.insertOneEvent(e2);
+        er.insertOneEvent(e3);
+
+
+        // access data
+        events = er.getAllEvents();
+
+        // Avoid this error
+        // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
+        // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
+        if (events != null) {
+            for (Event event: events) {
+                System.out.println("new record");
+                System.out.println(event.title);
+                list.add(event.title);
+            }
+        } else {
+            list.add("Hello from DAO");
+        }
+
+
+
+        // fill in listView
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(arrayAdapter);
+
 
 
     }

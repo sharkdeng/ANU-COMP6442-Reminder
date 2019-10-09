@@ -135,7 +135,8 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
-        // FIXME: how to avoid conflicts
+        // Done: how to avoid conflicts
+        // because setSelectedItem is not changed
         /**
          * @author: Limin Deng(u6849956)
          */

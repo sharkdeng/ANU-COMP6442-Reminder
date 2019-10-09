@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.anu.dolist">
+    <!-- map permission -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -9,33 +11,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MapActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar"
-            ></activity>
-        <activity android:name=".DayActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar"
-            />
-        <activity android:name=".CalendarActivity"
-            />
-        <activity android:name=".EditorActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar"
-            />
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".MapActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity
+            android:name=".DayActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity android:name=".CalendarActivity" />
+        <activity
+            android:name=".EditorActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity android:name=".InitActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".InitActivity" />
-
-        <!-- map api -->
+        <activity android:name=".MainActivity" /> <!-- map api -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAWmtG6idRoKm1FA45s7OlYImda0QXHnc4"/>
+            android:value="AIzaSyAWmtG6idRoKm1FA45s7OlYImda0QXHnc4" />
     </application>
-
-    <!-- map permission -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
 </manifest>

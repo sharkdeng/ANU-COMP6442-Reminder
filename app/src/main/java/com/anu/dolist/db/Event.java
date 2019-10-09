@@ -3,11 +3,13 @@ package com.anu.dolist.db;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.Insert;
 import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 @Entity(tableName = "event",
@@ -46,6 +48,23 @@ public class Event {
         this.alert = alert;
         this.url = url;
         this.notes = notes;
+    }
+
+    /**
+     * Error: Room cannot pick a constructor since multiple constructors are suitable.
+     * use @Ignore to silence multiple constructor
+     * @param title
+     */
+    @Ignore
+    public Event(@NotNull String title) {
+        this.title = title;
+        this.location = "ANU";
+        this.starts = "11 AM";
+        this.ends = "1 PM";
+        this.alert = "5 mins";
+        this.url = "";
+        this.notes = "Attend lab 5 and get marked";
+
     }
 }
 
