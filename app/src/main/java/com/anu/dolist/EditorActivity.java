@@ -166,6 +166,7 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.alert = editAlert.getText().toString();
                     newEvent.url = editUrl.getText().toString();
                     newEvent.notes = editNote.getText().toString();
+//                    newEvent.category =
 
 
 

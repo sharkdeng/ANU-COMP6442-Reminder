@@ -46,6 +46,9 @@ public class Event {
     @ColumnInfo(name = "notes")
     public String notes;
 
+    @ColumnInfo(name = "category")
+    public Category category;
+
     public Event(@NotNull String title, String location, String starts, String ends, String alert, String url, String notes) {
         this.title = title;
         this.location = location;
