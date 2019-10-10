@@ -47,7 +47,7 @@ public class Event {
     public String notes;
 
     @ColumnInfo(name = "category")
-    public Category category;
+    public boolean category;
 
     public Event(@NotNull String title, String location, String starts, String ends, String alert, String url, String notes) {
         this.title = title;

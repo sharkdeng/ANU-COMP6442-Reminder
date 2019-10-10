@@ -1,27 +1,25 @@
 package com.anu.dolist;
 
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CalendarView;
 import android.widget.ListView;
-
+import android.widget.TextView;
+import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,13 +28,20 @@ public class MainActivity extends AppCompatActivity {
     public static String PACKAGE_NAME;
 
     /**
+     * attributes for database
+     * @author: Limin Deng u6849956
+     */
+    private List<Event> events;
+
+
+
+    /**
      * Add menu items to toolbar
      * @author: u6734521
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.add_note,menu);
+        getMenuInflater().inflate(R.menu.add_note,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -71,37 +76,53 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // get package name
-//        PACKAGE_NAME = getApplicationContext().getPackageName();
-//        System.out.println(PACKAGE_NAME);
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+        System.out.println(PACKAGE_NAME);
 
-        ListView listView = findViewById(R.id.main_lv);
+        final ListView listView = findViewById(R.id.main_lv);
 
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
-
-        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
+//        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
+//        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
 //        if(set == null){
 //            list.add("Example note");
 //        }else{
-            list = new ArrayList(set);
-
- //       }
-
+//            list = new ArrayList(set);
+//
+//        }
+//
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdapter);
-        /*
-        @author: u6734521
-         to jump to editor activity when the list item is pressed.
+        /**
+         * @author: u6734521
+         * to jump to editor activity when the list item is pressed.
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
-                intent.putExtra("noteId",i);
+//
+//                // pass data
+                EventRepository er = new EventRepository(getApplication());
+
+                String title = ((TextView) view).getText().toString();
+                Event seletecEvent = er.getEventByTitle(title);
+                intent.putExtra("title", seletecEvent.title);
+                intent.putExtra("location", seletecEvent.location);
+                intent.putExtra("start", seletecEvent.starts);
+                intent.putExtra("end", seletecEvent.ends);
+                intent.putExtra("alert", seletecEvent.alert);
+                intent.putExtra("url", seletecEvent.url);
+                intent.putExtra("notes", seletecEvent.notes);
+
+                // I don't want this
+//                intent.putExtra("noteId", position);
                 startActivity(intent);
             }
         });
 
-        /**
+
+
+        /*
         @author: u6734521
         when the list is long pressed, pop up delete alert confirmation.
         if opted yes, delete else keep data as such.
@@ -109,8 +130,11 @@ public class MainActivity extends AppCompatActivity {
          */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final int itemDelete =i;
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                // make it final for later access
+                final int itemDelete = position;
+
+
                 new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Delete Note")
@@ -120,10 +144,18 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 list.remove(itemDelete);
                                 arrayAdapter.notifyDataSetChanged();
-                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 
-                                HashSet<String> set = new HashSet(MainActivity.list);
-                                sharedPreferences.edit().putStringSet("notes",set).apply();
+//                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
+//                                HashSet<String> set = new HashSet(MainActivity.list);
+//                                sharedPreferences.edit().putStringSet("notes",set).apply();
+
+
+                                // delete by using Dao
+                                TextView child = (TextView) listView.getChildAt(itemDelete);
+                                EventRepository er = new EventRepository(getApplication());
+                                Event targetEvent = er.getEventByTitle(child.getText().toString());
+                                er.deleteOneEvent(targetEvent);
+
                             }
                         })
                         .setNegativeButton("No",null)
@@ -134,8 +166,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         /**
+         * BottomNavigationView
          * @author: Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
@@ -158,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_3:
                         Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
-                        go3.putExtra("placeNumber",1); //Supriya
+                        go3.putExtra("placeNumber",1);
                         startActivity(go3);
                         finish();
                         break;
@@ -169,6 +201,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         bnv.setSelectedItemId(R.id.main_item_1);
+
+
+        /**
+         * Database
+         * @author: Limin Deng(u6849956)
+         */
+        // clear the list first
+        list.clear();
+
+        // show data list
+        EventRepository er = new EventRepository(getApplication());
+        events = er.getAllEvents();
+
+        // Avoid this error
+        // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
+        // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
+        if (events != null) {
+            for (Event event: events) {
+                System.out.println("new record");
+                System.out.println(event.title);
+                list.add(event.title);
+            }
+        } else {
+            list.add("Hello from DAO");
+        }
+
+
+
+        // fill in listView
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+        listView.setAdapter(arrayAdapter);
+
 
 
     }

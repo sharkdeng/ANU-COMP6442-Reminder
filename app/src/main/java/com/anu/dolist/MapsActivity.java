@@ -16,6 +16,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -87,7 +88,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
         mMap.setOnMapLongClickListener(this);
         Intent intent = getIntent();
-        if(intent.getIntExtra("placeNumber",0) == 0) {
+        if(intent.getIntExtra("location",0) == 0) {
             //get users location
             mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
             mLocationListener = new LocationListener() {

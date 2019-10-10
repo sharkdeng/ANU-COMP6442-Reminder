@@ -36,6 +36,9 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity
+            android:name=".EditorActivity"
+            android:theme="@style/Theme.Design.Light.NoActionBar" />
+        <activity
             android:name=".DayActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity android:name=".CalendarActivity" />
