@@ -278,10 +278,9 @@ public class EditorActivity extends AppCompatActivity {
                 MainActivity.list.set(noteId,String.valueOf(charSequence));
                 MainActivity.arrayAdapter.notifyDataSetChanged();
 
-                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
-
-                HashSet<String> set = new HashSet(MainActivity.list);
-                sharedPreferences.edit().putStringSet("notes",set).apply();
+//                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
+//                HashSet<String> set = new HashSet(MainActivity.list);
+//                sharedPreferences.edit().putStringSet("notes",set).apply();
 
 
             }
@@ -293,7 +292,6 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
-        
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Edit Event");
 
