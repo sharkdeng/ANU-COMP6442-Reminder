@@ -21,6 +21,11 @@ import java.util.Calendar;
  */
 public class CalendarActivity extends AppCompatActivity {
 
+
+    /**
+     * @author: Limin
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +140,8 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
-        // FIXME: how to avoid conflicts
+        // Done: how to avoid conflicts
+        // because setSelectedItem is not changed
         /**
          * @author: Limin Deng(u6849956)
          */

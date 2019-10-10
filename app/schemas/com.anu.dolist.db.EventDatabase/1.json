@@ -1,0 +1,162 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "c342123816f71d1f84b901103c48d99f",
+    "entities": [
+      {
+        "tableName": "event",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `location` TEXT, `starts` TEXT, `ends` TEXT, `alert` TEXT, `url` TEXT, `notes` TEXT, PRIMARY KEY(`title`))",
+        "fields": [
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "starts",
+            "columnName": "starts",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ends",
+            "columnName": "ends",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "alert",
+            "columnName": "alert",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "url",
+            "columnName": "url",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "title"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_event_title",
+            "unique": false,
+            "columnNames": [
+              "title"
+            ],
+            "createSql": "CREATE  INDEX `index_event_title` ON `${TABLE_NAME}` (`title`)"
+          },
+          {
+            "name": "index_event_location",
+            "unique": false,
+            "columnNames": [
+              "location"
+            ],
+            "createSql": "CREATE  INDEX `index_event_location` ON `${TABLE_NAME}` (`location`)"
+          },
+          {
+            "name": "index_event_starts",
+            "unique": false,
+            "columnNames": [
+              "starts"
+            ],
+            "createSql": "CREATE  INDEX `index_event_starts` ON `${TABLE_NAME}` (`starts`)"
+          },
+          {
+            "name": "index_event_ends",
+            "unique": false,
+            "columnNames": [
+              "ends"
+            ],
+            "createSql": "CREATE  INDEX `index_event_ends` ON `${TABLE_NAME}` (`ends`)"
+          },
+          {
+            "name": "index_event_alert",
+            "unique": false,
+            "columnNames": [
+              "alert"
+            ],
+            "createSql": "CREATE  INDEX `index_event_alert` ON `${TABLE_NAME}` (`alert`)"
+          },
+          {
+            "name": "index_event_url",
+            "unique": false,
+            "columnNames": [
+              "url"
+            ],
+            "createSql": "CREATE  INDEX `index_event_url` ON `${TABLE_NAME}` (`url`)"
+          },
+          {
+            "name": "index_event_notes",
+            "unique": false,
+            "columnNames": [
+              "notes"
+            ],
+            "createSql": "CREATE  INDEX `index_event_notes` ON `${TABLE_NAME}` (`notes`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "cid",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "cid"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [
+          {
+            "name": "index_category_name",
+            "unique": false,
+            "columnNames": [
+              "name"
+            ],
+            "createSql": "CREATE  INDEX `index_category_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c342123816f71d1f84b901103c48d99f')"
+    ]
+  }
+}

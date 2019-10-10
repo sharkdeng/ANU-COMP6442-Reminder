@@ -101,7 +101,9 @@ public class Item extends SQLiteOpenHelper {
             return 3;
         }
     }
-
+/**
+ * part of the code based on https://github.com/vikesh8860/QuizBook/blob/master/app/src/main/java/com/kvikesh800gmail/relativlayoutjava/books.java
+ **/
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -214,7 +216,16 @@ public class Item extends SQLiteOpenHelper {
             da = "";
         return da;
     }
-
+    public String ReadLocation(int i)//Used to read the location from the item.db file where id is given and we choose id randomly
+    {
+        String lac = "";
+        Cursor c = sqlite.rawQuery("SELECT location FROM " + Table_name + " WHERE " + id + " = " + i + "", null);//cursor to that query
+        if (c.moveToFirst())
+            lac = c.getString(0);
+        else
+            lac = "";
+        return lac;
+    }
 
 }
 
