@@ -9,10 +9,11 @@ import java.util.List;
 
 
 /**
- * wrapper for EventDao.insert, update, and delete
+ * Wrapper for EventDao.insert, update, and delete
  * Example:
  * 1) eventdatabase.allowMainThread + eventDao.insert // main thread
  * 2) eventrepository.insert  // background thread
+ * @author: Limin
  */
 public class EventRepository {
     private EventDao eventDao;
@@ -39,6 +40,10 @@ public class EventRepository {
 
     public List<Event> getAllEvents() {
         return events;
+    }
+
+    public Event getEventByTitle(String title) {
+        return eventDao.getEventByTitle(title);
     }
 
 

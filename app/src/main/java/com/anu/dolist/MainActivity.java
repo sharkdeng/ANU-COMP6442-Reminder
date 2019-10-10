@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.anu.dolist.db.Event;
 
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         PACKAGE_NAME = getApplicationContext().getPackageName();
         System.out.println(PACKAGE_NAME);
 
-        ListView listView = findViewById(R.id.main_lv);
+        final ListView listView = findViewById(R.id.main_lv);
 
 //        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 //        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
@@ -106,9 +107,11 @@ public class MainActivity extends AppCompatActivity {
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
-                intent.putExtra("noteId",i);
+                intent.putExtra("noteId", position);
+                String title = ((TextView) view).getText().toString();
+                intent.putExtra("title", title);
                 startActivity(intent);
             }
         });
@@ -121,8 +124,11 @@ public class MainActivity extends AppCompatActivity {
          */
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final int itemDelete =i;
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
+                // make it final for later access
+                final int itemDelete = position;
+
+
                 new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Delete Note")
@@ -132,10 +138,18 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 list.remove(itemDelete);
                                 arrayAdapter.notifyDataSetChanged();
-                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 
-                                HashSet<String> set = new HashSet(MainActivity.list);
-                                sharedPreferences.edit().putStringSet("notes",set).apply();
+//                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
+//                                HashSet<String> set = new HashSet(MainActivity.list);
+//                                sharedPreferences.edit().putStringSet("notes",set).apply();
+
+
+                                // delete by using Dao
+                                TextView child = (TextView) listView.getChildAt(itemDelete);
+                                EventRepository er = new EventRepository(getApplication());
+                                Event targetEvent = er.getEventByTitle(child.getText().toString());
+                                er.deleteOneEvent(targetEvent);
+
                             }
                         })
                         .setNegativeButton("No",null)
@@ -187,18 +201,11 @@ public class MainActivity extends AppCompatActivity {
          * Database
          * @author: Limin Deng(u6849956)
          */
-        // get the database to do insert, update, and delete
+        // clear the list first
+        list.clear();
+
+        // show data list
         EventRepository er = new EventRepository(getApplication());
-
-        // access instance method, now the onCreate and onOpen methods in Callback can be called
-        Event e2 = new Event("COMP2220");
-        Event e3 = new Event("COMP3330");
-
-        er.insertOneEvent(e2);
-        er.insertOneEvent(e3);
-
-
-        // access data
         events = er.getAllEvents();
 
         // Avoid this error

@@ -12,9 +12,14 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-
+/**
+ * version is for database update
+ * java.lang.IllegalStateException: Room cannot verify the data integrity. Looks like you've changed schema but forgot to update the version number. You can simply fix this by increasing the version number.
+ * get database
+ * @author: Limin
+ */
 @Database(entities = {Event.class, Category.class},
-        version = 1
+        version = 1 //
        )
 public abstract class EventDatabase extends RoomDatabase {
 

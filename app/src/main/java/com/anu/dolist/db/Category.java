@@ -9,6 +9,9 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author: Limin
+ */
 @Entity (tableName = "category",
         indices = {@Index("name")})
 public class Category {

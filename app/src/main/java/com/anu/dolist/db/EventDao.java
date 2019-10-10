@@ -13,6 +13,10 @@ import androidx.room.Update;
 import java.util.List;
 
 
+/**
+ * handler to tackle sql manipulation
+ * @author: Limin
+ */
 @Dao
 public interface EventDao {
     @Query("SELECT * FROM event WHERE title=:title LIMIT 1")
@@ -32,9 +36,11 @@ public interface EventDao {
     @Delete
     void deleteOneEvent(Event event);
 
-
     @Query("DELETE FROM event")
     void deleteAll();
+
+    @Query("SELECT * FROM event where title=:title")
+    Event getEventByTitle(String title);
 
     @Query("SELECT * FROM event")
     List<Event> getAllEvents();

@@ -12,15 +12,21 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 
+/**
+ * @author: Limin
+ */
 @Entity(tableName = "event",
-indices = {@Index("title"), @Index("location"), @Index("starts"), @Index("ends"), @Index("alert"), @Index("url"), @Index("notes")})
+        indices = {@Index("title"), @Index("location"), @Index("starts"), @Index("ends"), @Index("alert"), @Index("url"), @Index("notes")}
+)
 public class Event {
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "eid")
-    public int id;
 
+    // TODO: how to set composite primary key
+//    @ColumnInfo(name = "eid")
+//    public int id;
+
+    @PrimaryKey
     @ColumnInfo(name = "title")
-    public String title;
+    @NotNull public String title;
 
     @ColumnInfo(name = "location")
     public String location;
@@ -64,7 +70,6 @@ public class Event {
         this.alert = "5 mins";
         this.url = "";
         this.notes = "Attend lab 5 and get marked";
-
     }
 }
 

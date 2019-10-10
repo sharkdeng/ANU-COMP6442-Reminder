@@ -33,8 +33,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="horizontal"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="14dp">
+            >
 
             <!-- customized left butotn -->
             <TextView
@@ -45,7 +44,7 @@
                 android:gravity="start"
                 android:text="@string/edit_tb_left"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <!-- customized title -->
             <TextView
@@ -69,7 +68,7 @@
                 android:gravity="end"
                 android:text="@string/edit_tb_right"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
@@ -81,6 +80,7 @@
         android:layout_height="0dp"
         android:shrinkColumns="*"
         android:stretchColumns="*"
+        android:background="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,7 +116,7 @@
                 android:layout_weight="1"
                 android:hint="Location"
                 android:padding="10dp"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
         </TableRow>
 
@@ -135,7 +135,11 @@
                 android:text="Starts"
                 android:textSize="18sp" />
 
-            <Button android:text="1:00 AM" />
+            <Button
+                android:id="@+id/edit_event_start"
+                android:text="1:00 AM"
+                android:textSize="18sp"
+                />
         </TableRow>
 
         <TableRow
@@ -147,7 +151,11 @@
                 android:text="Ends"
                 android:textSize="18sp" />
 
-            <Button android:text="3:00 AM" />
+            <Button
+                android:id="@+id/edit_event_end"
+                android:text="3:00 AM"
+                android:textSize="18sp"
+                />
         </TableRow>
 
         <!-- space -->
@@ -167,7 +175,11 @@
                 android:padding="10dp"
                 android:textSize="18sp" />
 
-            <Button android:hint="None" />
+            <Button
+                android:id="@+id/edit_event_alert"
+                android:hint="None"
+                android:textSize="18sp"
+                />
 
 
         </TableRow>
@@ -184,12 +196,13 @@
             android:layout_height="match_parent">
 
             <EditText
+                android:id="@+id/edit_event_url"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:hint="URL"
                 android:padding="10dp"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </TableRow>
 
 
@@ -198,23 +211,14 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/edit_event_notes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:ems="10"
-                android:gravity="top|left"
                 android:hint="Notes"
-                android:inputType="textMultiLine"
-                android:padding="0dp"
-                android:paddingStart="0dp"
-                android:paddingLeft="0dp"
-                android:paddingTop="0dp"
-                android:paddingEnd="0dp"
-                android:paddingRight="0dp"
-                tools:ignore="MissingConstraints"
-                tools:layout_editor_absoluteX="-1dp"
-                tools:layout_editor_absoluteY="27dp" />
+                android:padding="10dp"
+                android:textSize="18sp"
+                />
 
         </TableRow>
 
