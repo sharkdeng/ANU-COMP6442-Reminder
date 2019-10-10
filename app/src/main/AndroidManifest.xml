@@ -39,9 +39,6 @@
             android:name=".DayActivity"
             android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity android:name=".CalendarActivity" />
-        <activity
-            android:name=".EditorActivity"
-            android:theme="@style/Theme.Design.Light.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

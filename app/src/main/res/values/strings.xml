@@ -10,6 +10,6 @@
     <string name="note_add">Add</string>
     <string name="edit_tb_center">New Event</string>
     <string name="edit_tb_left">Cancel</string>
-    <string name="edit_tb_right">Add</string>
     <string name="title_activity_maps">Map</string>
+    <string name="edit_tb_right">Save</string>
 </resources>

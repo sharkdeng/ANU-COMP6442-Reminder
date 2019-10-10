@@ -114,6 +114,14 @@ public abstract class EventDatabase extends RoomDatabase {
             eventDao.insertOneEvent(two);
             eventDao.insertOneEvent(three);
 
+
+            Category cat1 = new Category("Incomplete");
+            Category cat2 = new Category("Completed");
+            categoryDao.insertOneCategory(cat1);
+            categoryDao.insertOneCategory(cat2);
+
+
+
             return null;
 
         }
