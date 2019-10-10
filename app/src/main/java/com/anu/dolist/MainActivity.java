@@ -1,10 +1,13 @@
 package com.anu.dolist;
 
+<<<<<<< HEAD
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
+=======
+>>>>>>> 689491d45a5bca2844dbca9e94f2a66c754223e6
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,15 +22,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.anu.dolist.db.Event;
-
-
-import com.anu.dolist.db.EventDao;
-import com.anu.dolist.db.EventDatabase;
 import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
