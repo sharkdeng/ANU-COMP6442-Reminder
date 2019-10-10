@@ -85,6 +85,7 @@ public class EditorActivity extends AppCompatActivity {
             editUrl.setText(eventUrl);
         }
         if (eventNotes != null) {
+            System.out.println(editNote.getText().toString());;
             editNote.setText(eventNotes);
         }
 
@@ -168,7 +169,6 @@ public class EditorActivity extends AppCompatActivity {
 
 
 
-
                     // insert one record
                     if (add.getText().toString().equals("Add")) {
 
@@ -224,6 +224,24 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
+        // title change listener
+        editTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
 
         editTitle.setText(eventTitle);
 
@@ -234,16 +252,16 @@ public class EditorActivity extends AppCompatActivity {
          */
         EditText editText = findViewById(R.id.edit_event_notes);
 
-        Intent intent = getIntent();
-        noteId = intent.getIntExtra("noteId",-1);
-
-        if(noteId != -1){
-            editText.setText(MainActivity.list.get(noteId));
-        }else{
-            MainActivity.list.add("");
-            noteId = MainActivity.list.size()-1;
-            MainActivity.arrayAdapter.notifyDataSetChanged();
-        }
+//        Intent intent = getIntent();
+//        noteId = intent.getIntExtra("noteId",-1);
+//
+//        if(noteId != -1){
+//            editText.setText(MainActivity.list.get(noteId));
+//        }else{
+//            MainActivity.list.add(""); // here it set
+//            noteId = MainActivity.list.size()-1;
+//            MainActivity.arrayAdapter.notifyDataSetChanged();
+//        }
 
 
         /**
@@ -275,6 +293,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
+        
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Edit Event");
 
