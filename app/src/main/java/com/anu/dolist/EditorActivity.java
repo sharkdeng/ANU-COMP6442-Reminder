@@ -4,9 +4,13 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,6 +22,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -46,6 +51,9 @@ public class EditorActivity extends AppCompatActivity {
 
 
     int noteId;
+    final static int RQS_1 = 1;
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "default" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +121,7 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
-
+                Calendar mCalendar = Calendar.getInstance();
                 int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = mCalendar.get(Calendar.MINUTE);
 
@@ -121,6 +129,8 @@ public class EditorActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(EditorActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+//                        mCalendar.set(Calendar.HOUR, selectedHour);
+//                        mCalendar.set(Calendar.MINUTE, selectedMinute);
                         editEnd.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -133,6 +143,7 @@ public class EditorActivity extends AppCompatActivity {
         editStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Calendar mCalendar = Calendar.getInstance();
                 new DatePickerDialog(
                         EditorActivity. this, date ,
                         mCalendar .get(Calendar. YEAR ) ,
@@ -143,6 +154,7 @@ public class EditorActivity extends AppCompatActivity {
                     }
 
             DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
                 @Override
                 public void onDateSet (DatePicker view , int year , int monthOfYear , int dayOfMonth) {
                     mCalendar .set(Calendar. YEAR , year) ;
@@ -157,7 +169,26 @@ public class EditorActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
                 Date date = mCalendar .getTime() ;
                 editStart .setText(sdf.format(date)) ;
-                //scheduleNotification(getNotification( btnDate .getText().toString()) , date.getTime()) ;
+                scheduleNotification(getNotification( editStart.getText().toString()) , date.getTime()) ;
+            }
+
+            private void scheduleNotification (Notification notification , long delay) {
+                Intent notificationIntent = new Intent( EditorActivity.this, MyNotificationPublisher. class ) ;
+                notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION_ID , 1 ) ;
+                notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION , notification) ;
+                PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+                AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+                assert alarmManager != null;
+                alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , delay , pendingIntent) ;
+            }
+            private Notification getNotification (String content) {
+                NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
+                builder.setContentTitle( "Scheduled Notification" ) ;
+                builder.setContentText(content) ;
+                builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+                builder.setAutoCancel( true ) ;
+                builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+                return builder.build() ;
             }
 
         });
@@ -203,6 +234,30 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
+        editAlert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(EditorActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Do you want to set alarm")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                editAlert.setText("Alarm set");
+//                                Intent intent = new Intent(EditorActivity.this, AlarmActivity.class);
+//                                PendingIntent pendingIntent = PendingIntent.getBroadcast(EditorActivity.this, RQS_1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//                                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+//                                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pendingIntent);
+                            }
+                        })
+                        .setNegativeButton("No",null)
+                        .show();
+
+            }
+        });
+
+
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,13 +272,13 @@ public class EditorActivity extends AppCompatActivity {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setTitle("Title cannot be empty")
                             .setTitle("Title cannot be empty")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     System.out.println("do nothing");
                                 }
                             })
-                            .setNegativeButton("No",null)
+                            //.setNegativeButton("No",null)
                             .show();
 
                     // add
@@ -240,6 +295,7 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.url = editUrl.getText().toString();
                     newEvent.notes = editNote.getText().toString();
                     newEvent.category = false;
+
 
 
 

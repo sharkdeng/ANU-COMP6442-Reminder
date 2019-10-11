@@ -138,8 +138,8 @@ z
             <Button
                 android:id="@+id/edit_event_date"
                 android:text="dd/MM/yy"
-                android:textSize="18sp"
-                />
+                android:textColor="#612B1D1D"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -154,8 +154,8 @@ z
             <Button
                 android:id="@+id/edit_event_time"
                 android:text="00:00"
-                android:textSize="18sp"
-                />
+                android:textColor="#612B1D1D"
+                android:textSize="18sp" />
         </TableRow>
 
         <!-- space -->
