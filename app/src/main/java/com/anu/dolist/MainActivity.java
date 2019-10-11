@@ -2,6 +2,7 @@ package com.anu.dolist;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
@@ -23,15 +24,16 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    ListView listView;
     static ArrayList<String> list = new ArrayList<>();
+    private EventRepository er;
+    private List<Event> events;
     static ArrayAdapter arrayAdapter;
     public static String PACKAGE_NAME;
+    private ActionBar ab;
 
-    /**
-     * attributes for database
-     * @author: Limin Deng u6849956
-     */
-    private List<Event> events;
+
+
 
 
 
@@ -55,11 +57,91 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId() == R.id.add_note){
+
+
+        /**
+         * callbacks on menu items
+         */
+        if(item.getItemId() == R.id.main_add_note){
+
             Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
             startActivity(intent);
             return true;
+
+        } else if (item.getItemId() == R.id.main_show_incompleted) {
+
+            Log.d("Tag", "Incompleted");
+
+            // clear the list first
+            list.clear();
+
+            events = er.getIncompletedEvents();
+
+
+            // Avoid this error
+            // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
+            // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
+            if (events != null) {
+                for (Event event: events) {
+                    System.out.println("new record");
+                    System.out.println(event.title);
+                    list.add(event.title);
+                }
+            } else {
+                list.add("Hello from DAO");
+            }
+
+
+            // fill in listView
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+            listView.setAdapter(arrayAdapter);
+
+
+            // change title
+            ab.setTitle("Incompleted");
+
+            return true;
+
+        } else if (item.getItemId() == R.id.main_show_completed) {
+
+            Log.d("Tag", "Completed");
+
+            // clear the list first
+            list.clear();
+
+            events = er.getCompletedEvents();
+
+
+            // Avoid this error
+            // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
+            // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
+            if (events != null) {
+                for (Event event: events) {
+                    System.out.println("new record");
+                    System.out.println(event.title);
+                    list.add(event.title);
+                }
+            } else {
+                list.add("Hello from DAO");
+            }
+
+            // fill in listView
+            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+            listView.setAdapter(arrayAdapter);
+
+            //
+            ab.setTitle("Completed");
+
+            return true;
+
+        } else if (item.getItemId() == R.id.main_delete_all) {
+
+            er.deleteAll();
+            return true;
+
         }
+
+
         return false;
     }
 
@@ -79,7 +161,13 @@ public class MainActivity extends AppCompatActivity {
         PACKAGE_NAME = getApplicationContext().getPackageName();
         System.out.println(PACKAGE_NAME);
 
-        final ListView listView = findViewById(R.id.main_lv);
+
+        ab = getSupportActionBar();
+        ab.setTitle("All events");
+
+        // initiate EventRepository
+        er = new EventRepository(getApplication());
+        listView = findViewById(R.id.main_lv);
 
 //        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 //        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
@@ -187,7 +275,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.main_item_3:
-                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
+                        Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
+                        go3.putExtra("location", 1);  // Supriya
                         startActivity(go3);
                         finish();
                         break;
@@ -204,11 +293,12 @@ public class MainActivity extends AppCompatActivity {
          * Database
          * @author: Limin Deng(u6849956)
          */
+
+
         // clear the list first
         list.clear();
 
         // show data list
-        EventRepository er = new EventRepository(getApplication());
         events = er.getAllEvents();
 
         // Avoid this error
@@ -223,6 +313,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             list.add("Hello from DAO");
         }
+
+
 
 
 

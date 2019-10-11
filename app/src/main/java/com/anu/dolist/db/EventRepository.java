@@ -38,13 +38,28 @@ public class EventRepository {
 //        eventDao.deleteOneEvent(event); // main thread
     }
 
-    public List<Event> getAllEvents() {
-        return events;
-    }
+
 
     public Event getEventByTitle(String title) {
         return eventDao.getEventByTitle(title);
     }
+
+    public List<Event> getCompletedEvents() {
+        return eventDao.getCompletedEvents();
+    }
+
+    public List<Event> getIncompletedEvents() {
+        return eventDao.getIncompletedEvents();
+    }
+
+    public List<Event> getAllEvents() {
+        return events;
+    }
+
+    public void deleteAll() {
+        new deleteAllAsyncTask(eventDao).execute();
+    }
+
 
 
     // synchronically because dao doesn't allow executing in main thread
@@ -101,4 +116,21 @@ public class EventRepository {
         }
     }
 
+
+    private static class deleteAllAsyncTask extends AsyncTask<Event, Void, Void> {
+
+        // pass this to database manipulation
+        private EventDao eventDao;
+
+        deleteAllAsyncTask(EventDao eventDao) {
+            this.eventDao = eventDao;
+        }
+
+        @Override
+        protected Void doInBackground(Event... events) {
+            this.eventDao.deleteAll();
+
+            return null;
+        }
+    }
 }

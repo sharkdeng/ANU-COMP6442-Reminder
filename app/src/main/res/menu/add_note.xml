@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/add_note"
+        android:id="@+id/main_add_note"
         android:icon="@android:drawable/ic_input_add"
         android:title="@string/note_add">
+    </item>
+
+    <item
+        android:id="@+id/main_show_incompleted"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/show_incompleted">
+    </item>
+
+    <item
+        android:id="@+id/main_show_completed"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/show_completed">
+    </item>
+
+    <item
+        android:id="@+id/main_delete_all"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/delete_all">
     </item>
 
 </menu>

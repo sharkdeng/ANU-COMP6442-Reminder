@@ -106,6 +106,7 @@ public abstract class EventDatabase extends RoomDatabase {
             Event two = new Event("Python Lab");
             Event three = new Event("Database Lab");
 
+
             eventDao.insertOneEvent(one);
             eventDao.insertOneEvent(two);
             eventDao.insertOneEvent(three);
