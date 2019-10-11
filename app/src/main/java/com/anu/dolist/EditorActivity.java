@@ -25,7 +25,7 @@ import java.util.HashSet;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 import static com.anu.dolist.MainActivity.list;
-import static com.anu.dolist.MainActivity.listView;
+
 
 
 /**
