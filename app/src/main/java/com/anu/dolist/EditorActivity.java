@@ -121,7 +121,7 @@ public class EditorActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(EditorActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                        eReminderTime.setText( selectedHour + ":" + selectedMinute);
+                        editEnd.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
