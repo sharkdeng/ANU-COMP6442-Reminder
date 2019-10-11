@@ -12,4 +12,7 @@
     <string name="edit_tb_left">Cancel</string>
     <string name="title_activity_maps">Map</string>
     <string name="edit_tb_right">Save</string>
+    <string name="show_incompleted">Show incompleted</string>
+    <string name="show_completed">Show completed</string>
+    <string name="delete_all">Delete all</string>
 </resources>

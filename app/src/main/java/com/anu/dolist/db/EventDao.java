@@ -19,10 +19,6 @@ import java.util.List;
  */
 @Dao
 public interface EventDao {
-    @Query("SELECT * FROM event WHERE title=:title LIMIT 1")
-    Event findEventByTitle(String title);
-
-
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertOneEvent(Event newEvent);
@@ -39,11 +35,21 @@ public interface EventDao {
     @Query("DELETE FROM event")
     void deleteAll();
 
-    @Query("SELECT * FROM event where title=:title")
+
+
+    // querys
+    @Query("SELECT * FROM event WHERE title=:title")
     Event getEventByTitle(String title);
 
     @Query("SELECT * FROM event")
     List<Event> getAllEvents();
+
+    @Query("SELECT * FROM event WHERE category==1")
+    List<Event> getCompletedEvents();
+
+    @Query("SELECT * FROM event WHERE category==0")
+    List<Event> getIncompletedEvents();
+
 
 //    @Query("SELECT * FROM event WHERE category=incompleted")
 //    LiveData<List<Event>> getAllIncompletedEvents();

@@ -18,7 +18,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
  * get database
  * @author: Limin
  */
-@Database(entities = {Event.class, Category.class},
+@Database(entities = {Event.class},
         version = 1 //
        )
 public abstract class EventDatabase extends RoomDatabase {
@@ -28,7 +28,6 @@ public abstract class EventDatabase extends RoomDatabase {
 
     // pass value to nested class
     public abstract EventDao eventDao();
-    public abstract CategoryDao categoryDao();
 
     private static final String DB_NAME = "events.db";
 
@@ -88,12 +87,10 @@ public abstract class EventDatabase extends RoomDatabase {
     // populate the database
     private static class PopulateDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
         private final EventDao eventDao;
-        private final CategoryDao categoryDao;
 
         // pass value
         public PopulateDatabaseAsyncTask(EventDatabase instance){
             eventDao = instance.eventDao();
-            categoryDao = instance.categoryDao();
         }
 
 
@@ -101,7 +98,6 @@ public abstract class EventDatabase extends RoomDatabase {
         protected Void doInBackground(Void... voids) {
             // clear db
             eventDao.deleteAll();
-            categoryDao.deleteAll();
 
             Log.d("Database", "Sureeee");
 
@@ -110,15 +106,11 @@ public abstract class EventDatabase extends RoomDatabase {
             Event two = new Event("Python Lab");
             Event three = new Event("Database Lab");
 
+
             eventDao.insertOneEvent(one);
             eventDao.insertOneEvent(two);
             eventDao.insertOneEvent(three);
 
-
-            Category cat1 = new Category("Incomplete");
-            Category cat2 = new Category("Completed");
-            categoryDao.insertOneCategory(cat1);
-            categoryDao.insertOneCategory(cat2);
 
 
 

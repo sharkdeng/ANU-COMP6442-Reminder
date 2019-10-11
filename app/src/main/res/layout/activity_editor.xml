@@ -132,12 +132,12 @@
 z
             <TextView
                 android:padding="10dp"
-                android:text="Starts"
+                android:text="Date"
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/edit_event_start"
-                android:text="1:00 AM"
+                android:id="@+id/edit_event_date"
+                android:text="dd/MM/yy"
                 android:textSize="18sp"
                 />
         </TableRow>
@@ -148,12 +148,12 @@ z
 
             <TextView
                 android:padding="10dp"
-                android:text="Ends"
+                android:text="Time"
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/edit_event_end"
-                android:text="3:00 AM"
+                android:id="@+id/edit_event_time"
+                android:text="00:00"
                 android:textSize="18sp"
                 />
         </TableRow>

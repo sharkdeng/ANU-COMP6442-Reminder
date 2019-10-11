@@ -114,7 +114,7 @@ public class DayActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
 
-        if(item.getItemId() == R.id.add_note){
+        if(item.getItemId() == R.id.main_add_note){
             Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
             startActivity(intent);
             return true;

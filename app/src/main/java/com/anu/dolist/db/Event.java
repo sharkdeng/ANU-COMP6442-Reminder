@@ -46,10 +46,12 @@ public class Event {
     @ColumnInfo(name = "notes")
     public String notes;
 
+    // 0 for incompleted, 1 for completed
     @ColumnInfo(name = "category")
     public boolean category;
 
-    public Event(@NotNull String title, String location, String starts, String ends, String alert, String url, String notes) {
+    @Ignore
+    public Event(@NotNull String title, String location, String starts, String ends, String alert, String url, String notes, boolean category) {
         this.title = title;
         this.location = location;
         this.starts = starts;
@@ -57,6 +59,7 @@ public class Event {
         this.alert = alert;
         this.url = url;
         this.notes = notes;
+        this.category = category;
     }
 
     /**
@@ -64,15 +67,16 @@ public class Event {
      * use @Ignore to silence multiple constructor
      * @param title
      */
-    @Ignore
+
     public Event(@NotNull String title) {
         this.title = title;
-        this.location = "ANU";
-        this.starts = "11 AM";
-        this.ends = "1 PM";
-        this.alert = "5 mins";
+        this.location = "";
+        this.starts = "";
+        this.ends = "";
+        this.alert = "";
         this.url = "";
-        this.notes = "Attend lab 5 and get marked";
+        this.notes = "";
+        this.category = false;
     }
 }
 

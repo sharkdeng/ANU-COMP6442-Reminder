@@ -4,6 +4,10 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,12 +20,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 import static com.anu.dolist.MainActivity.list;
@@ -60,8 +71,8 @@ public class EditorActivity extends AppCompatActivity {
         final EditText editLocation = findViewById(R.id.edit_event_location);
         final EditText editUrl = findViewById(R.id.edit_event_url);
         final EditText editNote = findViewById(R.id.edit_event_notes);
-        final Button editStart = findViewById(R.id.edit_event_start);
-        final Button editEnd = findViewById(R.id.edit_event_end);
+        final Button editStart = findViewById(R.id.edit_event_date);
+        final Button editEnd = findViewById(R.id.edit_event_time);
         final Button editAlert = findViewById(R.id.edit_event_alert);
 
         // change right button on the toolbar
@@ -94,6 +105,62 @@ public class EditorActivity extends AppCompatActivity {
             System.out.println(editNote.getText().toString());;
             editNote.setText(eventNotes);
         }
+
+
+        final Calendar mCalendar = Calendar.getInstance();
+        // start callback
+        editEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO Auto-generated method stub
+
+                int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
+                int minute = mCalendar.get(Calendar.MINUTE);
+
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(EditorActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+//                        eReminderTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+
+            }
+        });
+
+        editStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(
+                        EditorActivity. this, date ,
+                        mCalendar .get(Calendar. YEAR ) ,
+                        mCalendar .get(Calendar. MONTH ) ,
+                        mCalendar .get(Calendar. DAY_OF_MONTH )
+                ).show() ;
+
+                    }
+
+            DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet (DatePicker view , int year , int monthOfYear , int dayOfMonth) {
+                    mCalendar .set(Calendar. YEAR , year) ;
+                    mCalendar .set(Calendar. MONTH , monthOfYear) ;
+                    mCalendar .set(Calendar. DAY_OF_MONTH , dayOfMonth) ;
+                    updateLabel() ;
+                }
+            } ;
+
+            private void updateLabel () {
+                String myFormat = "dd/MM/yy" ; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
+                Date date = mCalendar .getTime() ;
+                editStart .setText(sdf.format(date)) ;
+                //scheduleNotification(getNotification( btnDate .getText().toString()) , date.getTime()) ;
+            }
+
+        });
 
 
 
@@ -172,7 +239,7 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.alert = editAlert.getText().toString();
                     newEvent.url = editUrl.getText().toString();
                     newEvent.notes = editNote.getText().toString();
-//                    newEvent.category =
+                    newEvent.category = false;
 
 
 
