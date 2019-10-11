@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     static ArrayAdapter arrayAdapter;
     public static String PACKAGE_NAME;
     private ActionBar ab;
+
 
 
 
@@ -168,6 +171,9 @@ public class MainActivity extends AppCompatActivity {
         // initiate EventRepository
         er = new EventRepository(getApplication());
         listView = findViewById(R.id.main_lv);
+
+
+
 
 //        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 //        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
