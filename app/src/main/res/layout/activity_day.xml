@@ -53,16 +53,10 @@
 
 
             <!-- show selection -->
-            <ImageButton
-                android:id="@+id/day_tb_select"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/colorPrimary"
-                android:src="@android:drawable/arrow_up_float" />
+
 
             <!-- search -->
-            <ImageButton
+            <SearchView
                 android:id="@+id/day_tb_search"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

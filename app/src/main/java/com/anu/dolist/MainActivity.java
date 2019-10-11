@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     static ArrayAdapter arrayAdapter;
     public static String PACKAGE_NAME;
     private ActionBar ab;
+    private SearchView searchBtn;
 
 
 
@@ -150,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     /**
      * @author: u6734521
      * listView for notes taking with an example note
@@ -171,6 +175,10 @@ public class MainActivity extends AppCompatActivity {
         // initiate EventRepository
         er = new EventRepository(getApplication());
         listView = findViewById(R.id.main_lv);
+
+        searchBtn = findViewById(R.id.main_search_btn);
+
+
 
 
 
@@ -329,6 +337,11 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
 
 
+    }
 
+
+
+    public void filterEvents(View view) {
+        System.out.println("Hello! Search");
     }
 }
