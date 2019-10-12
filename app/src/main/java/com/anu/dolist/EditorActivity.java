@@ -138,19 +138,19 @@ public class EditorActivity extends AppCompatActivity {
                             .show();
                 } else {
 
+
+                    final EventRepository er = new EventRepository(getApplication());
+                    Event newEvent = new Event(editTitle.getText().toString());
+                    newEvent.location = editLocation.getText().toString();
+                    newEvent.starts = editDate.getText().toString();
+                    newEvent.ends = editTime.getText().toString();
+                    newEvent.alert = editAlert.getText().toString();
+                    newEvent.url = editUrl.getText().toString();
+                    newEvent.notes = editNote.getText().toString();
+                    newEvent.category = false;
+
                     // insert one record
                     if (add.getText().toString().equals("Add")) {
-
-                        final EventRepository er = new EventRepository(getApplication());
-                        System.out.println(editTitle.getText().toString());
-                        Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editDate.getText().toString();
-                        newEvent.ends = editTime.getText().toString();
-                        newEvent.alert = editAlert.getText().toString();
-                        newEvent.url = editUrl.getText().toString();
-                        newEvent.notes = editNote.getText().toString();
-                        newEvent.category = false;
 
                         er.insertOneEvent(newEvent);
 
@@ -175,16 +175,6 @@ public class EditorActivity extends AppCompatActivity {
 
                         // update
                     } else {
-
-                        final EventRepository er = new EventRepository(getApplication());
-                        Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editDate.getText().toString();
-                        newEvent.ends = editTime.getText().toString();
-                        newEvent.alert = editAlert.getText().toString();
-                        newEvent.url = editUrl.getText().toString();
-                        newEvent.notes = editNote.getText().toString();
-                        newEvent.category = false;
 
                         er.updateOneEvent(newEvent);
 
@@ -415,7 +405,7 @@ public class EditorActivity extends AppCompatActivity {
 
                         // update
                     } else {
-                        
+
                         er.updateOneEvent(newEvent);
 
 
