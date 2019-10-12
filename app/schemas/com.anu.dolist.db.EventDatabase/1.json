@@ -2,18 +2,12 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c95fe9e256ba10eacd5bd974c190fbd8",
+    "identityHash": "100d75ac8c8508ff0c5240cd7167a5f1",
     "entities": [
       {
         "tableName": "event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eid` INTEGER NOT NULL, `title` TEXT NOT NULL, `location` TEXT, `date` TEXT, `starts` TEXT, `ends` TEXT, `alert` TEXT, `url` TEXT, `notes` TEXT, `category` INTEGER NOT NULL, PRIMARY KEY(`eid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`title` TEXT NOT NULL, `location` TEXT, `date` TEXT, `starts` TEXT, `ends` TEXT, `alert` TEXT, `url` TEXT, `notes` TEXT, `category` INTEGER NOT NULL, PRIMARY KEY(`title`))",
         "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "eid",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
           {
             "fieldPath": "title",
             "columnName": "title",
@@ -71,7 +65,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "eid"
+            "title"
           ],
           "autoGenerate": false
         },
@@ -139,7 +133,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c95fe9e256ba10eacd5bd974c190fbd8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '100d75ac8c8508ff0c5240cd7167a5f1')"
     ]
   }
 }

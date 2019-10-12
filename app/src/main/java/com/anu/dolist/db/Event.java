@@ -22,10 +22,10 @@ public class Event {
 
 
     // After change this, I can modify the title
-    @PrimaryKey()
-    @ColumnInfo(name = "eid")
-    public int id;
 
+//       @ColumnInfo(name = "eid")
+//    public int id;
+    @PrimaryKey()
     @ColumnInfo(name = "title")
     @NotNull public String title;
 
