@@ -4,20 +4,26 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,27 +39,27 @@ import com.google.android.material.snackbar.Snackbar;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 import static com.anu.dolist.MainActivity.list;
-
+import static com.anu.dolist.MainActivity.listView;
 
 // three extra libraries about notification
 // FIXME: cannot import, already defined by single-type
 //import com.allyants.notifyme.NotifyMe;
-//import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-//import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 /**
  * @author: Limin Deng(u6849956)
  */
-public class EditorActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EditorActivity extends AppCompatActivity {
 
 
     int noteId;
-
-
+    final static int RQS_1 = 1;
+    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
+    private final static String default_notification_channel_id = "default" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,7 +223,7 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
-                Calendar mCalendar = Calendar.getInstance();
+                final Calendar mCalendar = Calendar.getInstance();
                 int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = mCalendar.get(Calendar.MINUTE);
 
@@ -225,8 +231,8 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                 mTimePicker = new TimePickerDialog(EditorActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                        mCalendar.set(Calendar.HOUR, selectedHour);
-//                        mCalendar.set(Calendar.MINUTE, selectedMinute);
+                        mCalendar.set(Calendar.HOUR, selectedHour);
+                        mCalendar.set(Calendar.MINUTE, selectedMinute);
                         editTime.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -248,32 +254,31 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                 // show the date picker
                 new DatePickerDialog(
                         EditorActivity. this, date ,
-                        mCalendar .get(Calendar. YEAR ) ,
-                        mCalendar .get(Calendar. MONTH ) ,
-                        mCalendar .get(Calendar. DAY_OF_MONTH )
+                        mCalendar.get(Calendar. YEAR ) ,
+                        mCalendar.get(Calendar. MONTH ) ,
+                        mCalendar.get(Calendar. DAY_OF_MONTH )
                 ).show() ;
 
-            }
+                    }
 
             // update date picker
             DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
                 @Override
-                public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                    mCalendar.set(Calendar.YEAR, year);
-                    mCalendar.set(Calendar.MONTH, monthOfYear);
-                    mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    updateLabel();
+                public void onDateSet (DatePicker view , int year , int monthOfYear , int dayOfMonth) {
+                    mCalendar.set(Calendar. YEAR , year) ;
+                    mCalendar.set(Calendar. MONTH , monthOfYear) ;
+                    mCalendar.set(Calendar. DAY_OF_MONTH , dayOfMonth) ;
+                    updateLabel() ;
                 }
-            };
+            } ;
 
             private void updateLabel () {
-                Log.d("Shark ", "updateLabel");
-
-                String myFormat = "dd/MM/yy"; //In which you need put here
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ());
-                Date date = mCalendar.getTime();
-                editDate.setText(sdf.format(date));
+                String myFormat = "dd/MM/yy" ; //In which you need put here
+                SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
+                Date date = mCalendar.getTime() ;
+                editDate.setText(sdf.format(date)) ;
+//                scheduleNotification(getNotification(editDate.getText().toString()) , date.getTime()) ;
             }
 
 
@@ -285,25 +290,6 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
          */
         Toolbar tb = findViewById(R.id.edit_toolbar);
         setSupportActionBar(tb);
-        // use customized Cancel instead
-        // click home button
-//        tb.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // because previous view is not finished
-//                finish();
-//            }
-//        });
-        // make sure toolbar is not null
-        if (getSupportActionBar() != null){
-            // show back arrow
-            // we use customized Cancel text instead
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        // add menu
-        // use customized Add text instead
-//        tb.inflateMenu(R.menu.add_note);
 
 
 
@@ -334,6 +320,11 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 editAlert.setText("Alarm set");
 
+
+                                System.out.println("i am in calender"+ mCalendar.getTime());
+//                                scheduleNotification(getNotification( editDate.getText().toString()) , mCalendar.getTimeInMillis()) ;
+//
+
                                 Intent intent = new Intent(EditorActivity.this, AlarmReceiver.class);
                                 PendingIntent pendingIntent = PendingIntent.getBroadcast(EditorActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                 AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -345,13 +336,9 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                                 Reminder.createNotificationChannel(getApplicationContext(), channelId);
                                 Reminder.createNotification(EditorActivity.this, channelId, editTitle.getText().toString(), channelId);
 
-                                Calendar now = Calendar.getInstance();
-                                now.set(Calendar.YEAR, "2019");
-                                now.set(Calendar.MONDAY, "Oc");
-                                now.set(Calendar.DAY_OF_MONTH, "");
+                                Calendar now = mCalendar;
 
-                                TimePickerDialog tpd;
-                                DatePickerDialog dpd;
+
 
                             }
                         })
@@ -376,7 +363,6 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                     new AlertDialog.Builder(EditorActivity.this)
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .setTitle("Title cannot be empty")
-                            .setTitle("Title cannot be empty")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
@@ -388,19 +374,21 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
 
                 } else {
 
+                    final EventRepository er = new EventRepository(getApplication());
+                    System.out.println(editTitle.getText().toString());
+                    Event newEvent = new Event(editTitle.getText().toString());
+                    newEvent.location = editLocation.getText().toString();
+                    newEvent.starts = editDate.getText().toString();
+                    newEvent.ends = editTime.getText().toString();
+                    newEvent.alert = editAlert.getText().toString();
+                    newEvent.url = editUrl.getText().toString();
+                    newEvent.notes = editNote.getText().toString();
+                    newEvent.category = false;
+
                     // insert one record
                     if (add.getText().toString().equals("Add")) {
 
-                        final EventRepository er = new EventRepository(getApplication());
-                        System.out.println(editTitle.getText().toString());
-                        Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editDate.getText().toString();
-                        newEvent.ends = editTime.getText().toString();
-                        newEvent.alert = editAlert.getText().toString();
-                        newEvent.url = editUrl.getText().toString();
-                        newEvent.notes = editNote.getText().toString();
-                        newEvent.category = false;
+
 
                         er.insertOneEvent(newEvent);
 
@@ -423,19 +411,11 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
                             }
                         }, 1000);
 
+
+
                         // update
                     } else {
-
-                        final EventRepository er = new EventRepository(getApplication());
-                        Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editDate.getText().toString();
-                        newEvent.ends = editTime.getText().toString();
-                        newEvent.alert = editAlert.getText().toString();
-                        newEvent.url = editUrl.getText().toString();
-                        newEvent.notes = editNote.getText().toString();
-                        newEvent.category = false;
-
+                        
                         er.updateOneEvent(newEvent);
 
 
@@ -536,16 +516,25 @@ public class EditorActivity extends AppCompatActivity implements DatePickerDialo
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Edit Event");
 
-    }
-
-
-    @Override
-    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
 
     }
 
-    @Override
-    public void onTimeSet(TimePicker timePicker, int i, int i1) {
-
-    }
+//    private void scheduleNotification (Notification notification , long delay) {
+//        Intent notificationIntent = new Intent( EditorActivity.this, MyNotificationPublisher. class ) ;
+//        notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION_ID , 1 ) ;
+//        notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION , notification) ;
+//        PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+//        assert alarmManager != null;
+//        alarmManager.set(AlarmManager.RTC_WAKEUP , delay , pendingIntent) ;
+//    }
+//    private Notification getNotification (String content) {
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
+//        builder.setContentTitle( "Scheduled Notification" ) ;
+//        builder.setContentText(content) ;
+//        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+//        builder.setAutoCancel( true ) ;
+//        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+//        return builder.build() ;
+//    }
 }

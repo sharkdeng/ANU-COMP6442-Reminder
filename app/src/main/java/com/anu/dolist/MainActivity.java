@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
+    static ListView listView;
     static ArrayList<String> list = new ArrayList<>();
     private EventRepository er;
     private List<Event> events;
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
             startActivity(intent);
+            finish();
             return true;
 
         } else if (item.getItemId() == R.id.main_show_incompleted) {
@@ -156,8 +157,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.main_delete_all) {
 
             er.deleteAll();
-            list.clear(); // make sure ui is correctly
-
             return true;
 
         }
@@ -319,8 +318,8 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_2:
 
-                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-                        finish();
+//                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+//                        finish();
                         break;
 
                     case R.id.main_item_3:
@@ -362,8 +361,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             list.add("Hello from DAO");
         }
-
-
 
 
 

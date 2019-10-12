@@ -20,6 +20,7 @@ android {
     }
     buildTypes {
         release {
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -55,7 +56,6 @@ dependencies {
     // Notification
     implementation "com.android.support:support-compat:29.0.0"
     implementation "com.github.jakebonk:NotifyMe:1.0.0"
-    implementation "com.wdullaer:materialdatetimepicker:3.6.0"
 
 
     // Floating Action Bar
