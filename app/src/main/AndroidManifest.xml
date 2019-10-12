@@ -3,6 +3,7 @@
     package="com.anu.dolist">
     <!-- map permission -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use

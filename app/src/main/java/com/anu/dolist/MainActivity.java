@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+
 import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
@@ -30,13 +33,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
+    static ListView listView;
     static ArrayList<String> list = new ArrayList<>();
     private EventRepository er;
     private List<Event> events;
     static ArrayAdapter arrayAdapter;
     public static String PACKAGE_NAME;
     private ActionBar ab;
+    private SearchView searchBtn;
+
 
 
 
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
             startActivity(intent);
+            finish();
             return true;
 
         } else if (item.getItemId() == R.id.main_show_incompleted) {
@@ -155,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+
     /**
      * @author: u6734521
      * listView for notes taking with an example note
@@ -177,6 +185,13 @@ public class MainActivity extends AppCompatActivity {
         er = new EventRepository(getApplication());
         listView = findViewById(R.id.main_lv);
 
+        searchBtn = findViewById(R.id.main_search_btn);
+
+
+
+
+
+
 //        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
 //        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
 //        if(set == null){
@@ -186,8 +201,8 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(arrayAdapter);
+//        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+//        listView.setAdapter(arrayAdapter);
         /**
          * @author: u6734521
          * to jump to editor activity when the list item is pressed.
@@ -276,11 +291,11 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("Do nothing");
                         break;
 
-                    case R.id.main_item_2:
-
-                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-                        finish();
-                        break;
+//                    case R.id.main_item_2:
+//
+//                    //    startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+//                        finish();
+//                        break;
 
                     case R.id.main_item_3:
                         Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
@@ -324,14 +339,17 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
         // fill in listView
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
         listView.setAdapter(arrayAdapter);
 
 
+    }
 
+
+
+    public void filterEvents(View view) {
+        System.out.println("Hello! Search");
 
 
     }

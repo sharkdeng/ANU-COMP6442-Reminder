@@ -31,6 +31,9 @@ public class Event {
     @ColumnInfo(name = "location")
     public String location;
 
+    @ColumnInfo(name = "date")
+    public String date;
+
     @ColumnInfo(name = "starts")
     public String starts;
 
@@ -51,9 +54,10 @@ public class Event {
     public boolean category;
 
     @Ignore
-    public Event(@NotNull String title, String location, String starts, String ends, String alert, String url, String notes, boolean category) {
+    public Event(@NotNull String title, String location, String date, String starts, String ends, String alert, String url, String notes, boolean category) {
         this.title = title;
         this.location = location;
+        this.date = date;
         this.starts = starts;
         this.ends = ends;
         this.alert = alert;
@@ -71,6 +75,7 @@ public class Event {
     public Event(@NotNull String title) {
         this.title = title;
         this.location = "";
+        this.date = "";
         this.starts = "";
         this.ends = "";
         this.alert = "";

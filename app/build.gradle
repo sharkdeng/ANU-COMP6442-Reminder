@@ -49,5 +49,8 @@ dependencies {
     // @NotNull
     implementation 'org.jetbrains:annotations-java5:15.0'
 
+    //Notification
+    implementation 'com.android.support:support-compat:29.0.0'
+
 
 }

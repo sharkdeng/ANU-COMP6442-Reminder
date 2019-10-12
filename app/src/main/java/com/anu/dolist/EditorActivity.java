@@ -41,7 +41,7 @@ import java.util.Locale;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 import static com.anu.dolist.MainActivity.list;
-
+import static com.anu.dolist.MainActivity.listView;
 
 
 /**
@@ -121,7 +121,7 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
-                Calendar mCalendar = Calendar.getInstance();
+              //  Calendar mCalendar = Calendar.getInstance();
                 int hour = mCalendar.get(Calendar.HOUR_OF_DAY);
                 int minute = mCalendar.get(Calendar.MINUTE);
 
@@ -129,8 +129,8 @@ public class EditorActivity extends AppCompatActivity {
                 mTimePicker = new TimePickerDialog(EditorActivity.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-//                        mCalendar.set(Calendar.HOUR, selectedHour);
-//                        mCalendar.set(Calendar.MINUTE, selectedMinute);
+                        mCalendar.set(Calendar.HOUR, selectedHour);
+                        mCalendar.set(Calendar.MINUTE, selectedMinute);
                         editEnd.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
@@ -140,10 +140,12 @@ public class EditorActivity extends AppCompatActivity {
             }
         });
 
+
+
         editStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendar mCalendar = Calendar.getInstance();
+            //    Calendar mCalendar = Calendar.getInstance();
                 new DatePickerDialog(
                         EditorActivity. this, date ,
                         mCalendar .get(Calendar. YEAR ) ,
@@ -167,31 +169,19 @@ public class EditorActivity extends AppCompatActivity {
             private void updateLabel () {
                 String myFormat = "dd/MM/yy" ; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
-                Date date = mCalendar .getTime() ;
+                Date date = mCalendar.getTime();
+                System.out.println("showing you date: "+ sdf.format(date.getTime()));
                 editStart .setText(sdf.format(date)) ;
-                scheduleNotification(getNotification( editStart.getText().toString()) , date.getTime()) ;
+
             }
 
-            private void scheduleNotification (Notification notification , long delay) {
-                Intent notificationIntent = new Intent( EditorActivity.this, MyNotificationPublisher. class ) ;
-                notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION_ID , 1 ) ;
-                notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION , notification) ;
-                PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
-                assert alarmManager != null;
-                alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , delay , pendingIntent) ;
-            }
-            private Notification getNotification (String content) {
-                NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
-                builder.setContentTitle( "Scheduled Notification" ) ;
-                builder.setContentText(content) ;
-                builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
-                builder.setAutoCancel( true ) ;
-                builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
-                return builder.build() ;
-            }
+
+
+
 
         });
+
+
 
 
 
@@ -244,6 +234,8 @@ public class EditorActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 editAlert.setText("Alarm set");
+                                System.out.println("i am in calender"+ mCalendar.getTime());
+                                scheduleNotification(getNotification( editStart.getText().toString()) , mCalendar.getTimeInMillis()) ;
 //                                Intent intent = new Intent(EditorActivity.this, AlarmActivity.class);
 //                                PendingIntent pendingIntent = PendingIntent.getBroadcast(EditorActivity.this, RQS_1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //                                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
@@ -270,7 +262,6 @@ public class EditorActivity extends AppCompatActivity {
                     // show alert
                     new AlertDialog.Builder(EditorActivity.this)
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("Title cannot be empty")
                             .setTitle("Title cannot be empty")
                             .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 @Override
@@ -303,6 +294,9 @@ public class EditorActivity extends AppCompatActivity {
                     if (add.getText().toString().equals("Add")) {
 
                         er.insertOneEvent(newEvent);
+                        arrayAdapter = new ArrayAdapter(EditorActivity.this, android.R.layout.simple_list_item_1, list);
+                        listView.setAdapter(arrayAdapter);
+
 
 
                         // show info
@@ -318,7 +312,9 @@ public class EditorActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
                                 EditorActivity.this.finish();
+
                             }
                         }, 1000);
 
@@ -341,6 +337,7 @@ public class EditorActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
+                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
                                 EditorActivity.this.finish();
                             }
                         }, 2000);
@@ -427,5 +424,24 @@ public class EditorActivity extends AppCompatActivity {
         ab.setTitle("Edit Event");
 
 
+    }
+
+    private void scheduleNotification (Notification notification , long delay) {
+        Intent notificationIntent = new Intent( EditorActivity.this, MyNotificationPublisher. class ) ;
+        notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION_ID , 1 ) ;
+        notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION , notification) ;
+        PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+        assert alarmManager != null;
+        alarmManager.set(AlarmManager.RTC_WAKEUP , delay , pendingIntent) ;
+    }
+    private Notification getNotification (String content) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
+        builder.setContentTitle( "Scheduled Notification" ) ;
+        builder.setContentText(content) ;
+        builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
+        builder.setAutoCancel( true ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        return builder.build() ;
     }
 }
