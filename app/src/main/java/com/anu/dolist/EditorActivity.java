@@ -39,11 +39,16 @@ import static com.anu.dolist.MainActivity.arrayAdapter;
 import static com.anu.dolist.MainActivity.list;
 
 
+// three extra libraries about notification
+// FIXME: cannot import, already defined by single-type
+//import com.allyants.notifyme.NotifyMe;
+//import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+//import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 /**
  * @author: Limin Deng(u6849956)
  */
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
 
     int noteId;
@@ -340,6 +345,14 @@ public class EditorActivity extends AppCompatActivity {
                                 Reminder.createNotificationChannel(getApplicationContext(), channelId);
                                 Reminder.createNotification(EditorActivity.this, channelId, editTitle.getText().toString(), channelId);
 
+                                Calendar now = Calendar.getInstance();
+                                now.set(Calendar.YEAR, "2019");
+                                now.set(Calendar.MONDAY, "Oc");
+                                now.set(Calendar.DAY_OF_MONTH, "");
+
+                                TimePickerDialog tpd;
+                                DatePickerDialog dpd;
+
                             }
                         })
                         .setNegativeButton("No",null)
@@ -526,4 +539,13 @@ public class EditorActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int i, int i1) {
+
+    }
 }
