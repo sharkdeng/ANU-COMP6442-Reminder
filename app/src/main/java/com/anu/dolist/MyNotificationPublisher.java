@@ -7,6 +7,7 @@ import android.app.NotificationManager ;
 import android.content.BroadcastReceiver ;
 import android.content.Context ;
 import android.content.Intent ;
+import android.net.Uri;
 
 import static com.anu.dolist.EditorActivity.NOTIFICATION_CHANNEL_ID;
 
@@ -23,7 +24,7 @@ public class MyNotificationPublisher extends BroadcastReceiver {
             assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel) ;
         }
-        int id = intent.getIntExtra( NOTIFICATION_ID , 0 ) ;
+        int id = intent.getIntExtra( NOTIFICATION_ID ,  0) ;
         assert notificationManager != null;
         notificationManager.notify(id , notification) ;
     }
