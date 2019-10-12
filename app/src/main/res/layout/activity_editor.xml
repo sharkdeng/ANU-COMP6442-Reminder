@@ -114,6 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:onClick="selectPlace"
                 android:hint="Location"
                 android:padding="10dp"
                 android:textSize="18sp" />

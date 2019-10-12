@@ -27,6 +27,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private EventRepository er;
     private List<Event> events;
     static ArrayAdapter arrayAdapter;
+    static ArrayList<String> places = new ArrayList<>();
+    static ArrayList<LatLng> locations = new ArrayList<>();
     public static String PACKAGE_NAME;
     private ActionBar ab;
     private SearchView searchBtn;
@@ -272,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
 
 
 
