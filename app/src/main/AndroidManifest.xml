@@ -10,11 +10,13 @@
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
 
     <!-- map permission -->
     <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
 
     <application
+        android:name=".Reminder"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -51,8 +53,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".AlarmActivity" android:process=":remote" />
-        <receiver android:name=".MyNotification" android:process=":remote" />
+
+        <!-- register receiver -->
+        <receiver android:name=".notify.AlarmReceiver" android:process=":remote" />
+
         <activity android:name=".InitActivity" />
     </application>
 

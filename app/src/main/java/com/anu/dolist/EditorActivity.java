@@ -4,12 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.NotificationCompat;
-import androidx.core.view.inputmethod.EditorInfoCompat;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -29,10 +26,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
+import com.anu.dolist.notify.AlarmReceiver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -51,9 +47,6 @@ public class EditorActivity extends AppCompatActivity {
 
 
     int noteId;
-    final static int RQS_1 = 1;
-    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
-    private final static String default_notification_channel_id = "default" ;
 
 
     @Override
@@ -81,8 +74,8 @@ public class EditorActivity extends AppCompatActivity {
         final EditText editLocation = findViewById(R.id.edit_event_location);
         final EditText editUrl = findViewById(R.id.edit_event_url);
         final EditText editNote = findViewById(R.id.edit_event_notes);
-        final Button editStart = findViewById(R.id.edit_event_date);
-        final Button editEnd = findViewById(R.id.edit_event_time);
+        final Button editDate = findViewById(R.id.edit_event_date);
+        final Button editTime = findViewById(R.id.edit_event_time);
         final Button editAlert = findViewById(R.id.edit_event_alert);
 
         // change right button on the toolbar
@@ -100,10 +93,10 @@ public class EditorActivity extends AppCompatActivity {
             editLocation.setText(eventLocation);
         }
         if (eventStart != null) {
-            editStart.setText(eventStart);
+            editDate.setText(eventStart);
         }
         if (eventEnd != null) {
-            editEnd.setText(eventEnd);
+            editTime.setText(eventEnd);
         }
         if (eventAlert != null) {
             editAlert.setText(eventAlert);
@@ -141,8 +134,8 @@ public class EditorActivity extends AppCompatActivity {
                         System.out.println(editTitle.getText().toString());
                         Event newEvent = new Event(editTitle.getText().toString());
                         newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editStart.getText().toString();
-                        newEvent.ends = editEnd.getText().toString();
+                        newEvent.starts = editDate.getText().toString();
+                        newEvent.ends = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
                         newEvent.url = editUrl.getText().toString();
                         newEvent.notes = editNote.getText().toString();
@@ -175,8 +168,8 @@ public class EditorActivity extends AppCompatActivity {
                         final EventRepository er = new EventRepository(getApplication());
                         Event newEvent = new Event(editTitle.getText().toString());
                         newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editStart.getText().toString();
-                        newEvent.ends = editEnd.getText().toString();
+                        newEvent.starts = editDate.getText().toString();
+                        newEvent.ends = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
                         newEvent.url = editUrl.getText().toString();
                         newEvent.notes = editNote.getText().toString();
@@ -215,7 +208,7 @@ public class EditorActivity extends AppCompatActivity {
         /**
          * select time
          */
-        editEnd.setOnClickListener(new View.OnClickListener() {
+        editTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
@@ -229,7 +222,7 @@ public class EditorActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 //                        mCalendar.set(Calendar.HOUR, selectedHour);
 //                        mCalendar.set(Calendar.MINUTE, selectedMinute);
-                        editEnd.setText( selectedHour + ":" + selectedMinute);
+                        editTime.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -242,7 +235,7 @@ public class EditorActivity extends AppCompatActivity {
         /**
          * select date
          */
-        editStart.setOnClickListener(new View.OnClickListener() {
+        editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendar mCalendar = Calendar.getInstance();
@@ -275,33 +268,9 @@ public class EditorActivity extends AppCompatActivity {
                 String myFormat = "dd/MM/yy"; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ());
                 Date date = mCalendar.getTime();
-                editStart.setText(sdf.format(date));
-                scheduleNotification(getNotification( editStart.getText().toString()), 10);
+                editDate.setText(sdf.format(date));
             }
 
-            private void scheduleNotification (Notification notification , long delay) {
-
-                Intent notificationIntent = new Intent( EditorActivity.this, MyNotification.class );
-                notificationIntent.putExtra(MyNotification. NOTIFICATION_ID , 1 );
-                notificationIntent.putExtra(MyNotification. NOTIFICATION , notification);
-                PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, 0 , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
-                AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE );
-                assert alarmManager != null;
-                alarmManager.set(AlarmManager. ELAPSED_REALTIME_WAKEUP , delay , pendingIntent);
-            }
-
-            private Notification getNotification (String content) {
-
-
-                // create a notification
-                NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
-                builder.setContentTitle( "Scheduled Notification" ) ;
-                builder.setContentText(content) ;
-                builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
-//                builder.setAutoCancel( true ) ;
-                builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
-                return builder.build() ;
-            }
 
         });
 
@@ -359,10 +328,18 @@ public class EditorActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 editAlert.setText("Alarm set");
-//                                Intent intent = new Intent(EditorActivity.this, AlarmActivity.class);
-//                                PendingIntent pendingIntent = PendingIntent.getBroadcast(EditorActivity.this, RQS_1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//                                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//                                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pendingIntent);
+
+                                Intent intent = new Intent(EditorActivity.this, AlarmReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(EditorActivity.this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis(), pendingIntent);
+
+
+                                // notify rightnow
+                                String channelId = getApplicationContext().getPackageName() + editTitle.getText().toString();
+                                Reminder.createNotificationChannel(getApplicationContext(), channelId);
+                                Reminder.createNotification(EditorActivity.this, channelId, editTitle.getText().toString(), channelId);
+
                             }
                         })
                         .setNegativeButton("No",null)
@@ -405,8 +382,8 @@ public class EditorActivity extends AppCompatActivity {
                         System.out.println(editTitle.getText().toString());
                         Event newEvent = new Event(editTitle.getText().toString());
                         newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editStart.getText().toString();
-                        newEvent.ends = editEnd.getText().toString();
+                        newEvent.starts = editDate.getText().toString();
+                        newEvent.ends = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
                         newEvent.url = editUrl.getText().toString();
                         newEvent.notes = editNote.getText().toString();
@@ -439,8 +416,8 @@ public class EditorActivity extends AppCompatActivity {
                         final EventRepository er = new EventRepository(getApplication());
                         Event newEvent = new Event(editTitle.getText().toString());
                         newEvent.location = editLocation.getText().toString();
-                        newEvent.starts = editStart.getText().toString();
-                        newEvent.ends = editEnd.getText().toString();
+                        newEvent.starts = editDate.getText().toString();
+                        newEvent.ends = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
                         newEvent.url = editUrl.getText().toString();
                         newEvent.notes = editNote.getText().toString();

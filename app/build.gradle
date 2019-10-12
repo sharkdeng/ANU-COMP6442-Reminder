@@ -54,6 +54,9 @@ dependencies {
 
     // Notification
     implementation "com.android.support:support-compat:29.0.0"
+    implementation "com.github.jakebonk:NotifyMe:1.0.0"
+    implementation "com.wdullaer:materialdatetimepicker:3.6.0"
+
 
     // Floating Action Bar
     implementation 'com.android.support:design:29.1.0'
