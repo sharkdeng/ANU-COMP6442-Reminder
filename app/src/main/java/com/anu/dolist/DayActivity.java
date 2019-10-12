@@ -77,7 +77,6 @@ public class DayActivity extends AppCompatActivity {
 
 
 
-
         // change textview content
         Intent get = getIntent();
 

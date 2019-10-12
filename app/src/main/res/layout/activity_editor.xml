@@ -129,17 +129,17 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+z
             <TextView
                 android:padding="10dp"
-                android:text="Starts"
+                android:text="Date"
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/edit_event_start"
-                android:text="1:00 AM"
-                android:textSize="18sp"
-                />
+                android:id="@+id/edit_event_date"
+                android:text="dd/MM/yy"
+                android:textColor="#612B1D1D"
+                android:textSize="18sp" />
         </TableRow>
 
         <TableRow
@@ -148,14 +148,14 @@
 
             <TextView
                 android:padding="10dp"
-                android:text="Ends"
+                android:text="Time"
                 android:textSize="18sp" />
 
             <Button
-                android:id="@+id/edit_event_end"
-                android:text="3:00 AM"
-                android:textSize="18sp"
-                />
+                android:id="@+id/edit_event_time"
+                android:text="00:00"
+                android:textColor="#612B1D1D"
+                android:textSize="18sp" />
         </TableRow>
 
         <!-- space -->
@@ -224,6 +224,22 @@
 
 
     </TableLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="30dp"
+        android:src="@android:drawable/checkbox_on_background"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.917" />
 
 
 
