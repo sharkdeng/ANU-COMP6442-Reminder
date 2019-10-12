@@ -49,6 +49,10 @@ public class EventRepository {
         return eventDao.getEventByTitle(title);
     }
 
+    public int getId(String title) {
+        return eventDao.getId(title);
+    }
+
     public List<Event> getCompletedEvents() {
         // it works for List<Event> and allowMainThread
         // but not works for LiveData

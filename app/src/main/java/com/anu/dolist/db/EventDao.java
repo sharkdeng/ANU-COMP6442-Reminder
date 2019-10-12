@@ -41,6 +41,9 @@ public interface EventDao {
     @Query("SELECT * FROM event WHERE title=:title")
     Event getEventByTitle(String title);
 
+    @Query("SELECT eid FROM event WHERE title=:title")
+    int getId(String title);
+
     @Query("SELECT * FROM event")
     List<Event> getAllEvents();
 

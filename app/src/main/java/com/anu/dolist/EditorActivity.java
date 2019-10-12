@@ -59,7 +59,7 @@ public class EditorActivity extends AppCompatActivity {
 
         // get data
         Intent go = getIntent();
-        String eventTitle = go.getStringExtra("title");
+        final String eventTitle = go.getStringExtra("title");
         String eventLocation = go.getStringExtra("location");
         String eventStart = go.getStringExtra("start");
         String eventEnd = go.getStringExtra("end");
@@ -67,6 +67,7 @@ public class EditorActivity extends AppCompatActivity {
         String eventUrl = go.getStringExtra("url");
         String eventNotes = go.getStringExtra("notes");
 //        final int[] uniqueId = new int[1000];
+        final int[] uniqueId = new int[1];
 
         // get all UIs
         TextView cancel = findViewById(R.id.edit_tb_left);
@@ -140,7 +141,7 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.url = editUrl.getText().toString();
                     newEvent.notes = editNote.getText().toString();
                     newEvent.category = false;
-
+                    uniqueId[0] = newEvent.id;
 
 
                     // insert one record
@@ -302,7 +303,8 @@ public class EditorActivity extends AppCompatActivity {
                                 System.out.println("i am in calender: "+ mCalendar.getTimeInMillis());
                                 editAlert.setText("Alarm set");
                                 System.out.println("i am alert: "+mCalendar.getTime());
-                                scheduleNotification(getNotification( editTitle.getText().toString()) , mCalendar.getTimeInMillis(), editTitle.getText().hashCode()) ;
+                                final EventRepository er = new EventRepository(getApplication());
+                                scheduleNotification(getNotification( editTitle.getText().toString()) , mCalendar.getTimeInMillis(), er.getId(eventTitle)) ;
 
                             }
                         })
