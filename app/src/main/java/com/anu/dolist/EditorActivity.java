@@ -16,8 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -34,6 +32,9 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
+import com.anu.dolist.notify.AlarmReceiver;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -118,8 +119,94 @@ public class EditorActivity extends AppCompatActivity {
 
 
         final Calendar mCalendar = Calendar.getInstance();
-        // start callback
-        editEnd.setOnClickListener(new View.OnClickListener() {
+
+
+        /**
+         * Floating Action Bar
+         */
+        FloatingActionButton fab = findViewById(R.id.edit_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // what is this?
+                if (editTitle.getText().toString().equals("")) {
+                    Snackbar.make(view, "Title cannot be emptyt", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
+                            .show();
+                } else {
+
+
+                    final EventRepository er = new EventRepository(getApplication());
+                    Event newEvent = new Event(editTitle.getText().toString());
+                    newEvent.location = editLocation.getText().toString();
+                    newEvent.starts = editDate.getText().toString();
+                    newEvent.ends = editTime.getText().toString();
+                    newEvent.alert = editAlert.getText().toString();
+                    newEvent.url = editUrl.getText().toString();
+                    newEvent.notes = editNote.getText().toString();
+                    newEvent.category = false;
+
+                    // insert one record
+                    if (add.getText().toString().equals("Add")) {
+
+                        er.insertOneEvent(newEvent);
+
+
+                        // show info
+                        Context context = getApplicationContext();
+                        CharSequence text = "Add completely";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text,  duration);
+                        toast.show();
+
+
+
+                        // after toast, finish the activity
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                EditorActivity.this.finish();
+                            }
+                        }, 1000);
+
+                        // update
+                    } else {
+
+                        er.updateOneEvent(newEvent);
+
+
+                        // show info
+                        Context context = getApplicationContext();
+                        CharSequence text = "Update completely";
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text,  duration);
+                        toast.show();
+
+
+
+                        // after toast, finish the activity
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                EditorActivity.this.finish();
+                            }
+                        }, 1000);
+
+                    }
+
+                }
+
+
+            }
+        });
+
+
+        /**
+         * select time
+         */
+        editStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
@@ -172,46 +259,20 @@ public class EditorActivity extends AppCompatActivity {
                 String myFormat = "dd/MM/yy" ; //In which you need put here
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
                 Date date = mCalendar.getTime();
-                System.out.println("i am updating: "+date.getTime());
                 System.out.println("showing you date: "+ sdf.format(date.getTime()));
                 editStart .setText(sdf.format(date)) ;
 
             }
 
 
-
-
-
         });
 
 
-
-
-
-
-
-        // toolbar
+        /**
+         * tooar
+         */
         Toolbar tb = findViewById(R.id.edit_toolbar);
         setSupportActionBar(tb);
-        // use customized Cancel instead
-        // click home button
-//        tb.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // because previous view is not finished
-//                finish();
-//            }
-//        });
-        // make sure toolbar is not null
-        if (getSupportActionBar() != null){
-            // show back arrow
-            // we use customized Cancel text instead
-//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-        // add menu
-        // use customized Add text instead
-//        tb.inflateMenu(R.menu.add_note);
 
 
 
@@ -222,11 +283,15 @@ public class EditorActivity extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(EditorActivity.this, MainActivity.class));
                 finish();
             }
         });
 
 
+        /**
+         * alert
+         */
         editAlert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -276,9 +341,11 @@ public class EditorActivity extends AppCompatActivity {
                             //.setNegativeButton("No",null)
                             .show();
 
-                    // add
                 } else {
-                    EventRepository er = new EventRepository(getApplication());
+
+                    final EventRepository er = new EventRepository(getApplication());
+                    System.out.println(editTitle.getText().toString());
+
 
 
                     Event newEvent = new Event(editTitle.getText().toString());
@@ -290,16 +357,12 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.notes = editNote.getText().toString();
                     newEvent.category = false;
 
-
-
-
                     // insert one record
                     if (add.getText().toString().equals("Add")) {
 
-                        er.insertOneEvent(newEvent);
-                        arrayAdapter = new ArrayAdapter(EditorActivity.this, android.R.layout.simple_list_item_1, list);
-                        listView.setAdapter(arrayAdapter);
 
+
+                        er.insertOneEvent(newEvent);
 
 
                         // show info
@@ -344,8 +407,7 @@ public class EditorActivity extends AppCompatActivity {
                                 startActivity(new Intent(EditorActivity.this, MainActivity.class));
                                 EditorActivity.this.finish();
                             }
-                        }, 2000);
-
+                        }, 1000);
 
                     }
 
@@ -442,4 +504,3 @@ public class EditorActivity extends AppCompatActivity {
         return builder.build() ;
     }
 }
-

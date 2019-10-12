@@ -20,11 +20,12 @@ import org.jetbrains.annotations.Nullable;
 )
 public class Event {
 
-    // TODO: how to set composite primary key
-//    @ColumnInfo(name = "eid")
-//    public int id;
 
-    @PrimaryKey
+    // After change this, I can modify the title
+    @PrimaryKey()
+    @ColumnInfo(name = "eid")
+    public int id;
+
     @ColumnInfo(name = "title")
     @NotNull public String title;
 

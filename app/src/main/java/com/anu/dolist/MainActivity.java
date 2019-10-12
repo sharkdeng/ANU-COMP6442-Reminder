@@ -11,10 +11,13 @@ import androidx.core.app.NotificationCompat;
 
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,6 +32,9 @@ import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     /**
      * @author: u6734521
      * listView for notes taking with an example note
@@ -192,6 +199,22 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        FloatingActionButton fab = findViewById(R.id.main_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // what is this?
+                startActivity(new Intent(MainActivity.this, EditorActivity.class));
+                finish();
+                Snackbar.make(view, "Add a new Event", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show();
+
+            }
+        });
+
+
+
 
 
 
@@ -204,8 +227,10 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //
-//        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-//        listView.setAdapter(arrayAdapter);
+
+
+
+
         /**
          * @author: u6734521
          * to jump to editor activity when the list item is pressed.
@@ -295,11 +320,11 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("Do nothing");
                         break;
 
-//                    case R.id.main_item_2:
-//
-//                    //    startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                    case R.id.main_item_2:
+
+//                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
 //                        finish();
-//                        break;
+                        break;
 
                     case R.id.main_item_3:
                         Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
