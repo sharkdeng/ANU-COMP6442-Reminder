@@ -141,7 +141,7 @@ public class EditorActivity extends AppCompatActivity {
                     newEvent.url = editUrl.getText().toString();
                     newEvent.notes = editNote.getText().toString();
                     newEvent.category = false;
-                    uniqueId[0] = newEvent.id;
+
 
 
                     // insert one record
@@ -303,7 +303,7 @@ public class EditorActivity extends AppCompatActivity {
                                 System.out.println("i am in calender: "+ mCalendar.getTimeInMillis());
                                 editAlert.setText("Alarm set");
                                 System.out.println("i am alert: "+mCalendar.getTime());
-                                final EventRepository er = new EventRepository(getApplication());
+                                EventRepository er = new EventRepository(getApplication());
                                 scheduleNotification(getNotification( editTitle.getText().toString()) , mCalendar.getTimeInMillis(), er.getId(eventTitle)) ;
 
                             }
@@ -320,7 +320,7 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                // insert one record
+                // insert one record0
 
 
                 // empty not allowed
@@ -340,10 +340,11 @@ public class EditorActivity extends AppCompatActivity {
 
                 } else {
 
-                    final EventRepository er = new EventRepository(getApplication());
+                    EventRepository er = new EventRepository(getApplication());
 
 
                     Event newEvent = new Event(editTitle.getText().toString());
+                    newEvent.title = editTitle.getText().toString();
                     newEvent.location = editLocation.getText().toString();
                     newEvent.starts = editStart.getText().toString();
                     newEvent.ends = editEnd.getText().toString();
@@ -383,6 +384,8 @@ public class EditorActivity extends AppCompatActivity {
 
                         // update
                     } else {
+
+                        System.out.println("i am in update:"+newEvent.title);
 
                         er.updateOneEvent(newEvent);
 

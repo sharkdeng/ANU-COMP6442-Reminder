@@ -26,7 +26,7 @@ public interface EventDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertEvents(Event... events);
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
+    @Update//(onConflict = OnConflictStrategy.REPLACE)
     int updateOneEvent(Event event);
 
     @Delete

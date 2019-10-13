@@ -16,16 +16,18 @@ import org.jetbrains.annotations.Nullable;
  * @author: Limin
  */
 @Entity(tableName = "event",
-        indices = {@Index("title"), @Index("location"), @Index("starts"), @Index("ends"), @Index("alert"), @Index("url"), @Index("notes")}
+        indices = {@Index(value = "title"), @Index("location"), @Index("starts"), @Index("ends"), @Index("alert"), @Index("url"), @Index("notes")}
 )
 public class Event {
 
 
     // After change this, I can modify the title
-    @PrimaryKey(autoGenerate = true)
+   //@PrimaryKey(autoGenerate = true)
+
     @ColumnInfo(name = "eid")
     public int id;
 
+    @PrimaryKey
     @ColumnInfo(name = "title")
     @NotNull public String title;
 

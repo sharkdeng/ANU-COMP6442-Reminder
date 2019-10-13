@@ -78,9 +78,9 @@
         android:id="@+id/edit_table"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="#FFF"
         android:shrinkColumns="*"
         android:stretchColumns="*"
-        android:background="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,8 +114,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="selectPlace"
                 android:hint="Location"
+                android:onClick="selectPlace"
                 android:padding="10dp"
                 android:textSize="18sp" />
 
@@ -130,7 +130,8 @@
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-z
+            z
+
             <TextView
                 android:padding="10dp"
                 android:text="Date"
@@ -179,8 +180,7 @@ z
             <Button
                 android:id="@+id/edit_event_alert"
                 android:hint="None"
-                android:textSize="18sp"
-                />
+                android:textSize="18sp" />
 
 
         </TableRow>
@@ -218,8 +218,7 @@ z
                 android:layout_weight="1"
                 android:hint="Notes"
                 android:padding="10dp"
-                android:textSize="18sp"
-                />
+                android:textSize="18sp" />
 
         </TableRow>
 
