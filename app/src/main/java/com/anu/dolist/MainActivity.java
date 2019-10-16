@@ -196,9 +196,11 @@ public class MainActivity extends AppCompatActivity {
 
                 SwipeMenuItem markCompleted = new SwipeMenuItem(getApplicationContext());
                 markCompleted.setBackground(new ColorDrawable(Color.YELLOW));
+                markCompleted.setIcon(android.R.drawable.presence_online);
                 markCompleted.setWidth(200);
                 menu.addMenuItem(markCompleted);
                 markCompleted.setTitle("Completed");
+                
 
                 SwipeMenuItem markIncompleted = new SwipeMenuItem(getApplicationContext());
                 markIncompleted.setBackground(new ColorDrawable(Color.BLUE));

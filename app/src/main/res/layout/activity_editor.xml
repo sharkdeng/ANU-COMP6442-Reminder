@@ -250,6 +250,7 @@ z
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="30dp"
+
         android:src="@android:drawable/checkbox_on_background"
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
