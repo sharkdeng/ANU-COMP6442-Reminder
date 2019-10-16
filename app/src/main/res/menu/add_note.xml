@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/main_add_note"
+        android:id="@+id/main_show_all"
         android:icon="@android:drawable/ic_input_add"
-        android:title="@string/note_add">
+        android:title="Show all">
     </item>
 
     <item
@@ -23,5 +23,6 @@
         android:icon="@android:drawable/ic_input_add"
         android:title="@string/delete_all">
     </item>
+
 
 </menu>

@@ -4,22 +4,30 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,18 +36,20 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
+import com.anu.dolist.notify.MyNotificationPublisher;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
-import static com.anu.dolist.MainActivity.list;
 
 
 /**
@@ -48,73 +58,94 @@ import static com.anu.dolist.MainActivity.list;
 public class EditorActivity extends AppCompatActivity {
 
 
+    private int eventId = -1;
+    private Intent go; // received information
+
     int noteId;
     public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
     private final static String default_notification_channel_id = "default" ;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
+    Context context;
+    boolean eventOnCalendar =false;
+    boolean falseDatePicker = false;
+    private Calendar mCalendar = Calendar.getInstance();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
 
-        // get data
-        Intent go = getIntent();
-        final String eventTitle = go.getStringExtra("title");
-        String eventLocation = go.getStringExtra("location");
-        String eventStart = go.getStringExtra("start");
-        String eventEnd = go.getStringExtra("end");
-        String eventAlert = go.getStringExtra("alert");
-        String eventUrl = go.getStringExtra("url");
-        String eventNotes = go.getStringExtra("notes");
-//        final int[] uniqueId = new int[1000];
-        final int[] uniqueId = new int[1];
+        // start from now
+//        final Calendar mCalendar = Calendar.getInstance();
 
-        // get all UIs
-        TextView cancel = findViewById(R.id.edit_tb_left);
-        final TextView add = findViewById(R.id.edit_tb_right);
-
+        context = EditorActivity.this;
         // UI
         final EditText editTitle = findViewById(R.id.edit_event_title);
         final EditText editLocation = findViewById(R.id.edit_event_location);
+        final Button editDate = findViewById(R.id.edit_event_date);
+        final Button editTime = findViewById(R.id.edit_event_time);
+        final Button editAlert = findViewById(R.id.edit_event_alert);
         final EditText editUrl = findViewById(R.id.edit_event_url);
         final EditText editNote = findViewById(R.id.edit_event_notes);
-        final Button editStart = findViewById(R.id.edit_event_date);
-        final Button editEnd = findViewById(R.id.edit_event_time);
-        final Button editAlert = findViewById(R.id.edit_event_alert);
-
-        // change right button on the toolbar
-        if (eventTitle != null) {
-            add.setText("Update");
-        }else {
-            add.setText("Add");
-        }
-
-        // fill in data
-        if (eventTitle != null) {
-            editTitle.setText(eventTitle);
-        }
-        if (eventLocation != null) {
-            editLocation.setText(eventLocation);
-        }
-        if (eventStart != null) {
-            editStart.setText(eventStart);
-        }
-        if (eventEnd != null) {
-            editEnd.setText(eventEnd);
-        }
-        if (eventAlert != null) {
-            editAlert.setText(eventAlert);
-        }
-        if (eventUrl != null) {
-            editUrl.setText(eventUrl);
-        }
-        if (eventNotes != null) {
-            System.out.println(editNote.getText().toString());;
-            editNote.setText(eventNotes);
-        }
+        TextView cancel = findViewById(R.id.edit_tb_left);
+        final TextView add = findViewById(R.id.edit_tb_right);
+        final Button calEvent = findViewById(R.id.Calendar_event);
 
 
-        final Calendar mCalendar = Calendar.getInstance();
+
+
+        // get data
+        go = getIntent();
+        eventId = go.getIntExtra(EventAttrib.ID.toString(), -1);
+
+
+        // old event
+        if (eventId != -1) {
+
+            // get event
+            EventRepository er = new EventRepository(getApplication());
+            Event selectedEvent = er.getEventById(eventId);
+
+            final String eventTitle = selectedEvent.title;
+            System.out.printf("Shark", eventTitle);
+            String eventLocation = selectedEvent.location;
+            String eventDate = selectedEvent.date;
+            String eventTime = selectedEvent.time;
+            String eventAlert = selectedEvent.alert;
+            String eventUrl = selectedEvent.url;
+            String eventNotes = selectedEvent.notes;
+
+
+            // fill in data
+            if (eventTitle != null) {
+                editTitle.setText(eventTitle);
+            }
+            if (eventLocation != null) {
+                editLocation.setText(eventLocation);
+            }
+            if (eventDate != null) {
+                editDate.setText(eventDate);
+            }
+            if (editTime != null) {
+                editTime.setText(eventTime);
+            }
+            if (eventAlert != null) {
+                editAlert.setText(eventAlert);
+            }
+            if (eventUrl != null) {
+                editUrl.setText(eventUrl);
+            }
+            if (eventNotes != null) {
+                editNote.setText(eventNotes);
+            }
+
+
+
+        }
+
 
 
         /**
@@ -124,73 +155,113 @@ public class EditorActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // what is this?
+                // empty alert
                 if (editTitle.getText().toString().equals("")) {
-                    Snackbar.make(view, "Title cannot be emptyt", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "Title cannot be empty!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
+
                 } else {
 
 
-                    final EventRepository er = new EventRepository(getApplication());
-                    Event newEvent = new Event(editTitle.getText().toString());
-                    newEvent.location = editLocation.getText().toString();
-                    newEvent.starts = editStart.getText().toString();
-                    newEvent.ends = editEnd.getText().toString();
-                    newEvent.alert = editAlert.getText().toString();
-                    newEvent.url = editUrl.getText().toString();
-                    newEvent.notes = editNote.getText().toString();
-                    newEvent.category = false;
 
+                    final EventRepository er = new EventRepository(getApplication());
 
 
                     // insert one record
-                    if (add.getText().toString().equals("Add")) {
+                    if (eventId == -1) {
 
-                        er.insertOneEvent(newEvent);
+                        Event newEvent = new Event(editTitle.getText().toString());
+                        newEvent.location = editLocation.getText().toString();
+                        newEvent.date = editDate.getText().toString();
+                        newEvent.time = editTime.getText().toString();
+                        newEvent.alert = editAlert.getText().toString();
+                        newEvent.url = editUrl.getText().toString();
+                        newEvent.notes = editNote.getText().toString();
+                        newEvent.completed = false;
 
+                        String dateTime =newEvent.date+" "+newEvent.time;
+                        long current = Calendar.getInstance().getTimeInMillis(); // current time
+                        long scheduled = getTimeinMilli(dateTime); // schedule time
 
-                        // show info
-                        Context context = getApplicationContext();
-                        CharSequence text = "Add completely";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text,  duration);
-                        toast.show();
+                        falseDatePicker = checkPastDateTime(current,scheduled);
+                        if(!(falseDatePicker)) {
+                            er.insertOneEvent(newEvent);
 
-
-
-                        // after toast, finish the activity
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                EditorActivity.this.finish();
+                            if (eventOnCalendar) {
+                                writeCalendarEvent(newEvent, scheduled);
                             }
-                        }, 1000);
 
+                            // schedule notification
+                            if (!editAlert.getText().toString().equals("None")) {
+                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
+                            }
+
+                            // show info
+                            Context context = getApplicationContext();
+                            CharSequence text = "Add completely";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+
+
+                            // after toast, finish the activity
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                    EditorActivity.this.finish();
+                                }
+                            }, 1000);
+                        }
                         // update
                     } else {
 
-                        er.updateOneEvent(newEvent);
+                        Event selectedEvent = er.getEventById(eventId);
+                        selectedEvent.title = editTitle.getText().toString();
+                        selectedEvent.location = editLocation.getText().toString();
+                        selectedEvent.date = editDate.getText().toString();
+                        selectedEvent.time = editTime.getText().toString();
+                        selectedEvent.alert = editAlert.getText().toString();
+                        selectedEvent.url = editUrl.getText().toString();
+                        selectedEvent.notes = editNote.getText().toString();
+                        selectedEvent.completed = false;
 
+                        String dateTime =selectedEvent.date+" "+selectedEvent.time;
+                        long current = Calendar.getInstance().getTimeInMillis(); // current time
+                        long scheduled = getTimeinMilli(dateTime); // schedule time
 
-                        // show info
-                        Context context = getApplicationContext();
-                        CharSequence text = "Update completely";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text,  duration);
-                        toast.show();
+                        falseDatePicker = checkPastDateTime(current,scheduled);
+                        if(!(falseDatePicker)) {
 
+                            er.updateOneEvent(selectedEvent);
 
-
-                        // after toast, finish the activity
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                EditorActivity.this.finish();
+                            if (eventOnCalendar) {
+                                writeCalendarEvent(selectedEvent, scheduled);
                             }
-                        }, 1000);
+
+                            // schedule notification
+                            if (!editAlert.getText().toString().equals("None")) {
+                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
+                            }
+
+                            // show info
+                            Context context = getApplicationContext();
+                            CharSequence text = "Update completely";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+
+
+                            // after toast, finish the activity
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                    EditorActivity.this.finish();
+                                }
+                            }, 1000);
+                        }
 
                     }
 
@@ -204,7 +275,7 @@ public class EditorActivity extends AppCompatActivity {
         /**
          * select time
          */
-        editEnd.setOnClickListener(new View.OnClickListener() {
+        editTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // TODO Auto-generated method stub
@@ -219,7 +290,8 @@ public class EditorActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
                         mCalendar.set(Calendar.HOUR_OF_DAY, selectedHour);
                         mCalendar.set(Calendar.MINUTE, selectedMinute);
-                        editEnd.setText( selectedHour + ":" + selectedMinute);
+                        mCalendar.set(Calendar.SECOND, 0);
+                        editTime.setText( selectedHour + ":" + selectedMinute);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -230,15 +302,15 @@ public class EditorActivity extends AppCompatActivity {
 
 
 
-        editStart.setOnClickListener(new View.OnClickListener() {
+        editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             //    Calendar mCalendar = Calendar.getInstance();
                 new DatePickerDialog(
                         EditorActivity. this, date ,
-                        mCalendar .get(Calendar. YEAR ) ,
-                        mCalendar .get(Calendar. MONTH ) ,
-                        mCalendar .get(Calendar. DAY_OF_MONTH )
+                        mCalendar.get(Calendar. YEAR ) ,
+                        mCalendar.get(Calendar. MONTH ) ,
+                        mCalendar.get(Calendar. DAY_OF_MONTH )
                 ).show() ;
 
                     }
@@ -247,9 +319,9 @@ public class EditorActivity extends AppCompatActivity {
 
                 @Override
                 public void onDateSet (DatePicker view , int year , int monthOfYear , int dayOfMonth) {
-                    mCalendar .set(Calendar. YEAR , year) ;
-                    mCalendar .set(Calendar. MONTH , monthOfYear) ;
-                    mCalendar .set(Calendar. DAY_OF_MONTH , dayOfMonth) ;
+                    mCalendar.set(Calendar. YEAR , year) ;
+                    mCalendar.set(Calendar. MONTH , monthOfYear) ;
+                    mCalendar.set(Calendar. DAY_OF_MONTH , dayOfMonth) ;
                     updateLabel() ;
                 }
             } ;
@@ -258,8 +330,7 @@ public class EditorActivity extends AppCompatActivity {
                 String myFormat = "dd/MM/yy" ;
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat , Locale. getDefault ()) ;
                 Date date = mCalendar.getTime();
-                System.out.println("showing you date: "+ sdf.format(date.getTime()));
-                editStart .setText(sdf.format(date)) ;
+                editDate .setText(sdf.format(date)) ;
 
             }
 
@@ -268,7 +339,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
         /**
-         * tooar
+         * toolbar
          */
         Toolbar tb = findViewById(R.id.edit_toolbar);
         setSupportActionBar(tb);
@@ -300,17 +371,29 @@ public class EditorActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                System.out.println("i am in calender: "+ mCalendar.getTimeInMillis());
                                 editAlert.setText("Alarm set");
-                                System.out.println("i am alert: "+mCalendar.getTime());
-                                EventRepository er = new EventRepository(getApplication());
-                                scheduleNotification(getNotification( editTitle.getText().toString()) , mCalendar.getTimeInMillis(), er.getId(eventTitle)) ;
+                                final EventRepository er = new EventRepository(getApplication());
 
                             }
                         })
-                        .setNegativeButton("No",null)
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                editAlert.setText("None");
+                            }
+                        })
                         .show();
 
+            }
+        });
+
+        calEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean result = checkPermission();
+                if (result) {
+                      eventOnCalendar = true;
+                }
             }
         });
 
@@ -319,9 +402,6 @@ public class EditorActivity extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // insert one record0
-
 
                 // empty not allowed
                 if (editTitle.getText().toString().equals("")) {
@@ -340,72 +420,106 @@ public class EditorActivity extends AppCompatActivity {
 
                 } else {
 
-                    EventRepository er = new EventRepository(getApplication());
 
-
-                    Event newEvent = new Event(editTitle.getText().toString());
-                    newEvent.title = editTitle.getText().toString();
-                    newEvent.location = editLocation.getText().toString();
-                    newEvent.starts = editStart.getText().toString();
-                    newEvent.ends = editEnd.getText().toString();
-                    newEvent.alert = editAlert.getText().toString();
-                    newEvent.url = editUrl.getText().toString();
-                    newEvent.notes = editNote.getText().toString();
-                    newEvent.category = false;
+                    final EventRepository er = new EventRepository(getApplication());
 
                     // insert one record
-                    if (add.getText().toString().equals("Add")) {
+                    if (eventId == -1) {
+                        Event newEvent = new Event(editTitle.getText().toString());
+                        newEvent.location = editLocation.getText().toString();
+                        newEvent.date = editDate.getText().toString();
+                        newEvent.time = editTime.getText().toString();
+                        newEvent.alert = editAlert.getText().toString();
+                        newEvent.url = editUrl.getText().toString();
+                        newEvent.notes = editNote.getText().toString();
+                        newEvent.completed = false;
+
+                        String dateTime =newEvent.date+" "+newEvent.time;
+
+                        long current = Calendar.getInstance().getTimeInMillis(); // current time
+                        long scheduled = getTimeinMilli(dateTime); // schedule time
 
 
+                        falseDatePicker = checkPastDateTime(current,scheduled);
+                        if(!(falseDatePicker)) {
+                            er.insertOneEvent(newEvent);
 
-                        er.insertOneEvent(newEvent);
-
-
-                        // show info
-                        Context context = getApplicationContext();
-                        CharSequence text = "Add completely";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text,  duration);
-                        toast.show();
-
-
-
-                        // after toast, finish the activity
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                EditorActivity.this.finish();
-
+                            // schedule notification
+                            if (!editAlert.getText().toString().equals("None")) {
+                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
                             }
-                        }, 1000);
 
 
+                            // show info
+                            Context context = getApplicationContext();
+                            CharSequence text = "Add completely";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+
+
+                            // after toast, finish the activity
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                    EditorActivity.this.finish();
+
+                                }
+                            }, 1000);
+
+                        }
 
                         // update
                     } else {
 
-                        System.out.println("i am in update:"+newEvent.title);
+                        Event updatedEvent = er.getEventById(eventId);
+                        updatedEvent.title = editTitle.getText().toString();
+                        updatedEvent.location = editLocation.getText().toString();
+                        updatedEvent.date = editDate.getText().toString();
+                        updatedEvent.time = editTime.getText().toString();
+                        updatedEvent.alert = editAlert.getText().toString();
+                        updatedEvent.url = editUrl.getText().toString();
+                        updatedEvent.notes = editNote.getText().toString();
+                        updatedEvent.completed = false;
 
-                        er.updateOneEvent(newEvent);
+                        String dateTime =updatedEvent.date+" "+updatedEvent.time;
+                       // er.updateOneEvent(updatedEvent);
 
+                        long current = Calendar.getInstance().getTimeInMillis(); // current time
+                        long scheduled = getTimeinMilli(dateTime); //converted scheduled time
 
-                        // show info
-                        Context context = getApplicationContext();
-                        CharSequence text = "Update completely";
-                        int duration = Toast.LENGTH_SHORT;
-                        Toast toast = Toast.makeText(context, text,  duration);
-                        toast.show();
+                        falseDatePicker = checkPastDateTime(current,scheduled);
+                        if(!(falseDatePicker)) {
+                            er.updateOneEvent(updatedEvent);
 
-
-                        // after toast, finish the activity
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                EditorActivity.this.finish();
+                            if(eventOnCalendar) {
+                                writeCalendarEvent(updatedEvent, scheduled);
                             }
-                        }, 1000);
+
+                            // schedule notification
+                            if (!editAlert.getText().toString().equals("None")) {
+                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
+                            }
+
+
+                            // show info
+                            Context context = getApplicationContext();
+                            CharSequence text = "Update completely";
+                            int duration = Toast.LENGTH_SHORT;
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.show();
+
+
+                            // after toast, finish the activity
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
+                                    EditorActivity.this.finish();
+                                }
+                            }, 1000);
+                        }
 
                     }
 
@@ -416,26 +530,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
-        // title change listener
-        editTitle.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-
-        editTitle.setText(eventTitle);
 
         /**
          * @author: Supriya Kamble(u6734521)
@@ -456,9 +551,10 @@ public class EditorActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                list.set(noteId,String.valueOf(charSequence));
+//                list.set(noteId,String.valueOf(charSequence));
                 arrayAdapter.notifyDataSetChanged();
             }
+
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -472,23 +568,138 @@ public class EditorActivity extends AppCompatActivity {
 
 
     }
+
+
+    /**
+     * @author: Supriya Kamble
+     * @param notification
+     * @param delay: time to shoot notification
+     * @param id: notification id
+     */
     private void scheduleNotification (Notification notification , long delay, int id) {
         System.out.println("i am called: "+id);
         Intent notificationIntent = new Intent( EditorActivity.this, MyNotificationPublisher. class ) ;
         notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION_ID , id) ;
         notificationIntent.putExtra(MyNotificationPublisher. NOTIFICATION , notification) ;
-        PendingIntent pendingIntent = PendingIntent. getBroadcast ( EditorActivity.this, id , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context. ALARM_SERVICE ) ;
+        PendingIntent pendingIntent = PendingIntent.getBroadcast ( EditorActivity.this, id , notificationIntent , PendingIntent. FLAG_UPDATE_CURRENT ) ;
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE ) ;
         assert alarmManager != null;
         alarmManager.set(AlarmManager.RTC_WAKEUP , delay , pendingIntent) ;
     }
+
+
+    /**
+     * @author: Supriya Kamble
+     * @param content
+     * @return
+     */
     private Notification getNotification (String content) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
         builder.setContentTitle( "Reminder" ) ;
         builder.setContentText(content) ;
         builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
         builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID ) ;
+        builder.setChannelId( NOTIFICATION_CHANNEL_ID );
         return builder.build() ;
     }
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    public boolean checkPermission()
+    {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if(currentAPIVersion>=android.os.Build.VERSION_CODES.M)
+        {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_CALENDAR)) {
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                    alertBuilder.setCancelable(true);
+                    alertBuilder.setTitle("Permission necessary");
+                    alertBuilder.setMessage("Write calendar permission is necessary to write event!!!");
+                    alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                        }
+                    });
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+                } else {
+                    ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_CALENDAR:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    eventOnCalendar = true;
+                     // writeCalendarEvent(events, mCalendar);
+                } else {
+                    eventOnCalendar = false;
+                }
+                break;
+        }
+    }
+    private void writeCalendarEvent(Event events, long timeInMilli) {
+        final ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.CALENDAR_ID, 4);
+        event.put(CalendarContract.Events.TITLE, events.title);
+        event.put(CalendarContract.Events.DESCRIPTION, events.notes);
+        event.put(CalendarContract.Events.EVENT_LOCATION, events.location);
+        event.put(CalendarContract.Events.DTSTART, timeInMilli);//startTimeMillis
+        event.put(CalendarContract.Events.DTEND, timeInMilli + 60*60);//endTimeMillis
+        event.put(CalendarContract.Events.ALL_DAY, 0);   // 0 for false, 1 for true
+        event.put(CalendarContract.Events.HAS_ALARM, 1); // 0 for false, 1 for true
+        String timeZone = TimeZone.getDefault().getID();
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone);
+        System.out.println("event writing: "+event.get(CalendarContract.Events.TITLE));
+
+        Uri baseUri;
+        if (Build.VERSION.SDK_INT >= 8) {
+            baseUri = Uri.parse("content://com.android.calendar/events");
+        } else {
+            baseUri = Uri.parse("content://calendar/events");
+        }
+        getApplicationContext().getContentResolver().insert(baseUri, event);
+        Toast.makeText(getApplicationContext(), "Event Created", Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean checkPastDateTime(long current, long scheduled) {
+        if (scheduled <= current) {
+            new AlertDialog.Builder(EditorActivity.this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("You cannot set past reminder")
+                    .setNegativeButton("Got it", null)
+                    .show();
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    private long getTimeinMilli(String dateTimeString) {
+        Calendar calendarUpdate = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy hh:mm");
+        Date date = null;
+        try {
+            date = dateFormat.parse(dateTimeString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        calendarUpdate.set(Calendar.DATE ,date.getDate());
+        calendarUpdate.set(Calendar.HOUR_OF_DAY,date.getHours());
+        calendarUpdate.set(Calendar.MINUTE,date.getMinutes());
+        return calendarUpdate.getTimeInMillis();
+
+    }
+
+
 }

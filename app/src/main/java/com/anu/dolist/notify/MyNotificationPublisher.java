@@ -1,4 +1,4 @@
-package com.anu.dolist;
+package com.anu.dolist.notify;
 
 
 import android.app.Notification ;
@@ -15,17 +15,26 @@ import static com.anu.dolist.EditorActivity.NOTIFICATION_CHANNEL_ID;
 public class MyNotificationPublisher extends BroadcastReceiver {
     public static String NOTIFICATION_ID = "notification-id" ;
     public static String NOTIFICATION = "notification" ;
+
     public void onReceive (Context context , Intent intent) {
+
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context. NOTIFICATION_SERVICE ) ;
-        Notification notification = intent.getParcelableExtra( NOTIFICATION ) ;
+
+        // 1: get content
+        Notification notification = intent.getParcelableExtra( NOTIFICATION );
+        int id = intent.getIntExtra( NOTIFICATION_ID ,  0);
+
+        // 2:  create channel
         if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
-            int importance = NotificationManager. IMPORTANCE_HIGH ;
+            int importance = NotificationManager. IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
             assert notificationManager != null;
-            notificationManager.createNotificationChannel(notificationChannel) ;
+            notificationManager.createNotificationChannel(notificationChannel);
         }
-        int id = intent.getIntExtra( NOTIFICATION_ID ,  0) ;
+
+
+        // 3: show
         assert notificationManager != null;
-        notificationManager.notify(id , notification) ;
+        notificationManager.notify(id , notification);
     }
 }

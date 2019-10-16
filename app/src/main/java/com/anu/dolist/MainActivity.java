@@ -5,43 +5,48 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
-
-import androidx.core.app.NotificationCompat;
-
-import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    static ListView listView;
-    static ArrayList<String> list = new ArrayList<>();
+    // listview
+//    private ListView listView;
+    private Cursor myCursor;
+    // swipe menu
+    private SwipeMenuListView listView;
+
+
     private EventRepository er;
     private List<Event> events;
     static ArrayAdapter arrayAdapter;
@@ -50,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     public static String PACKAGE_NAME;
     private ActionBar ab;
     private SearchView searchBtn;
+
+
 
 
 
@@ -80,88 +87,46 @@ public class MainActivity extends AppCompatActivity {
         super.onOptionsItemSelected(item);
 
 
-
         /**
          * callbacks on menu items
          */
-        if(item.getItemId() == R.id.main_add_note){
+        if(item.getItemId() == R.id.main_show_all) {
 
-            Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
-            startActivity(intent);
-            finish();
+            myCursor = er.getAllEventsCursor();
+            MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
+            listView.setAdapter(ca);
+
+            // change title
+            ab.setTitle("All Events");
+
             return true;
 
         } else if (item.getItemId() == R.id.main_show_incompleted) {
 
-            Log.d("Tag", "Incompleted");
+            myCursor = er.getAllIncompletedEventsCursor();
+            MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
+            listView.setAdapter(ca);
 
-            // clear the list first
-            list.clear();
-
-            events = er.getIncompletedEvents();
-
-
-            // Avoid this error
-            // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
-            // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
-            if (events != null) {
-                for (Event event: events) {
-                    System.out.println("new record");
-                    System.out.println(event.title);
-                    list.add(event.title);
-                }
-            } else {
-                list.add("Hello from DAO");
-            }
-
-
-            // fill in listView
-            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-            listView.setAdapter(arrayAdapter);
-
-
-            // change title
-            ab.setTitle("Incompleted");
+            ab.setTitle("Incompleted Events");
 
             return true;
 
         } else if (item.getItemId() == R.id.main_show_completed) {
 
-            Log.d("Tag", "Completed");
+            myCursor = er.getAllCompletedEventsCursor();
+            MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
+            listView.setAdapter(ca);
 
-            // clear the list first
-            list.clear();
-
-            events = er.getCompletedEvents();
-
-
-            // Avoid this error
-            // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
-            // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
-            if (events != null) {
-                for (Event event: events) {
-                    System.out.println("new record");
-                    System.out.println(event.title);
-                    list.add(event.title);
-                }
-            } else {
-                list.add("Hello from DAO");
-            }
-
-            // fill in listView
-            arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-            listView.setAdapter(arrayAdapter);
-
-            //
-            ab.setTitle("Completed");
+            ab.setTitle("Completed Events");
 
             return true;
 
         } else if (item.getItemId() == R.id.main_delete_all) {
 
-            er.deleteAll();
-            return true;
+            er.deletAllEvents();
+            recreate();
 
+            return true;
         }
 
 
@@ -188,23 +153,28 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(PACKAGE_NAME);
 
 
+        // change ListView to SwipeListView to support swipe menus
+//        listView = findViewById(R.id.main_lv);
+        listView = findViewById(R.id.main_swip_list);
+
+
         ab = getSupportActionBar();
-        ab.setTitle("All events");
+        ab.setTitle("All Events");
 
         // initiate EventRepository
         er = new EventRepository(getApplication());
-        listView = findViewById(R.id.main_lv);
+
 
         searchBtn = findViewById(R.id.main_search_btn);
-
 
 
         FloatingActionButton fab = findViewById(R.id.main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // what is this?
-                startActivity(new Intent(MainActivity.this, EditorActivity.class));
+
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                startActivity(intent);
                 finish();
                 Snackbar.make(view, "Add a new Event", Snackbar.LENGTH_LONG)
                         .setAction("Action", null)
@@ -214,48 +184,98 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        /**
+         * Swipe Menu to for following functions
+         * 1) mark the event as completed or incompleted
+         */
+        // create menus
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
 
+            @Override
+            public void create(SwipeMenu menu) {
 
+                SwipeMenuItem markCompleted = new SwipeMenuItem(getApplicationContext());
+                markCompleted.setBackground(new ColorDrawable(Color.YELLOW));
+                markCompleted.setWidth(200);
+                menu.addMenuItem(markCompleted);
+                markCompleted.setTitle("Completed");
 
+                SwipeMenuItem markIncompleted = new SwipeMenuItem(getApplicationContext());
+                markIncompleted.setBackground(new ColorDrawable(Color.BLUE));
+                markIncompleted.setWidth(200);
+                menu.addMenuItem(markIncompleted);
+                markCompleted.setTitle("Incompleted");
+            }
+        };
 
-//        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
-//        HashSet<String> set = (HashSet<String>) sharedPreferences.getStringSet("notes",null);
-//        if(set == null){
-//            list.add("Example note");
-//        }else{
-//            list = new ArrayList(set);
-//
-//        }
-//
+        // bind menus
+        listView.setMenuCreator(creator);
+
+        // menu callback
+        listView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+
+                Cursor c = (Cursor)listView.getAdapter().getItem(position);
+                int eventId = c.getInt(c.getColumnIndexOrThrow(EventAttrib.ID.toString()));
+
+                switch (index) {
+                    case 0:
+                        // completed
+                        er.updateCompleted(eventId, 1);
+
+                        recreate();
+
+                        break;
+                    case 1:
+                        // incompleted
+                        er.updateCompleted(eventId, 0);
+
+                        recreate();
+
+                        break;
+                }
+
+                return false;
+            }
+        });
 
 
 
 
         /**
+         * if the event is completed, cannot modify it
+         * if the event is incomplete, mark as complete or modify it
          * @author: u6734521
          * to jump to editor activity when the list item is pressed.
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
-//
-//                // pass data
-                EventRepository er = new EventRepository(getApplication());
 
-                String title = ((TextView) view).getText().toString();
-                Event seletecEvent = er.getEventByTitle(title);
-                intent.putExtra("title", seletecEvent.title);
-                intent.putExtra("location", seletecEvent.location);
-                intent.putExtra("start", seletecEvent.starts);
-                intent.putExtra("end", seletecEvent.ends);
-                intent.putExtra("alert", seletecEvent.alert);
-                intent.putExtra("url", seletecEvent.url);
-                intent.putExtra("notes", seletecEvent.notes);
+                Cursor c = (Cursor)adapterView.getAdapter().getItem(position);
+                int e_completed = c.getInt(c.getColumnIndexOrThrow(EventAttrib.COMPLETED.toString()));
 
-                // I don't want this
-//                intent.putExtra("noteId", position);
-                startActivity(intent);
+                // not completed, can modify it
+                if (e_completed == 0){
+
+                    Intent intent = new Intent(getApplicationContext(), EditorActivity.class);
+                    int e_id = c.getInt(c.getColumnIndexOrThrow(EventAttrib.ID.toString()));
+                    intent.putExtra(EventAttrib.ID.toString(), e_id);
+
+                    startActivity(intent);
+                    finish();
+
+
+                } else {
+                    // completed
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("You cannot modify a completed event")
+                            .setNegativeButton("Sure",null)
+                            .show();
+                }
+
             }
         });
 
@@ -268,9 +288,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l) {
-                // make it final for later access
-                final int itemDelete = position;
-
+                final AdapterView av = adapterView;
 
                 new AlertDialog.Builder(MainActivity.this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
@@ -279,19 +297,14 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                list.remove(itemDelete);
-                                arrayAdapter.notifyDataSetChanged();
 
-//                                SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("com.anu.dolist", Context.MODE_PRIVATE);
-//                                HashSet<String> set = new HashSet(MainActivity.list);
-//                                sharedPreferences.edit().putStringSet("notes",set).apply();
-
-
-                                // delete by using Dao
-                                TextView child = (TextView) listView.getChildAt(itemDelete);
                                 EventRepository er = new EventRepository(getApplication());
-                                Event targetEvent = er.getEventByTitle(child.getText().toString());
-                                er.deleteOneEvent(targetEvent);
+                                Cursor c = (Cursor)av.getAdapter().getItem(position);
+                                Event selectedEvent = er.getEventById(c.getInt(c.getColumnIndexOrThrow(EventAttrib.ID.toString())));
+                                er.deleteOneEvent(selectedEvent);
+
+                                // refresh the activity without animation
+                                recreate();
 
                             }
                         })
@@ -322,12 +335,12 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_2:
 
-//                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-//                        finish();
+                        startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                        finish();
                         break;
 
                     case R.id.main_item_3:
-                        Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
+                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
                         go3.putExtra("placeNumber",1); //Supriya
                         startActivity(go3);
                         finish();
@@ -342,45 +355,20 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         * Database
+         * check completed and update database
+         * load data
          * @author: Limin Deng(u6849956)
          */
-
-
-        // clear the list first
-        list.clear();
-
-        // show data list
-        events = er.getAllEvents();
-
-        // Avoid this error
-        // Attempt to invoke interface method 'java.util.Iterator java.util.List.iterator()' on a null object reference
-        // at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2778)
-        if (events != null) {
-            for (Event event: events) {
-                System.out.println("new record");
-                System.out.println(event.title);
-                list.add(event.title);
-            }
-        } else {
-            list.add("Hello from DAO");
-        }
-
-
-
-        // fill in listView
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(arrayAdapter);
+        myCursor = er.getAllEventsCursor();
+        MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
+        listView.setAdapter(ca);
 
 
     }
 
 
-
     public void filterEvents(View view) {
         System.out.println("Hello! Search");
-
-
     }
 
 }

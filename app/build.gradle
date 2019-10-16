@@ -61,5 +61,8 @@ dependencies {
     // Floating Action Bar
     implementation 'com.android.support:design:29.1.0'
 
+    // Swipe Menu
+    api 'com.baoyz.swipemenulistview:library:1.3.0'
+
 
 }

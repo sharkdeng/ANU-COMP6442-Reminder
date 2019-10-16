@@ -1,8 +1,7 @@
 package com.anu.dolist.db;
 
-import android.graphics.Movie;
+import android.database.Cursor;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,61 +12,45 @@ import androidx.room.Update;
 import java.util.List;
 
 
-/**
- * handler to tackle sql manipulation
- * @author: Limin
- */
 @Dao
 public interface EventDao {
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertOneEvent(Event newEvent);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertEvents(Event... events);
 
-    @Update//(onConflict = OnConflictStrategy.REPLACE)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     int updateOneEvent(Event event);
+
 
     @Delete
     void deleteOneEvent(Event event);
 
-    @Query("DELETE FROM event")
-    void deleteAll();
-
-
-
-    // querys
-    @Query("SELECT * FROM event WHERE title=:title")
-    Event getEventByTitle(String title);
-
-    @Query("SELECT eid FROM event WHERE title=:title")
-    int getId(String title);
 
     @Query("SELECT * FROM event")
-    List<Event> getAllEvents();
-
-    @Query("SELECT * FROM event WHERE category==1")
-    List<Event> getCompletedEvents();
-
-    @Query("SELECT * FROM event WHERE category==0")
-    List<Event> getIncompletedEvents();
+    Cursor getAllEventsCursor();
 
 
-//    @Query("SELECT * FROM event WHERE category=incompleted")
-//    LiveData<List<Event>> getAllIncompletedEvents();
+    @Query("SELECT * FROM event WHERE completed")
+    Cursor getAllCompletedEventsCursor();
 
 
+    @Query("SELECT * FROM event WHERE not completed")
+    Cursor getAllIncompletedEventsCursor();
 
 
+    @Query("SELECT * FROM event where _id=:id")
+    Event getEventById(int id);
 
-//    @Insert
-//    public void insertBothUsers(User user1, User user2);
-//
-//    @Insert
-//    public void insertUsersAndFriends(User user, List<User> friends);s
-//    boolean addOneEvent();
-//    boolean deleteOneEvent();
+
+    @Query("DELETE FROM event")
+    void deleteAllEvents();
+
+    @Query("UPDATE event SET completed=:completed WHERE _id=:id")
+    void updateCompleted(int id, int completed);
+
+
 
 
 }

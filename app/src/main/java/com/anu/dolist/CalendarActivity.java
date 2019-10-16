@@ -1,54 +1,54 @@
-//package com.anu.dolist;
-//
-//import androidx.annotation.NonNull;
-//import androidx.appcompat.app.ActionBar;
-//import androidx.appcompat.app.AppCompatActivity;
-//
-//
-//import android.content.Intent;
-//import android.os.Bundle;
-//import android.view.MenuItem;
-//import android.widget.CalendarView;
-//import android.widget.Toast;
-//
-//import com.google.android.material.bottomnavigation.BottomNavigationView;
-//
-//import java.util.Calendar;
-//
-//
-///**
-// * @author: Limin Deng(u6849956)
-// */
-//public class CalendarActivity extends AppCompatActivity {
-//
-//
-//    /**
-//     * @author: Limin
-//     * @param savedInstanceState
-//     */
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_calendar);
-//
-//
-//
-//
-//        // getActionBar() return null
-//        // this works
-//        // original actionbat
-//        ActionBar actionBar = getSupportActionBar();
-////        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-////        actionBar.setCustomView(R.layout.abs_layout);
-//        actionBar.setTitle("Calendar");
-//
-//
-//
-//
-//
-//        // get the reference of CalendarView
-//        CalendarView cv = findViewById(R.id.cal);
-//
+package com.anu.dolist;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.MenuItem;
+import android.widget.CalendarView;
+import android.widget.Toast;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Calendar;
+
+
+/**
+ * @author: Limin Deng(u6849956)
+ */
+public class CalendarActivity extends AppCompatActivity {
+
+
+    /**
+     * @author: Limin
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_calendar);
+
+
+
+
+        // getActionBar() return null
+        // this works
+        // original actionbat
+        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        actionBar.setCustomView(R.layout.abs_layout);
+        actionBar.setTitle("Calendar");
+
+
+
+
+
+        // get the reference of CalendarView
+        CalendarView cv = findViewById(R.id.cal);
+
 //        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 //            @Override
 //            public void onSelectedDayChange(CalendarView calendarView, int year, int month, int date) {
@@ -125,60 +125,62 @@
 ////                finish();
 //            }
 //        });
-//
-//
-//
-//        // set selected date 22 May 2016 in milliseconds
-//        cv.setDate(1463918226920L);
-//
-//        // set Monday as the first day of the week
-//        cv.setFirstDayOfWeek(2);
-//
-//        final int firstDayOfWeek= cv.getFirstDayOfWeek(); // get first day of the week
-//
-//
-//
-//
-//
-//        // Done: how to avoid conflicts
-//        // because setSelectedItem is not changed
-//        /**
-//         * @author: Limin Deng(u6849956)
-//         */
-//        // callback when item on BottomNavigationView is selected
-//        BottomNavigationView bnv = findViewById(R.id.cal_nav);
-//        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-//            @Override
-//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-//                System.out.println("good");
-//
-//                switch (menuItem.getItemId()) {
-//                    case R.id.main_item_1:
-//                        Intent go1 = new Intent(CalendarActivity.this, MainActivity.class);
-//                        startActivity(go1);
-//                        finish();
-//                        break;
-//
-//                    case R.id.main_item_2:
-//
-//                        System.out.println("Do nothing");
-//                        break;
-//
-//                    case R.id.main_item_3:
-//                        Intent go3 = new Intent(CalendarActivity.this, MapsActivity.class);
-//                        startActivity(go3);
-//                        finish();
-//                        break;
-//                }
-//
-//                // update selecte state
-//                return true;
-//            }
-//        });
-//        bnv.setSelectedItemId(R.id.main_item_2);
-//
-//
-//    }
-//
-//
-//}
+
+
+
+        // select current day
+        Calendar now = Calendar.getInstance();
+        cv.setDate(now.getTimeInMillis());
+        cv.setSelectedDateVerticalBar(getResources().getDrawable(R.drawable.common_google_signin_btn_icon_dark));
+
+        // set Monday as the first day of the week
+        cv.setFirstDayOfWeek(2);
+
+        final int firstDayOfWeek= cv.getFirstDayOfWeek(); // get first day of the week
+
+
+
+
+
+        // Done: how to avoid conflicts
+        // because setSelectedItem is not changed
+        /**
+         * @author: Limin Deng(u6849956)
+         */
+        // callback when item on BottomNavigationView is selected
+        BottomNavigationView bnv = findViewById(R.id.cal_nav);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                System.out.println("good");
+
+                switch (menuItem.getItemId()) {
+                    case R.id.main_item_1:
+                        Intent go1 = new Intent(CalendarActivity.this, MainActivity.class);
+                        startActivity(go1);
+                        finish();
+                        break;
+
+                    case R.id.main_item_2:
+
+                        System.out.println("Do nothing");
+                        break;
+
+                    case R.id.main_item_3:
+                        Intent go3 = new Intent(CalendarActivity.this, MapsActivity.class);
+                        startActivity(go3);
+                        finish();
+                        break;
+                }
+
+                // update selecte state
+                return true;
+            }
+        });
+        bnv.setSelectedItemId(R.id.main_item_2);
+
+
+    }
+
+
+}

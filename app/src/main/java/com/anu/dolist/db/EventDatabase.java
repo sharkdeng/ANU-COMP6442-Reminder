@@ -12,17 +12,13 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-/**
- * version is for database update
- * java.lang.IllegalStateException: Room cannot verify the data integrity. Looks like you've changed schema but forgot to update the version number. You can simply fix this by increasing the version number.
- * get database
- * @author: Limin
- */
-@Database(entities = {Event.class},
-        version = 1 //
-       )
-public abstract class EventDatabase extends RoomDatabase {
 
+
+@Database(entities = {Event.class},
+        version = 1,
+        exportSchema = false
+)
+public abstract class EventDatabase extends RoomDatabase {
     // singleton
     private static EventDatabase INSTANCE;
 
@@ -51,27 +47,14 @@ public abstract class EventDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public void clearDb() {
-        if (INSTANCE != null) {
-            new PopulateDatabaseAsyncTask(INSTANCE).execute();
-        }
-    }
 
-
-    /**
-     * 1) For the first time, app get just installed
-     * the callback will be executed
-     * and data cannot be shown
-     *
-     * 2) But secondly, the database already exits,
-     * the callback will not be executed
-     */
     private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
             System.out.println("EventDatabase is created");
             Log.d("Database", "EventDatabase is created");
+
             new PopulateDatabaseAsyncTask(INSTANCE).execute();
         }
 
@@ -82,7 +65,6 @@ public abstract class EventDatabase extends RoomDatabase {
 
         }
     };
-
 
     // populate the database
     private static class PopulateDatabaseAsyncTask extends AsyncTask<Void, Void, Void> {
@@ -97,14 +79,19 @@ public abstract class EventDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
             // clear db
-            eventDao.deleteAll();
+            eventDao.deleteAllEvents();
 
-            Log.d("Database", "Sureeee");
 
             // fill in data
-            Event one = new Event("6442 Lab");
-            Event two = new Event("Python Lab");
-            Event three = new Event("Database Lab");
+            Event one = new Event("COMP6442 Lab");
+            one.location = "CSIT N111";
+
+            Event two = new Event("COMP6730 Lab");
+            two.location = "CSIT N115";
+
+            Event three = new Event("COMP6240 Lab");
+            three.location = "CSIT N109";
+
 
 
             eventDao.insertOneEvent(one);
@@ -119,4 +106,8 @@ public abstract class EventDatabase extends RoomDatabase {
         }
     }
 
+
 }
+
+
+
