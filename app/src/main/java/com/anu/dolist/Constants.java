@@ -14,4 +14,17 @@ public class Constants {
     public final static String default_notification_channel_id = "default" ;
     public final static int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
 
+
+    // request codes
+    public static final int LOCATION_REQUEST_CODE = 1000; // get current location
+    public static final int BACK_LOC_REQUEST_CODE = 1001; // for geofence
+
+    // geofence
+    public static long GEOFENCE_EXPIRATION_IN_MILLISECONDS = 60 * 60 * 1000;
+    public static float GEOFENCE_RADIUS_IN_METERS = 500.0f;
+
+    public static final int GEOFENCE_REQ_CODE = 0;
+
+
+
 }

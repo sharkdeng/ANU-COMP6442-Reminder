@@ -32,6 +32,11 @@ public class EventRepository {
 //        eventDao.deleteOneEvent(event); // main thread
     }
 
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents();
+    }
+
     public Cursor getAllEventsCursor() {
         return eventDao.getAllEventsCursor();
     }

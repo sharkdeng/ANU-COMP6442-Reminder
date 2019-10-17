@@ -27,7 +27,6 @@ public abstract class EventDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "events.db";
 
-
     // synchorinzed means only one thread can access this method when there are multiple threads
     public static synchronized EventDatabase getDatabase(final Context context) {
 

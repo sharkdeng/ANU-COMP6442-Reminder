@@ -130,12 +130,11 @@ public class CalendarActivity extends AppCompatActivity {
         // select current day
         Calendar now = Calendar.getInstance();
         cv.setDate(now.getTimeInMillis());
-        cv.setSelectedDateVerticalBar(getResources().getDrawable(R.drawable.common_google_signin_btn_icon_dark));
+
 
         // set Monday as the first day of the week
         cv.setFirstDayOfWeek(2);
 
-        final int firstDayOfWeek= cv.getFirstDayOfWeek(); // get first day of the week
 
 
 

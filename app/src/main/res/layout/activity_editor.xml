@@ -45,6 +45,7 @@
                 android:gravity="start"
                 android:text="@string/edit_tb_left"
                 android:textColor="@color/white"
+                android:textAlignment="center"
                 android:textSize="18sp" />
 
             <!-- customized title -->
@@ -68,6 +69,7 @@
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/edit_tb_right"
+                android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -160,7 +162,7 @@ z
                 android:padding="10dp"
                 android:text="Date"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_column="0"
                 />
 
             <Button
@@ -168,7 +170,7 @@ z
                 android:text="dd/MM/yy"
                 android:textColor="#612B1D1D"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_column="1"
                 />
         </TableRow>
 
@@ -188,14 +190,14 @@ z
                 android:hint="Alert"
                 android:padding="10dp"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_column="0"
                 />
 
             <Button
                 android:id="@+id/edit_event_alert"
                 android:hint="None"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_column="1"
                 />
 
 
@@ -248,7 +250,10 @@ z
                 android:id="@+id/Calendar_event"
                 android:gravity="clip_horizontal"
                 android:text="Add Event to Calendar"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:layout_weight="1"
+                />
 
 
         </TableRow>

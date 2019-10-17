@@ -9,6 +9,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -35,11 +36,15 @@ import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.Geofence;
+import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -75,10 +80,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     // send current location
-    private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
+
+
+    // GeoFence
+    private GeofencingClient geofencingClient;
+    private Geofence geofence;
+    List geofenceList = new ArrayList();
 
 
 
@@ -196,7 +206,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         // get current location
+        // for showing current marker on the map
         getCurrentLocation();
+
+        // enable geofence
+        // for location triggered notificaton
+        enableGeofence();
+
 
         /**
          * search events
@@ -531,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
             // No explanation needed; request the permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_REQUEST_CODE);
+                    Constants.LOCATION_REQUEST_CODE);
 
 
             // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -540,4 +556,133 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * one more permission for geofence
+     * @author: Limin Deng
+     */
+    private void getBackLocPermission() {
+
+        // A local method to request required permissions;
+        // See https://developer.android.com/training/permissions/requesting
+//            getLocationPermission();
+
+        // Permission is not granted
+        // Should we show an explanation?
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+        } else {
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION},
+                    Constants.BACK_LOC_REQUEST_CODE);
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
+    }
+
+
+
+    /**
+     * geofence - 3 get pending intent
+     * @author: Limin Deng
+     */
+    private PendingIntent geofencePendingIntent;
+    private PendingIntent getGeofencePendingIntent() {
+        // Reuse the PendingIntent if we already have it.
+        if (geofencePendingIntent != null) {
+            return geofencePendingIntent;
+        }
+        Intent intent = new Intent(this, com.anu.samplemap.GeofenceBroadcastReceiver.class);
+        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
+        // calling addGeofences() and removeGeofences().
+        geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.
+                FLAG_UPDATE_CURRENT);
+        return geofencePendingIntent;
+    }
+
+
+    /**
+     * @author: Limin Deng
+     */
+    public void enableGeofence() {
+        /**
+         * geofence
+         */
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED  &&
+                ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+
+            // geoFence client
+            geofencingClient = LocationServices.getGeofencingClient(this);
+
+            // create a geofence for each event
+            List<Event> events = er.getAllEvents();
+            for (Event e: events) {
+                // it has location
+                if (!e.location.equals("")) {
+
+                    String requestId = String.valueOf(e._id);
+                    double lat = Double.valueOf(e.location.split("/")[1]);
+                    double lon = Double.valueOf(e.location.split("/")[2]);
+
+                    // create one geofence
+                    geofence = new Geofence.Builder()
+                            // Set the request ID of the geofence. This is a string to identify this
+                            // geofence.
+                            .setRequestId(requestId) // entry.getKey() can be eventId
+                            .setCircularRegion(
+                                    lat,
+                                    lon,
+                                    Constants.GEOFENCE_RADIUS_IN_METERS
+                            )
+                            .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                                    Geofence.GEOFENCE_TRANSITION_EXIT)
+                            .build();
+
+                    // add to list
+                    geofenceList.add(geofence);
+                }
+            }
+
+
+            GeofencingRequest request = new GeofencingRequest.Builder()
+                    // Notification to trigger when the Geofence is created
+                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                    .addGeofences(geofenceList) // add a Geofence
+                    .build();
+
+
+            geofencingClient.addGeofences(request, getGeofencePendingIntent())
+                    .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            // Geofences added
+                            // ...
+
+                            System.out.println("Gooood!!!!Gooood!!!!Gooood!!!!");
+                            System.out.println("Gooood!!!!");
+                        }
+                    })
+                    .addOnFailureListener(this, new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Failed to add geofences
+                            // ...
+                        }
+                    });
+
+
+        } else {
+            getBackLocPermission();
+        }
+    }
 }

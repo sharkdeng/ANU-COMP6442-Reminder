@@ -29,7 +29,12 @@ public interface EventDao {
 
 
     @Query("SELECT * FROM event")
+    List<Event> getAllEvents();
+
+
+    @Query("SELECT * FROM event")
     Cursor getAllEventsCursor();
+
 
     @Query("SELECT * FROM event WHERE completed")
     List<Event> getAllCompletedEvents();

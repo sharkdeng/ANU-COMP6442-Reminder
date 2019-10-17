@@ -4,9 +4,15 @@
     <!-- map permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <!-- geofence -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Required if your app targets Android 10 (API level 29) or higher -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+
     <!-- permision for notification -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
 
     <uses-permission
         android:name="android.permission.READ_CALENDAR">
