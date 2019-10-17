@@ -11,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -98,6 +100,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Intent intent = getIntent();
         currentLat  = intent.getDoubleExtra(Constants.LAT.toString(), -1);
         currentLon = intent.getDoubleExtra(Constants.LON.toString(), -1);
+
+
+
+        /**
+         * BottomNavigationView
+         * @author: Limin Deng(u6849956)
+         */
+        // callback when item on BottomNavigationView is selected
+        BottomNavigationView bnv = findViewById(R.id.map_nav);
+        bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()) {
+                    case R.id.main_item_1:
+
+                        startActivity(new Intent(MapsActivity.this, MainActivity.class));
+                        finish();
+                        break;
+
+                    case R.id.main_item_2:
+
+                        startActivity(new Intent(MapsActivity.this, CalendarActivity.class));
+                        finish();
+                        break;
+
+                    case R.id.main_item_3:
+                        System.out.println("do nothing");
+
+                        break;
+                }
+
+                // update selecte state
+                return true;
+            }
+        });
+        bnv.setSelectedItemId(R.id.main_item_3);
     }
 
 
@@ -129,7 +168,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo( 15.0f ) );
 
 
-        
+
 
 //        mMap.setOnMapLongClickListener(this);
 //

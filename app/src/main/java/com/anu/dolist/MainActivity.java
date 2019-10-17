@@ -381,7 +381,6 @@ public class MainActivity extends AppCompatActivity {
         bnv.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                System.out.println("good");
 
                 switch (menuItem.getItemId()) {
                     case R.id.main_item_1:
