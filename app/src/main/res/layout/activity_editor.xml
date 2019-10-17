@@ -110,15 +110,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <EditText
+            <!-- google place autocomplete -->
+            <fragment
                 android:id="@+id/edit_event_location"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:onClick="selectPlace"
-                android:hint="Location"
+                android:hint="Find a Location"
                 android:padding="10dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                />
 
         </TableRow>
 
@@ -234,7 +236,7 @@ z
                 android:id="@+id/Calendar_event"
                 android:gravity="clip_horizontal"
                 android:text="Add Event to Calendar"
-                android:textSize="8sp" />
+                android:textSize="18sp" />
 
 
         </TableRow>

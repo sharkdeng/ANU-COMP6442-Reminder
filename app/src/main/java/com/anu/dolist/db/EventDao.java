@@ -43,6 +43,9 @@ public interface EventDao {
     @Query("SELECT * FROM event where _id=:id")
     Event getEventById(int id);
 
+    @Query("SELECT * FROM event where title LIKE :keywords")
+    Cursor getEventByKeywords(String keywords);
+
 
     @Query("DELETE FROM event")
     void deleteAllEvents();

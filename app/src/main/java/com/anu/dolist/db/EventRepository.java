@@ -48,6 +48,10 @@ public class EventRepository {
         return eventDao.getEventById(id);
     }
 
+    public Cursor getEventByKeywords(String keywords) {
+        return eventDao.getEventByKeywords(keywords);
+    }
+
     public void deletAllEvents() {
         new deleteAllAsyncTask(eventDao).execute();
     }

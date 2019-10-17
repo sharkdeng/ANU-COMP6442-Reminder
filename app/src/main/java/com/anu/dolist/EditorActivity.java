@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -39,11 +40,18 @@ import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
 import com.anu.dolist.notify.MyNotificationPublisher;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -68,7 +76,8 @@ public class EditorActivity extends AppCompatActivity {
     Context context;
     boolean eventOnCalendar =false;
     boolean falseDatePicker = false;
-    private Calendar mCalendar = Calendar.getInstance();
+    private Calendar mCalendar = Calendar.getInstance(); // start from today
+    private String newLocation = ""; // container to store the selected place
 
 
 
@@ -78,13 +87,12 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
 
-        // start from now
-//        final Calendar mCalendar = Calendar.getInstance();
 
         context = EditorActivity.this;
         // UI
         final EditText editTitle = findViewById(R.id.edit_event_title);
-        final EditText editLocation = findViewById(R.id.edit_event_location);
+        // it has been changed to places autocomplete
+        //final EditText editLocation = findViewById(R.id.edit_event_location);
         final Button editDate = findViewById(R.id.edit_event_date);
         final Button editTime = findViewById(R.id.edit_event_time);
         final Button editAlert = findViewById(R.id.edit_event_alert);
@@ -93,6 +101,50 @@ public class EditorActivity extends AppCompatActivity {
         TextView cancel = findViewById(R.id.edit_tb_left);
         final TextView add = findViewById(R.id.edit_tb_right);
         final Button calEvent = findViewById(R.id.Calendar_event);
+
+
+        /**
+         * select event location
+         * google places autocomplete
+         */
+        // get map API key
+        String apiKey = getString(R.string.google_maps_key);
+
+        // Initialize Places. For simplicity, the API key is hard-coded. In a production
+        // environment we recommend using a secure mechanism to manage API keys.
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+
+        // Create a new Places client instance.
+        PlacesClient placesClient = Places.createClient(this);
+
+        // get the fragment
+        final AutocompleteSupportFragment editLocation = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.edit_event_location);
+
+        // add attributes to place object
+        editLocation.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+
+        editLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+
+                // fill the eventLocation
+                Log.i(Constants.TAG.toString(), "Place: " + place.getName() + ", " + place.getId());
+                double myLatitude = place.getLatLng().latitude;
+                double myLongititude = place.getLatLng().longitude;
+                newLocation = myLatitude + " " + myLongititude;
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(Constants.TAG.toString(), "An error occurred: " + status);
+            }
+        });
+
 
 
 
@@ -108,10 +160,9 @@ public class EditorActivity extends AppCompatActivity {
             // get event
             EventRepository er = new EventRepository(getApplication());
             Event selectedEvent = er.getEventById(eventId);
-
-            final String eventTitle = selectedEvent.title;
-            System.out.printf("Shark", eventTitle);
+            String eventTitle = selectedEvent.title;
             String eventLocation = selectedEvent.location;
+            Log.d(Constants.TAG.toString(), eventLocation);
             String eventDate = selectedEvent.date;
             String eventTime = selectedEvent.time;
             String eventAlert = selectedEvent.alert;
@@ -172,7 +223,9 @@ public class EditorActivity extends AppCompatActivity {
                     if (eventId == -1) {
 
                         Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
+                        //FIXED
+//                        newEvent.location = editLocation.getText().toString();
+                        newEvent.location = newLocation;
                         newEvent.date = editDate.getText().toString();
                         newEvent.time = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
@@ -219,7 +272,8 @@ public class EditorActivity extends AppCompatActivity {
 
                         Event selectedEvent = er.getEventById(eventId);
                         selectedEvent.title = editTitle.getText().toString();
-                        selectedEvent.location = editLocation.getText().toString();
+                        // TODO
+//                        selectedEvent.location = editLocation.getText().toString();
                         selectedEvent.date = editDate.getText().toString();
                         selectedEvent.time = editTime.getText().toString();
                         selectedEvent.alert = editAlert.getText().toString();
@@ -301,7 +355,9 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
-
+        /**
+         * select date
+         */
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -426,7 +482,9 @@ public class EditorActivity extends AppCompatActivity {
                     // insert one record
                     if (eventId == -1) {
                         Event newEvent = new Event(editTitle.getText().toString());
-                        newEvent.location = editLocation.getText().toString();
+                        // TODO
+//                        newEvent.location = editLocation.getText().toString();
+                        newEvent.location = newLocation;
                         newEvent.date = editDate.getText().toString();
                         newEvent.time = editTime.getText().toString();
                         newEvent.alert = editAlert.getText().toString();
@@ -475,7 +533,8 @@ public class EditorActivity extends AppCompatActivity {
 
                         Event updatedEvent = er.getEventById(eventId);
                         updatedEvent.title = editTitle.getText().toString();
-                        updatedEvent.location = editLocation.getText().toString();
+                        //TODO
+//                        updatedEvent.location = editLocation.getText().toString();
                         updatedEvent.date = editDate.getText().toString();
                         updatedEvent.time = editTime.getText().toString();
                         updatedEvent.alert = editAlert.getText().toString();
@@ -523,18 +582,13 @@ public class EditorActivity extends AppCompatActivity {
 
                     }
 
-
                 }
 
             }
         });
 
-
-        
-
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Edit Event");
-
 
     }
 

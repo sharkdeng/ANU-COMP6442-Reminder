@@ -9,25 +9,18 @@
     tools:context=".MainActivity">
 
 
-    <LinearLayout
+    <SearchView
         android:id="@+id/main_search"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingLeft="30dp"
-        android:paddingRight="30dp"
+        android:layout_alignParentTop="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Here"
         app:layout_constraintBottom_toTopOf="@id/main_lv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <SearchView
-            android:id="@+id/main_search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="filterEvents"
-            />
-    </LinearLayout>
 
 
     <!-- traditional list view -->
@@ -47,7 +40,7 @@
 
     <!-- swip list view -->
     <com.baoyz.swipemenulistview.SwipeMenuListView
-        android:id="@+id/main_swip_list"
+        android:id="@+id/main_swipe_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/main_nav_frame"

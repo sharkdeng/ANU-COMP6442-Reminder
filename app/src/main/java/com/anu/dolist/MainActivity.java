@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         // change ListView to SwipeListView to support swipe menus
 //        listView = findViewById(R.id.main_lv);
-        listView = findViewById(R.id.main_swip_list);
+        listView = findViewById(R.id.main_swipe_list);
 
 
         ab = getSupportActionBar();
@@ -165,9 +165,35 @@ public class MainActivity extends AppCompatActivity {
         er = new EventRepository(getApplication());
 
 
-        searchBtn = findViewById(R.id.main_search_btn);
+
+        /**
+         * search events
+         */
+        searchBtn = findViewById(R.id.main_search);
+        searchBtn.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+
+                myCursor = er.getEventByKeywords(s);
+                MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
+                listView.setAdapter(ca);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                System.out.println("text change");
+                return false;
+            }
+        });
+        searchBtn.setSubmitButtonEnabled(true); // open submit button
 
 
+
+        /**
+         * floating action bar
+         */
         FloatingActionButton fab = findViewById(R.id.main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
