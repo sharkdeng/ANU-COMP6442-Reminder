@@ -1,4 +1,4 @@
-package com.anu.samplemap;
+package com.anu.dolist.notify;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

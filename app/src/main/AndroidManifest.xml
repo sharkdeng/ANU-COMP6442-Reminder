@@ -62,10 +62,17 @@
 
         <activity android:name=".CalendarActivity" />
 
+        <activity android:name=".InitActivity" />
+
+
         <!-- Notification -->
         <receiver android:name=".notify.MyNotificationPublisher" android:process=":remote" />
 
-        <activity android:name=".InitActivity" />
+        <!-- Geofence -->
+        <receiver android:name=".notify.GeofenceBroadcastReceiver"/>
+
+
+
     </application>
 
 </manifest>
