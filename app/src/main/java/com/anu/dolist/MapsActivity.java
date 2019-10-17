@@ -43,8 +43,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     LocationListener locationListener;
 
-    private double currentLat;
-    private double currentLon;
+    public static double currentLat;
+    public static double currentLon;
 
 
 
@@ -98,9 +98,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // get data
         Intent intent = getIntent();
-        currentLat  = intent.getDoubleExtra(Constants.LAT.toString(), -1);
-        currentLon = intent.getDoubleExtra(Constants.LON.toString(), -1);
-
 
 
         /**

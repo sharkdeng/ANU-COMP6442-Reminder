@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     // send current location
     private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient mFusedLocationClient;
-    private double myLat = 0.0, myLon = 0.0;
-    private TextView txtLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
@@ -461,9 +459,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                     for (Location location : locationResult.getLocations()) {
                         if (location != null) {
-                            System.out.println("good");
-                            myLat = location.getLatitude();
-                            myLon = location.getLongitude();
+
+                            MapsActivity.currentLat = location.getLatitude();
+                            MapsActivity.currentLon = location.getLongitude();
+
+
+
 //                            txtLocation.setText(String.format(Locale.US, "%s -- %s", myLat, myLon));
                         }
                     }
@@ -490,8 +491,13 @@ public class MainActivity extends AppCompatActivity {
 
                         // enter map activity
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        intent.putExtra(Constants.LAT.toString(), location.getLatitude());
-                        intent.putExtra(Constants.LON.toString(), location.getLongitude());
+//                        intent.putExtra(Constants.LAT.toString(), location.getLatitude());
+//                        intent.putExtra(Constants.LON.toString(), location.getLongitude());
+
+                        System.out.println("Shark");
+                        MapsActivity.currentLat = location.getLatitude();
+                        MapsActivity.currentLon = location.getLongitude();
+
                         startActivity(intent);
 
                     }
