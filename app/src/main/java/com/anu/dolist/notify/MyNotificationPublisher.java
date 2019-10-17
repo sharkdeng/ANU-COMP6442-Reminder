@@ -7,9 +7,8 @@ import android.app.NotificationManager ;
 import android.content.BroadcastReceiver ;
 import android.content.Context ;
 import android.content.Intent ;
-import android.net.Uri;
 
-import static com.anu.dolist.EditorActivity.NOTIFICATION_CHANNEL_ID;
+import com.anu.dolist.Constants;
 
 
 public class MyNotificationPublisher extends BroadcastReceiver {
@@ -27,7 +26,7 @@ public class MyNotificationPublisher extends BroadcastReceiver {
         // 2:  create channel
         if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
             int importance = NotificationManager. IMPORTANCE_HIGH;
-            NotificationChannel notificationChannel = new NotificationChannel( NOTIFICATION_CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
+            NotificationChannel notificationChannel = new NotificationChannel( Constants.NOTIFICATION_CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
             assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel);
         }

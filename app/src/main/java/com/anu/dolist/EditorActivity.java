@@ -69,9 +69,7 @@ public class EditorActivity extends AppCompatActivity {
     private int eventId = -1;
     private Intent go; // received information
 
-    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
-    private final static String default_notification_channel_id = "default" ;
-    public static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
+
     Context context;
     boolean eventOnCalendar =false;
     boolean falseDatePicker = false;
@@ -628,12 +626,12 @@ public class EditorActivity extends AppCompatActivity {
      * @return
      */
     private Notification getNotification (String content) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, Constants.default_notification_channel_id ) ;
         builder.setContentTitle( "Reminder" ) ;
         builder.setContentText(content) ;
         builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
         builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID );
+        builder.setChannelId( Constants.NOTIFICATION_CHANNEL_ID );
         return builder.build() ;
     }
 
@@ -651,13 +649,13 @@ public class EditorActivity extends AppCompatActivity {
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
                         }
                     });
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
                 } else {
-                    ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                    ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
                 }
                 return false;
             } else {
@@ -670,7 +668,7 @@ public class EditorActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_CALENDAR:
+            case Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     eventOnCalendar = true;
                      // writeCalendarEvent(events, mCalendar);

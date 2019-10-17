@@ -138,7 +138,7 @@ z
                 android:padding="10dp"
                 android:text="Time"
                 android:textSize="18sp"
-                android:layout_weight="2"
+                android:layout_column="0"
                 />
 
 
@@ -147,7 +147,7 @@ z
                 android:text="00:00"
                 android:textColor="#612B1D1D"
                 android:textSize="18sp"
-                android:layout_weight="1"
+                android:layout_column="1"
                 />
 
         </TableRow>
@@ -159,13 +159,17 @@ z
             <TextView
                 android:padding="10dp"
                 android:text="Date"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_weight="1"
+                />
 
             <Button
                 android:id="@+id/edit_event_date"
                 android:text="dd/MM/yy"
                 android:textColor="#612B1D1D"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_weight="1"
+                />
         </TableRow>
 
         <!-- space -->
@@ -173,7 +177,7 @@ z
             android:layout_height="20dip"
             android:background="#FFF" />
 
-        <!-- 3 -->
+        <!-- 3 alert -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -183,12 +187,15 @@ z
                 android:layout_height="match_parent"
                 android:hint="Alert"
                 android:padding="10dp"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_weight="1"
+                />
 
             <Button
                 android:id="@+id/edit_event_alert"
                 android:hint="None"
                 android:textSize="18sp"
+                android:layout_weight="1"
                 />
 
 
@@ -201,6 +208,7 @@ z
             android:background="#FFF" />
 
 
+        <!-- url -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">

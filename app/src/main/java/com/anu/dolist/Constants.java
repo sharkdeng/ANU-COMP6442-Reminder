@@ -1,21 +1,17 @@
 package com.anu.dolist;
 
-public enum Constants {
+/**
+ * global variables
+ */
+public class Constants {
 
-    TAG("Shark"),
-    LAT("latitude"),
-    LON("longititude");
+    public static String TAG = "Shark";
 
+    public static double CURRENT_LAT;
+    public static double CURRENT_LON;
 
-    private String name;
+    public final static String NOTIFICATION_CHANNEL_ID = "10001" ;
+    public final static String default_notification_channel_id = "default" ;
+    public final static int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
 
-    Constants(String name){
-        this.name = name;
-    }
-
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
 }

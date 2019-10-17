@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -42,7 +44,7 @@ import java.util.Locale;
 
 import static com.anu.dolist.MainActivity.locations;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     private GoogleMap mMap;
 
@@ -50,9 +52,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     LocationListener locationListener;
 
-    // global variables
-    public static double currentLat;
-    public static double currentLon;
 
     // get all location events
     EventRepository er = new EventRepository(getApplication());
@@ -108,8 +107,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
 
-        // get data
-        Intent intent = getIntent();
+
+
+        /**
+         * show action bar
+         */
+        ActionBar actionBar =  getSupportActionBar();
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        actionBar.setCustomView(R.layout.abs_layout);
+        actionBar.setTitle("Map");
 
 
 
@@ -164,12 +170,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+
+
+
+
         /**
          * mark current location
          * move camera here
          */
         // Add a marker in current location and move the camera
-        LatLng currentPlace = new LatLng(currentLat, currentLon);
+        LatLng currentPlace = new LatLng(Constants.CURRENT_LAT, Constants.CURRENT_LON);
         mMap.addMarker(new MarkerOptions()
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .position(currentPlace)

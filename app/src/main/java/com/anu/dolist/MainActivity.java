@@ -464,8 +464,8 @@ public class MainActivity extends AppCompatActivity {
                     for (Location location : locationResult.getLocations()) {
                         if (location != null) {
 
-                            MapsActivity.currentLat = location.getLatitude();
-                            MapsActivity.currentLon = location.getLongitude();
+                            Constants.CURRENT_LAT  = location.getLatitude();
+                            Constants.CURRENT_LON= location.getLongitude();
 
 
 
@@ -496,8 +496,8 @@ public class MainActivity extends AppCompatActivity {
                         // enter map activity
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
                         // fill the two global variables
-                        MapsActivity.currentLat = location.getLatitude();
-                        MapsActivity.currentLon = location.getLongitude();
+                        Constants.CURRENT_LAT = location.getLatitude();
+                        Constants.CURRENT_LON = location.getLongitude();
                     }
                 }
             });
