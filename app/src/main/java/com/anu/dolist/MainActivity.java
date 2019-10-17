@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         // change ListView to SwipeListView to support swipe menus
 //        listView = findViewById(R.id.main_lv);
-        listView = findViewById(R.id.main_swip_list);
+        listView = findViewById(R.id.main_swipe_list);
 
 
         ab = getSupportActionBar();
@@ -196,14 +196,16 @@ public class MainActivity extends AppCompatActivity {
 
                 SwipeMenuItem markCompleted = new SwipeMenuItem(getApplicationContext());
                 markCompleted.setBackground(new ColorDrawable(Color.YELLOW));
-                markCompleted.setIcon(android.R.drawable.presence_online);
+                markCompleted.setIcon(R.drawable.greentickmark);
+            //    markCompleted.getIcon().setTint(-16711936);
                 markCompleted.setWidth(200);
                 menu.addMenuItem(markCompleted);
                 markCompleted.setTitle("Completed");
-                
+
 
                 SwipeMenuItem markIncompleted = new SwipeMenuItem(getApplicationContext());
                 markIncompleted.setBackground(new ColorDrawable(Color.BLUE));
+                markIncompleted.setIcon(android.R.drawable.ic_delete);
                 markIncompleted.setWidth(200);
                 menu.addMenuItem(markIncompleted);
                 markCompleted.setTitle("Incompleted");
