@@ -5,13 +5,21 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +34,14 @@ import android.widget.TextView;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,13 +63,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     private EventRepository er;
-    private List<Event> events;
+
     static ArrayAdapter arrayAdapter;
     static ArrayList<String> places = new ArrayList<>();
     static ArrayList<LatLng> locations = new ArrayList<>();
     public static String PACKAGE_NAME;
     private ActionBar ab;
+
+
     private SearchView searchBtn;
+
+
+    // send current location
+    private static final int LOCATION_REQUEST_CODE = 1000;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private double myLat = 0.0, myLon = 0.0;
+    private TextView txtLocation;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
+
 
 
 
@@ -368,10 +395,14 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.main_item_3:
-                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
-                        go3.putExtra("placeNumber",1); //Supriya
-                        startActivity(go3);
-                        finish();
+
+                        getCurrentLocation();
+
+//                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
+//                        go3.putExtra("placeNumber",1); //Supriya
+//                        startActivity(go3);
+//                        finish();
+
                         break;
                 }
 
@@ -395,8 +426,118 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void filterEvents(View view) {
-        System.out.println("Hello! Search");
+    /**
+     * get current location
+     * @author: Limin Deng
+     */
+    public void getCurrentLocation() {
+
+
+        // Call findCurrentPlace and handle the response (first check that the user has granted permission).
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+
+            System.out.println("location permitted");
+
+
+            // method 2
+            // Construct a FusedLocationProviderClient.
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
+
+            // reqeust
+            locationRequest = LocationRequest.create();
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(20 * 1000);
+
+            // callback
+            locationCallback = new LocationCallback() {
+                @Override
+                public void onLocationResult(LocationResult locationResult) {
+                    if (locationResult == null) {
+                        System.out.println("nothing");
+                        return;
+                    }
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null) {
+                            System.out.println("good");
+                            myLat = location.getLatitude();
+                            myLon = location.getLongitude();
+//                            txtLocation.setText(String.format(Locale.US, "%s -- %s", myLat, myLon));
+                        }
+                    }
+                }
+            };
+
+            // set update
+            mFusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,  Looper.myLooper());
+
+            // remove request or it will take resources
+            if (mFusedLocationClient != null) {
+                mFusedLocationClient.removeLocationUpdates(locationCallback);
+            }
+
+
+            // get current location
+            Task<Location> task = mFusedLocationClient.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if(location!=null) {
+                        //Write your implemenation here
+                        Log.d("AndroidClarified",location.getLatitude()+" "+location.getLongitude());
+
+                        // enter map activity
+                        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+                        intent.putExtra(Constants.LAT.toString(), location.getLatitude());
+                        intent.putExtra(Constants.LON.toString(), location.getLongitude());
+                        startActivity(intent);
+
+                    }
+                }
+            });
+
+
+
+
+
+
+        } else {
+            getLocationPermission();
+        }
+    }
+
+
+
+    /**
+     * code snipt to get permission for retrieving current location
+     * @author: Limin Deng
+     */
+    private void getLocationPermission() {
+
+        // A local method to request required permissions;
+        // See https://developer.android.com/training/permissions/requesting
+//            getLocationPermission();
+        System.out.println("need location permission");
+
+        // Permission is not granted
+        // Should we show an explanation?
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // Show an explanation to the user *asynchronously* -- don't block
+            // this thread waiting for the user's response! After the user
+            // sees the explanation, try again to request the permission.
+        } else {
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    LOCATION_REQUEST_CODE);
+
+
+            // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+            // app-defined int constant. The callback method gets the
+            // result of the request.
+        }
     }
 
 }
