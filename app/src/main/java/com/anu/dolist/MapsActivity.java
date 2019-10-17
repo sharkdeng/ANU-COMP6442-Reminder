@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,16 +20,22 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+
+import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventRepository;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,8 +50,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     LocationListener locationListener;
 
+    // global variables
     public static double currentLat;
     public static double currentLon;
+
+    // get all location events
+    EventRepository er = new EventRepository(getApplication());
+
 
 
 
@@ -101,6 +113,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
+
         /**
          * BottomNavigationView
          * @author: Limin Deng(u6849956)
@@ -153,18 +166,60 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         /**
          * mark current location
+         * move camera here
          */
         // Add a marker in current location and move the camera
         LatLng currentPlace = new LatLng(currentLat, currentLon);
         mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                 .position(currentPlace)
-                .title("Marker in Sydney"));
+                .title("You are here"));
 
         // I don't want zoom
 //        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,15));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace,15)); // move camera to current location and zoom
 //        mMap.animateCamera(CameraUpdateFactory.zoomTo( 15.0f ) );
 
+
+        /**
+         * mark all event locations
+         */
+
+        // different markers to distinguish completedEvents and incompletedEvents
+        List<Event> completedEvents = er.getAllCompletedEvents();
+        List<Event> incompletedEvents = er.getAllIncompletedEvents();
+
+        // get completed locations
+        for (Event e: completedEvents) {
+            // make sure it has location
+            if (!e.location.equals("")) {
+                String lat = e.location.split("/")[1];
+                String lon = e.location.split("/")[2];
+                double lat_d = Double.valueOf(lat);
+                double lon_d = Double.valueOf(lon);
+                mMap.addMarker(new MarkerOptions()
+                        // make it different from current loca
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .position(new LatLng(lat_d, lon_d))
+                        .title("Good"));
+            }
+        }
+
+        // get completed locations
+        for (Event e: incompletedEvents) {
+            // make sure it has location
+            if (!e.location.equals("")) {
+                String lat = e.location.split("/")[1];
+                String lon = e.location.split("/")[2];
+                double lat_d = Double.valueOf(lat);
+                double lon_d = Double.valueOf(lon);
+                mMap.addMarker(new MarkerOptions()
+                        // make it different from current loca
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .position(new LatLng(lat_d, lon_d))
+                        .title("Good"));
+            }
+        }
 
 
 

@@ -137,14 +137,18 @@ z
             <TextView
                 android:padding="10dp"
                 android:text="Time"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_weight="2"
+                />
 
 
             <Button
                 android:id="@+id/edit_event_time"
                 android:text="00:00"
                 android:textColor="#612B1D1D"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_weight="1"
+                />
 
         </TableRow>
 

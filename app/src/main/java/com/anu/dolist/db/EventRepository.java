@@ -36,8 +36,17 @@ public class EventRepository {
         return eventDao.getAllEventsCursor();
     }
 
+    public List<Event> getAllCompletedEvents() {
+
+        return eventDao.getAllCompletedEvents();
+    }
+
     public Cursor getAllCompletedEventsCursor() {
         return eventDao.getAllCompletedEventsCursor();
+    }
+
+    public List<Event> getAllIncompletedEvents() {
+        return eventDao.getAllIncompletedEvents();
     }
 
     public Cursor getAllIncompletedEventsCursor() {

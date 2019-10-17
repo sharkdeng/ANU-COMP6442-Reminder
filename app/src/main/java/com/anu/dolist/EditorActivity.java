@@ -69,7 +69,6 @@ public class EditorActivity extends AppCompatActivity {
     private int eventId = -1;
     private Intent go; // received information
 
-    int noteId;
     public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
     private final static String default_notification_channel_id = "default" ;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
@@ -135,7 +134,8 @@ public class EditorActivity extends AppCompatActivity {
                 Log.i(Constants.TAG.toString(), "Place: " + place.getName() + ", " + place.getId());
                 double myLatitude = place.getLatLng().latitude;
                 double myLongititude = place.getLatLng().longitude;
-                newLocation = myLatitude + " " + myLongititude;
+                // name, latitude, longititude
+                newLocation = place.getName() + "/" + myLatitude + "/" + myLongititude;
 
             }
 
@@ -163,7 +163,6 @@ public class EditorActivity extends AppCompatActivity {
             Event selectedEvent = er.getEventById(eventId);
             String eventTitle = selectedEvent.title;
             String eventLocation = selectedEvent.location;
-            Log.d(Constants.TAG.toString(), eventLocation);
             String eventDate = selectedEvent.date;
             String eventTime = selectedEvent.time;
             String eventAlert = selectedEvent.alert;
@@ -177,7 +176,14 @@ public class EditorActivity extends AppCompatActivity {
             }
             if (eventLocation != null) {
 
-                editLocation.setHint(eventLocation);
+                if (!eventLocation.equals("")) {
+                    String placeName = eventLocation.split("/")[0];
+                    editLocation.setHint(placeName);
+                } else {
+                    // if there is not location
+                    editLocation.setHint("Search a place");
+                }
+
 //                editLocation.setText(eventLocation); // this doesn't work
             }
             if (eventDate != null) {
