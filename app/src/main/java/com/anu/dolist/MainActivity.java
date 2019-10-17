@@ -152,6 +152,11 @@ public class MainActivity extends AppCompatActivity {
             recreate();
 
             return true;
+        } else if (item.getItemId() == R.id.main_popluate) {
+
+            // populate the database for demonstation other features
+            
+            return true;
         }
 
 
