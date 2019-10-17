@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity {
     // send current location
     private static final int LOCATION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient mFusedLocationClient;
-    private double myLat = 0.0, myLon = 0.0;
-    private TextView txtLocation;
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
@@ -248,15 +246,17 @@ public class MainActivity extends AppCompatActivity {
             public void create(SwipeMenu menu) {
 
                 SwipeMenuItem markCompleted = new SwipeMenuItem(getApplicationContext());
-                markCompleted.setBackground(new ColorDrawable(Color.YELLOW));
-                markCompleted.setIcon(android.R.drawable.presence_online);
+                markCompleted.setBackground(new ColorDrawable(Color.GREEN));
+                markCompleted.setIcon(android.R.drawable.checkbox_on_background);
+              //  markCompleted.getIcon().setTint(-16711936);
                 markCompleted.setWidth(200);
                 menu.addMenuItem(markCompleted);
                 markCompleted.setTitle("Completed");
-                
+
 
                 SwipeMenuItem markIncompleted = new SwipeMenuItem(getApplicationContext());
-                markIncompleted.setBackground(new ColorDrawable(Color.BLUE));
+                markIncompleted.setBackground(new ColorDrawable(Color.RED));
+                markIncompleted.setIcon(android.R.drawable.btn_dialog);
                 markIncompleted.setWidth(200);
                 menu.addMenuItem(markIncompleted);
                 markCompleted.setTitle("Incompleted");
@@ -346,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                 final AdapterView av = adapterView;
 
                 new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_menu_delete)
                         .setTitle("Delete Note")
                         .setTitle("Do you want to delete this note?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -462,6 +462,9 @@ public class MainActivity extends AppCompatActivity {
 
                             MapsActivity.currentLat = location.getLatitude();
                             MapsActivity.currentLon = location.getLongitude();
+
+
+
 //                            txtLocation.setText(String.format(Locale.US, "%s -- %s", myLat, myLon));
                         }
                     }

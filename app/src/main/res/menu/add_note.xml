@@ -6,6 +6,7 @@
         android:title="Show all">
     </item>
 
+
     <item
         android:id="@+id/main_show_incompleted"
         android:icon="@android:drawable/ic_input_add"

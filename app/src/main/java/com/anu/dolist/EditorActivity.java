@@ -630,7 +630,7 @@ public class EditorActivity extends AppCompatActivity {
         builder.setChannelId( NOTIFICATION_CHANNEL_ID );
         return builder.build() ;
     }
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
     public boolean checkPermission()
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -643,7 +643,7 @@ public class EditorActivity extends AppCompatActivity {
                     alertBuilder.setTitle("Permission necessary");
                     alertBuilder.setMessage("Write calendar permission is necessary to write event!!!");
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
                         public void onClick(DialogInterface dialog, int which) {
                             ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
                         }
@@ -676,7 +676,7 @@ public class EditorActivity extends AppCompatActivity {
     }
     private void writeCalendarEvent(Event events, long timeInMilli) {
         final ContentValues event = new ContentValues();
-        event.put(CalendarContract.Events.CALENDAR_ID, 4);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
         event.put(CalendarContract.Events.TITLE, events.title);
         event.put(CalendarContract.Events.DESCRIPTION, events.notes);
         event.put(CalendarContract.Events.EVENT_LOCATION, events.location);
@@ -695,6 +695,7 @@ public class EditorActivity extends AppCompatActivity {
             baseUri = Uri.parse("content://calendar/events");
         }
         getApplicationContext().getContentResolver().insert(baseUri, event);
+
         Toast.makeText(getApplicationContext(), "Event Created", Toast.LENGTH_SHORT).show();
     }
 
