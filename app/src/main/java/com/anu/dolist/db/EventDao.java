@@ -40,8 +40,11 @@ public interface EventDao {
     Cursor getAllIncompletedEventsCursor();
 
 
-    @Query("SELECT * FROM event where _id=:id")
+    @Query("SELECT * FROM event WHERE _id=:id")
     Event getEventById(int id);
+
+    @Query("SELECT * FROM event WHERE title LIKE '%' || :keywords|| '%'")
+    Cursor getEventByKeywords(String keywords);
 
 
     @Query("DELETE FROM event")
@@ -50,9 +53,7 @@ public interface EventDao {
     @Query("UPDATE event SET completed=:completed WHERE _id=:id")
     void updateCompleted(int id, int completed);
 
-
-
-
+    
 }
 
 
