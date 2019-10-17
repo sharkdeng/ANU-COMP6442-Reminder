@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.main_popluate) {
 
             // populate the database for demonstation other features
-            
+
             return true;
         }
 
@@ -195,6 +195,8 @@ public class MainActivity extends AppCompatActivity {
         er = new EventRepository(getApplication());
 
 
+        // get current location
+        getCurrentLocation();
 
         /**
          * search events
@@ -400,12 +402,9 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.main_item_3:
 
-                        getCurrentLocation();
-
-//                        Intent go3 = new Intent(MainActivity.this, MapActivity.class);
-//                        go3.putExtra("placeNumber",1); //Supriya
-//                        startActivity(go3);
-//                        finish();
+                        Intent go3 = new Intent(MainActivity.this, MapsActivity.class);
+                        startActivity(go3);
+                        finish();
 
                         break;
                 }
@@ -496,12 +495,9 @@ public class MainActivity extends AppCompatActivity {
 
                         // enter map activity
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        // set these two global variables
-                        // so that it will not have issues when jumping from CalendarActivity to MapsActivity
+                        // fill the two global variables
                         MapsActivity.currentLat = location.getLatitude();
                         MapsActivity.currentLon = location.getLongitude();
-                        startActivity(intent);
-
                     }
                 }
             });

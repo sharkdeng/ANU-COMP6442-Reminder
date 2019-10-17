@@ -15,5 +15,6 @@
     <string name="show_incompleted">Show incompleted</string>
     <string name="show_completed">Show completed</string>
     <string name="delete_all">Delete all</string>
+    <string name="populate_data">Populate Data</string>
 
 </resources>
