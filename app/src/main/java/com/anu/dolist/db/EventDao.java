@@ -53,7 +53,7 @@ public interface EventDao {
     @Query("UPDATE event SET completed=:completed WHERE _id=:id")
     void updateCompleted(int id, int completed);
 
-    
+
 }
 
 
