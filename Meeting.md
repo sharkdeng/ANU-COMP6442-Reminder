@@ -8,6 +8,8 @@ This file is about the meeting time
 | 7 | Satursday 10am - 1pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| deal with the problem|
 | 8 | Satursday 12am - 1pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| deal with the problem and do assignment|
 | 9 | Satursday 12am - 1pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| deal with the problem and do assignment|
+|10 | Satursday 12am - 2pm | Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| find and fix the bugs|
+|11 | Thursday 10am - 4pm|Ran Zhang, Limin Deng, Yun Guan, Supriya Kamble| find and fix the bugs and finish wiki|
 
 ## group member
 
