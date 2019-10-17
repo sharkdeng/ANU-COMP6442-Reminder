@@ -459,9 +459,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     for (Location location : locationResult.getLocations()) {
                         if (location != null) {
-                            System.out.println("good");
-                            myLat = location.getLatitude();
-                            myLon = location.getLongitude();
+
+                            MapsActivity.currentLat = location.getLatitude();
+                            MapsActivity.currentLon = location.getLongitude();
 //                            txtLocation.setText(String.format(Locale.US, "%s -- %s", myLat, myLon));
                         }
                     }
@@ -488,18 +488,15 @@ public class MainActivity extends AppCompatActivity {
 
                         // enter map activity
                         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-                        intent.putExtra(Constants.LAT.toString(), location.getLatitude());
-                        intent.putExtra(Constants.LON.toString(), location.getLongitude());
+                        // set these two global variables
+                        // so that it will not have issues when jumping from CalendarActivity to MapsActivity
+                        MapsActivity.currentLat = location.getLatitude();
+                        MapsActivity.currentLon = location.getLongitude();
                         startActivity(intent);
 
                     }
                 }
             });
-
-
-
-
-
 
         } else {
             getLocationPermission();

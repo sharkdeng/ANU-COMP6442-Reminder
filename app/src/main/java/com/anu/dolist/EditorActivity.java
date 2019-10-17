@@ -136,6 +136,7 @@ public class EditorActivity extends AppCompatActivity {
                 double myLatitude = place.getLatLng().latitude;
                 double myLongititude = place.getLatLng().longitude;
                 newLocation = myLatitude + " " + myLongititude;
+
             }
 
             @Override
@@ -175,7 +176,9 @@ public class EditorActivity extends AppCompatActivity {
                 editTitle.setText(eventTitle);
             }
             if (eventLocation != null) {
-                editLocation.setText(eventLocation);
+
+                editLocation.setHint(eventLocation);
+//                editLocation.setText(eventLocation); // this doesn't work
             }
             if (eventDate != null) {
                 editDate.setText(eventDate);
@@ -274,6 +277,7 @@ public class EditorActivity extends AppCompatActivity {
                         selectedEvent.title = editTitle.getText().toString();
                         // TODO
 //                        selectedEvent.location = editLocation.getText().toString();
+                        selectedEvent.location = newLocation;
                         selectedEvent.date = editDate.getText().toString();
                         selectedEvent.time = editTime.getText().toString();
                         selectedEvent.alert = editAlert.getText().toString();
@@ -535,6 +539,7 @@ public class EditorActivity extends AppCompatActivity {
                         updatedEvent.title = editTitle.getText().toString();
                         //TODO
 //                        updatedEvent.location = editLocation.getText().toString();
+                        updatedEvent.location = newLocation;
                         updatedEvent.date = editDate.getText().toString();
                         updatedEvent.time = editTime.getText().toString();
                         updatedEvent.alert = editAlert.getText().toString();
