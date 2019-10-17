@@ -10,6 +10,11 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 import com.anu.dolist.db.EventAttrib;
 
+/**
+ * @author Limin Deng
+ * @author Supriya
+ */
+
 public class MyCursor extends CursorAdapter {
 
 
@@ -18,15 +23,23 @@ public class MyCursor extends CursorAdapter {
     }
 
 
-    // The newView method is used to inflate a new view and return it,
-    // you don't bind any data to the view at this point.
+    /** The newView method is used to inflate a new view and return it, you don't bind any data to the view at this point.
+     * @param context context Interface to application's global information
+     * @param cursor cursor The cursor from which to get the data.
+     * @param parent parent The parent to which the new view is attached to
+     * @return the newly created view.
+     */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.cursor_row, parent, false);
     }
-    // The bindView method is used to bind all data to a given view // such as setting the text on a TextView.
 
-
+    /**
+     * The bindView method is used to bind all data to a given view, such as setting the text on a TextView.
+     * @param view Existing view, returned earlier by newView
+     * @param context Interface to application's global information
+     * @param cursor The cursor from which to get the data.
+     */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
