@@ -221,17 +221,17 @@ public class MainActivity extends AppCompatActivity {
             public void create(SwipeMenu menu) {
 
                 SwipeMenuItem markCompleted = new SwipeMenuItem(getApplicationContext());
-                markCompleted.setBackground(new ColorDrawable(Color.YELLOW));
-                markCompleted.setIcon(R.drawable.greentickmark);
-            //    markCompleted.getIcon().setTint(-16711936);
+                markCompleted.setBackground(new ColorDrawable(Color.GREEN));
+                markCompleted.setIcon(android.R.drawable.checkbox_on_background);
+              //  markCompleted.getIcon().setTint(-16711936);
                 markCompleted.setWidth(200);
                 menu.addMenuItem(markCompleted);
                 markCompleted.setTitle("Completed");
 
 
                 SwipeMenuItem markIncompleted = new SwipeMenuItem(getApplicationContext());
-                markIncompleted.setBackground(new ColorDrawable(Color.BLUE));
-                markIncompleted.setIcon(android.R.drawable.ic_delete);
+                markIncompleted.setBackground(new ColorDrawable(Color.RED));
+                markIncompleted.setIcon(android.R.drawable.btn_dialog);
                 markIncompleted.setWidth(200);
                 menu.addMenuItem(markIncompleted);
                 markCompleted.setTitle("Incompleted");
@@ -321,7 +321,7 @@ public class MainActivity extends AppCompatActivity {
                 final AdapterView av = adapterView;
 
                 new AlertDialog.Builder(MainActivity.this)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setIcon(android.R.drawable.ic_menu_delete)
                         .setTitle("Delete Note")
                         .setTitle("Do you want to delete this note?")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
