@@ -530,38 +530,7 @@ public class EditorActivity extends AppCompatActivity {
         });
 
 
-
-
-        /**
-         * @author: Supriya Kamble(u6734521)
-         * get the intent id from MainActivity and put it here
-         * extra caution of -1 is put, to avoid getting wrong id
-         */
-        EditText editText = findViewById(R.id.edit_event_notes);
-
-
-        /**
-         * update text
-         */
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                list.set(noteId,String.valueOf(charSequence));
-                arrayAdapter.notifyDataSetChanged();
-            }
-
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
+        
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Edit Event");
