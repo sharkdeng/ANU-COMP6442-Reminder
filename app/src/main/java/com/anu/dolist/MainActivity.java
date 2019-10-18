@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity {
      * @author: Limin Deng
      */
     private PendingIntent geofencePendingIntent;
-    private PendingIntent getGeofencePendingIntent() {
+    private PendingIntent getGeofencePendingIntent(Event event) {
         // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
@@ -602,6 +602,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
+
+        // pass eventId and event title to
+        intent.putExtra(Constants.GEO_CHANNEL_ID, event._id);
+        intent.putExtra(Constants.GEO_CHANNEL_NAME, event.title);
+
         geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
@@ -624,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
             // geoFence client
             geofencingClient = LocationServices.getGeofencingClient(this);
 
-            // create a geofence for each event
+            // 1 - geofence for each event
             List<Event> events = er.getAllEvents();
             for (Event e: events) {
                 // it has location
@@ -653,34 +658,38 @@ public class MainActivity extends AppCompatActivity {
                     // add to list
                     geofenceList.add(geofence);
                 }
+
+
+
+                // 2 - request for each event
+                GeofencingRequest request = new GeofencingRequest.Builder()
+                        // Notification to trigger when the Geofence is created
+                        .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
+                        .addGeofences(geofenceList) // add a Geofence
+                        .build();
+
+
+                // 3 - intent for each event
+                geofencingClient.addGeofences(request, getGeofencePendingIntent(e))
+                        .addOnSuccessListener(this, new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // Geofences added
+                                // ...
+
+                                System.out.println("Gooood!!!!Gooood!!!!Gooood!!!!");
+                                System.out.println("Gooood!!!!");
+                            }
+                        })
+                        .addOnFailureListener(this, new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Failed to add geofences
+                                // ...
+                            }
+                        });
             }
 
-
-            GeofencingRequest request = new GeofencingRequest.Builder()
-                    // Notification to trigger when the Geofence is created
-                    .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-                    .addGeofences(geofenceList) // add a Geofence
-                    .build();
-
-
-            geofencingClient.addGeofences(request, getGeofencePendingIntent())
-                    .addOnSuccessListener(this, new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            // Geofences added
-                            // ...
-
-                            System.out.println("Gooood!!!!Gooood!!!!Gooood!!!!");
-                            System.out.println("Gooood!!!!");
-                        }
-                    })
-                    .addOnFailureListener(this, new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Failed to add geofences
-                            // ...
-                        }
-                    });
 
 
         } else {

@@ -27,4 +27,13 @@ public class Constants {
 
 
 
+    // for intent passing value
+    public static String GEO_CHANNEL_ID = "geo_channel_id";
+    public static String GEO_CHANNEL_NAME = "geo_channel_name";
+
+    public static String ALARM_CHANNEL_ID = "alarm_channel_id";
+    public static String ALARM_CHANNEL_NAME = "alarm_channel_name";
+
+
+
 }

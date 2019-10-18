@@ -40,53 +40,54 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         }
 
 
+        // make sure this receiver is called
         System.out.println("ninosnkonsongowg");
+
+
+        // get content
+        String channelId = String.valueOf(intent.getIntExtra(Constants.GEO_CHANNEL_ID , -1));
+        String channelName = intent.getStringExtra(Constants.GEO_CHANNEL_NAME);
 
 
         /**
          * notification
          */
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//
-//            // 2: get channel
-//            NotificationChannel channel = new NotificationChannel(channelId,
-//                    channelId+"_name",
-//                    NotificationManager.IMPORTANCE_DEFAULT);
-//            channel.setDescription(channelId+"_desc");
-//            channel.setShowBadge(true);
-//
-//
-//            // 3: register this notification to manager
-//            NotificationManager manager = getApplicationContext().getSystemService(NotificationManager.class);
-//            manager.createNotificationChannel(channel);
-//        }
-//
-//
-//
-//        // 1: Create an explicit intent for an Activity in your app
-//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, 0);
-//
-//
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
-//                .setSmallIcon(R.drawable.ic_launcher_background)
-//                .setContentTitle("Title")
-//                .setContentText("Content")
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-//                .setStyle(new NotificationCompat.BigTextStyle()
-//                        .bigText("Content"))
-//                .setAutoCancel(true) // which automatically removes the notification when the user taps it.
-//                // Set the intent that will fire when the user taps the notification
-//                .setContentIntent(pendingIntent)
-//                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
-//
-//
-//
-//        // 3: show the notification
-//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getApplicationContext());
-//        // notificationId is a unique int for each notification that you must define
-//        notificationManager.notify(1001, builder.build());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // 2: get channel
+            NotificationChannel channel = new NotificationChannel(channelId,
+                    channelName,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setShowBadge(true);
+
+
+            // 3: register this notification to manager
+            NotificationManager manager = context.getSystemService(NotificationManager.class);
+            assert manager != null;
+            assert channel != null;
+            manager.createNotificationChannel(channel);
+
+        }
+
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(channelName)
+                .setContentText("You have entered your event location")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("You have entered your event location"))
+                .setAutoCancel(true) // which automatically removes the notification when the user taps it.
+                // Set the intent that will fire when the user taps the notification
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+
+
+        // 3: show the notification
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(1001, builder.build());
+
 
 
 

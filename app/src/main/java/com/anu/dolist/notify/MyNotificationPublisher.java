@@ -27,6 +27,8 @@ public class MyNotificationPublisher extends BroadcastReceiver {
         if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
             int importance = NotificationManager. IMPORTANCE_HIGH;
             NotificationChannel notificationChannel = new NotificationChannel( Constants.NOTIFICATION_CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance) ;
+            notificationChannel.enableVibration(true);
+            notificationChannel.enableLights(true);
             assert notificationManager != null;
             notificationManager.createNotificationChannel(notificationChannel);
         }
