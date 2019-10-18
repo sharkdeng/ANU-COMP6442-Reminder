@@ -442,7 +442,13 @@ public class EditorActivity extends AppCompatActivity {
 
                         falseDatePicker = checkPastDateTime(current,scheduled);
                         if(!(falseDatePicker)) {
-                            er.updateOneEvent(updatedEvent);
+                            try {
+                                er.updateOneEvent(updatedEvent);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             if(eventOnCalendar) {
                                 writeCalendarEvent(updatedEvent, scheduled);

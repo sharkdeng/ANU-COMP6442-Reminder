@@ -32,8 +32,8 @@ public class EventRepository  {
 
 
 
-    public void updateOneEvent(Event event) {
-        new updateAsyncTask(eventDao).execute(event);
+    public int updateOneEvent(Event event) throws ExecutionException, InterruptedException {
+        return new updateAsyncTask(eventDao).execute(event).get();
     }
 
     public void deleteOneEvent(Event event) {
@@ -111,7 +111,7 @@ public class EventRepository  {
         }
     }
 
-    private static class updateAsyncTask extends AsyncTask<Event, Void, Void> {
+    private static class updateAsyncTask extends AsyncTask<Event, Void, Integer> {
 
         // pass this to database manipulation
         private EventDao eventDao;
@@ -121,10 +121,8 @@ public class EventRepository  {
         }
 
         @Override
-        protected Void doInBackground(Event... events) {
-            this.eventDao.updateOneEvent(events[0]);
-
-            return null;
+        protected Integer doInBackground(Event... events) {
+            return this.eventDao.updateOneEvent(events[0]);
         }
     }
 

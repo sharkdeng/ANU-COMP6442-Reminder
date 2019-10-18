@@ -24,6 +24,7 @@ import org.junit.runner.RunWith;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -53,8 +54,10 @@ public class TestDao {
      * Insert into database test case
      */
 
+    private int targetId = 0;
+
     @Test
-    public void insertTestDb() {
+    public void insertTestDb() throws ExecutionException, InterruptedException {
 
         Event one = new Event("COMP6442 Lab");
         one.date = "18/11/19";
@@ -64,17 +67,19 @@ public class TestDao {
         one.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
         one.notes = "COMP6442 lab is interesting";
         one.url ="http://anu.edu.au";
-        er.insertOneEvent(one);
-        List<Event> events = er.getAllEvents();
-        System.out.println("total insertion: "+events);
-        assertThat(events.get(0).title, equalTo(one.title));
-        assertThat(events.get(0).date, equalTo(one.date));
-        assertThat(events.get(0).alert, equalTo(one.alert));
-        assertThat(events.get(0).completed, equalTo(one.completed));
-        assertThat(events.get(0).time, equalTo(one.time));
-        assertThat(events.get(0).url, equalTo(one.url));
-        assertThat(events.get(0).notes, equalTo(one.notes));
-        assertThat(events.get(0).location, equalTo(one.location));
+        int targetId = (int)er.insertOneEvent(one);
+
+
+        Event e = er.getEventById(targetId);
+
+        assertThat(e.title, equalTo(one.title));
+        assertThat(e.date, equalTo(one.date));
+        assertThat(e.alert, equalTo(one.alert));
+        assertThat(e.completed, equalTo(one.completed));
+        assertThat(e.time, equalTo(one.time));
+        assertThat(e.url, equalTo(one.url));
+        assertThat(e.notes, equalTo(one.notes));
+        assertThat(e.location, equalTo(one.location));
 
 
     }
@@ -83,12 +88,13 @@ public class TestDao {
      */
 
     @Test
-    public void updateTestDb() {
+    public void updateTestDb() throws ExecutionException, InterruptedException {
 
         Event one = new Event("COMP6442 Lab");
         one.date = "18/11/19";
         one.time ="12:00";
         er.updateOneEvent(one);
+
         List<Event> events = er.getAllEvents();
         assertThat(events.get(0).title, equalTo(one.title));
         assertThat(events.get(0).date, equalTo(one.date));
