@@ -50,7 +50,7 @@
      */
 
     @LargeTest
-    public class TextChangeTest {
+    public class TextSave {
 
         private String title, time, mDate, url, notes;
         private EventRepository er;
@@ -77,77 +77,56 @@
             er= new EventRepository(activityRule.getActivity().getApplication());
         }
 
+
         /**
-         * title edit test
+         * save button test
          */
+
         @Test
-        public void changeTitleText() {
+        public void saveButton() {
 
             onView(withId(R.id.edit_event_title))
                     .perform(typeText(title), closeSoftKeyboard());
 
-            onView(withId(R.id.edit_event_title))
-                    .check(matches(withText("ANU")));
+            onView(withId(R.id.edit_event_date)).perform(click());
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2019, 10, 31));
+            onView(withId(android.R.id.button1)).perform(click());
 
 
-        }
-
-        /**
-         * date test
-         */
-
-        @Test
-        public void changeDateText() {
-
-                onView(withId(R.id.edit_event_date)).perform(click());
-                onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2019, 10, 31));
-                onView(withId(android.R.id.button1)).perform(click());
-                onView(withId(R.id.edit_event_date))
-                        .check(matches(withText(mDate)));
-            }
-        /**
-         * time test
-         */
-
-            @Test
-            public void changeTimeText() {
-
-                onView(withId(R.id.edit_event_time)).perform(click());
-                onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(4, 15));
-
-                onView(withId(android.R.id.button1)).perform(click());
-                onView(withId(R.id.edit_event_time))
-                        .check(matches(withText(time)));
-
-
-        }
-        /**
-         * url test
-         */
-
-        @Test
-        public void changeUrlText() {
+            onView(withId(R.id.edit_event_time)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(4, 15));
+            onView(withId(android.R.id.button1)).perform(click());
 
             onView(withId(R.id.edit_event_url))
                     .perform(typeText(url), closeSoftKeyboard());
 
-            onView(withId(R.id.edit_event_url))
-                    .check(matches(withText("https://www.anu.edu.au")));
-
-        }
-        /**
-         * notes test
-         */
-
-        @Test
-        public void changeNotesText() {
-
             onView(withId(R.id.edit_event_notes))
                     .perform(typeText(notes), closeSoftKeyboard());
 
-            onView(withId(R.id.edit_event_notes))
-                    .check(matches(withText("Welcome to Australian National University")));
+            onView(withId(R.id.edit_tb_right)).perform(click());
+
+            List<Event> events = er.getAllEvents();
+            String etitle = events.get(0).title;
+            String edate = events.get(0).date;
+            String etime = events.get(0).time;
+            String eurl = events.get(0).url;
+            String enotes = events.get(0).notes;
+
+            assertThat(etitle, equalTo(title));
+            assertThat(edate, equalTo(mDate));
+            assertThat(etime, equalTo(time));
+            assertThat(eurl, equalTo(url));
+            assertThat(enotes, equalTo(notes));
+
+
         }
+
+
+
+
+
+
+
 
 
     }
