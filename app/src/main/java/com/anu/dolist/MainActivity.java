@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventAttrib;
 import com.anu.dolist.db.EventRepository;
+import com.anu.dolist.notify.GeofenceBroadcastReceiver;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
@@ -598,7 +599,7 @@ public class MainActivity extends AppCompatActivity {
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
         }
-        Intent intent = new Intent(this, com.anu.samplemap.GeofenceBroadcastReceiver.class);
+        Intent intent = new Intent(this, GeofenceBroadcastReceiver.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
         geofencePendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.
