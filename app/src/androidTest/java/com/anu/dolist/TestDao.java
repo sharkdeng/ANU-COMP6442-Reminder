@@ -102,7 +102,6 @@ public class TestDao {
     /**
      * Delete database test case
      */
-
     @Test
     public void deleteTestDb() {
 
