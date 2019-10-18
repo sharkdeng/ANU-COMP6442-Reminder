@@ -239,8 +239,6 @@ public class TestMainActivity {
         assertThat("has been deleted", !events.contains(deleteEvent));
 
 
-
-
     }
 
 

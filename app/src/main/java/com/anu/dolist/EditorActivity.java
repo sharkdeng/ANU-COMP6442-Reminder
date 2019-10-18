@@ -348,16 +348,8 @@ public class EditorActivity extends AppCompatActivity {
                         editDate.getText().toString().equals("dd/MM/yy")||
                         editTime.getText().toString().equals("00:00")) {
                     // show alert
-                    new AlertDialog.Builder(EditorActivity.this)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("Title cannot be empty")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    System.out.println("do nothing");
-                                }
-                            })
-                            //.setNegativeButton("No",null)
+                    Snackbar.make(view, "Title, Date and Time cannot be empty!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
                             .show();
 
                 } else {
@@ -427,7 +419,7 @@ public class EditorActivity extends AppCompatActivity {
                         updatedEvent.title = editTitle.getText().toString();
                         //TODO
 //                        updatedEvent.location = editLocation.getText().toString();
-                        updatedEvent.location = newLocation;
+                        updatedEvent.location = newLocation.substring(0, 20); // substring to make the UI beautiful
                         updatedEvent.date = editDate.getText().toString();
                         updatedEvent.time = editTime.getText().toString();
                         updatedEvent.alert = editAlert.getText().toString();

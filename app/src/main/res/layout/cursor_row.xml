@@ -18,7 +18,7 @@
         android:padding="10dp"
         android:text="Study cursors"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
 
     <TextView

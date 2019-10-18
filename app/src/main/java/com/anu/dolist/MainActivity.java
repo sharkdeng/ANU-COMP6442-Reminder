@@ -58,6 +58,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -167,6 +168,68 @@ public class MainActivity extends AppCompatActivity {
 
             // populate the database for demonstation other features
 
+
+            // incomplete event 1
+            Event e1 = new Event("Help friends");
+            e1.location = "ACT Civil/-35.277619/149.127376";
+            e1.time = "14:35";
+            e1.date = "26/10/19";
+            e1.alert = "None";
+            e1.url = "http://ato.cool.cool";
+            e1.notes = "Negiotiation Room in on 4th floor";
+            e1.completed = false;
+
+            try {
+                er.insertOneEvent(e1);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
+            // incomplete event 2
+            Event e2 = new Event("Sushi with Friends");
+            e2.location = "Canberra Center/-35.279400/149.132919";
+            e2.time = "12:25";
+            e2.date = "31/10/19";
+            e2.alert = "ALARM SET";
+            e2.url = "http://boygirl88.com";
+            e2.notes = "Nothing";
+            e2.completed = false;
+
+            try {
+                er.insertOneEvent(e2);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
+            // completed event
+            Event e3 = new Event("6442 Labtest");
+            e3.location = "CSIT N111/-35.275024/149.120699";
+            e3.time = "11:0";
+            e3.date = "15/10/19";
+            e3.alert = "ALARM SET";
+            e3.url = "http://www.anu.edu.au";
+            e3.notes = "Get sleep early!";
+            e3.completed = false;
+
+            try {
+                er.insertOneEvent(e3);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
+            recreate();
             return true;
         }
 
