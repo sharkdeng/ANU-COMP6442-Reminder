@@ -18,9 +18,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.ActionBar;
 
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
@@ -47,7 +49,7 @@ import static com.anu.dolist.MainActivity.locations;
 /**
  * @author Limin Deng(u6849956), Supriya Kamble(u6734521)
  */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
 
     private GoogleMap mMap;
@@ -120,6 +122,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // init er
         er = new EventRepository(getApplication());
+
+
+
+        /**
+         * show action bar
+         */
+        ActionBar actionBar =  getSupportActionBar();
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+//        actionBar.setCustomView(R.layout.abs_layout);
+        actionBar.setTitle("Map");
+
 
 
         /**
