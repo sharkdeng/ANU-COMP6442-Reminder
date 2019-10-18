@@ -255,6 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
         // enable geofence
         // for location triggered notificaton
+
         enableGeofence();
 
 
@@ -707,6 +708,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
+                if (geofenceList.size() < 0) return;
+
 
                 // 2 - request for each event
                 GeofencingRequest request = new GeofencingRequest.Builder()
@@ -714,8 +717,6 @@ public class MainActivity extends AppCompatActivity {
                         .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                         .addGeofences(geofenceList) // add a Geofence
                         .build();
-
-
 
 
 

@@ -130,7 +130,7 @@ public class TestMainActivity {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         // Click the item.
-        onView(withText("Show all"))
+        onView(withText("Delete all"))
                 .perform(click());
 
 

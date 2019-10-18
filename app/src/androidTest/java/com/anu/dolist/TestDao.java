@@ -41,20 +41,20 @@ public class TestDao {
 
 
     @Rule
-    public ActivityTestRule<MainActivity> activityRule
-            = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<EditorActivity> activityRule
+            = new ActivityTestRule<>(EditorActivity.class);
 
 
     @Before
     public void createDb() {
         er= new EventRepository(activityRule.getActivity().getApplication());
+        er.deletAllEvents();
     }
 
     /**
      * Insert into database test case
      */
 
-    private int targetId = 0;
 
     @Test
     public void insertTestDb() throws ExecutionException, InterruptedException {
@@ -90,7 +90,20 @@ public class TestDao {
     @Test
     public void updateTestDb() throws ExecutionException, InterruptedException {
 
-        Event one = new Event("COMP6442 Lab");
+
+        Event sample = new Event("COMP6442 Lab");
+        sample.date = "18/11/19";
+        sample.time ="12:00";
+        sample.alert ="None";
+        sample.completed =false;
+        sample.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
+        sample.notes = "COMP6442 lab is interesting";
+        sample.url ="http://anu.edu.au";
+        int targetId = (int)er.insertOneEvent(sample);
+
+
+        Event one = er.getEventById(targetId);
+        one.title = "COMP6442 Lab";
         one.date = "18/11/19";
         one.time ="12:00";
         er.updateOneEvent(one);
@@ -99,6 +112,7 @@ public class TestDao {
         assertThat(events.get(0).title, equalTo(one.title));
         assertThat(events.get(0).date, equalTo(one.date));
     }
+
     /**
      * Delete database test case
      */
@@ -107,11 +121,11 @@ public class TestDao {
 
         List<Event> events = er.getAllEvents();
         int count = events.size();
-        er.deleteOneEvent(events.get(0));
-        int afterDeleteCount = events.size();
-        assertThat(count, equalTo(afterDeleteCount));
-
-
+        if (count > 0) {
+            er.deleteOneEvent(events.get(0));
+            int afterDeleteCount = events.size();
+            assertThat(count, equalTo(afterDeleteCount));
+        }
 
     }
 }
