@@ -255,8 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
         // enable geofence
         // for location triggered notificaton
-
-        enableGeofence();
+//        enableGeofence();
 
 
         /**
@@ -698,7 +697,7 @@ public class MainActivity extends AppCompatActivity {
                                     lon,
                                     Constants.GEOFENCE_RADIUS_IN_METERS
                             )
-                            .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                            .setExpirationDuration(Geofence.NEVER_EXPIRE)
                             .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                                     Geofence.GEOFENCE_TRANSITION_EXIT)
                             .build();
