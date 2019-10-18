@@ -630,6 +630,7 @@ public class MainActivity extends AppCompatActivity {
                 // it has location
                 if (!e.location.equals("")) {
 
+                    // get three
                     String requestId = String.valueOf(e._id);
                     double lat = Double.valueOf(e.location.split("/")[1]);
                     double lon = Double.valueOf(e.location.split("/")[2]);

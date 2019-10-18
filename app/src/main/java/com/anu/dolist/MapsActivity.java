@@ -1,10 +1,9 @@
 package com.anu.dolist;//package com.anu.dolist;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -12,6 +11,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -19,9 +19,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
@@ -30,14 +28,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -96,6 +94,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+    /**
+     * MapsActivity is ready
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +160,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -170,67 +175,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-
-
-
-
-        /**
-         * mark current location
-         * move camera here
-         */
-        // Add a marker in current location and move the camera
-        LatLng currentPlace = new LatLng(Constants.CURRENT_LAT, Constants.CURRENT_LON);
-        mMap.addMarker(new MarkerOptions()
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .position(currentPlace)
-                .title("You are here"));
-
-        // I don't want zoom
-//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,15));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace,15)); // move camera to current location and zoom
-//        mMap.animateCamera(CameraUpdateFactory.zoomTo( 15.0f ) );
-
-
-        /**
-         * mark all event locations
-         */
-
-        // different markers to distinguish completedEvents and incompletedEvents
-        List<Event> completedEvents = er.getAllCompletedEvents();
-        List<Event> incompletedEvents = er.getAllIncompletedEvents();
-
-        // get completed locations
-        for (Event e: completedEvents) {
-            // make sure it has location
-            if (!e.location.equals("")) {
-                String lat = e.location.split("/")[1];
-                String lon = e.location.split("/")[2];
-                double lat_d = Double.valueOf(lat);
-                double lon_d = Double.valueOf(lon);
-                mMap.addMarker(new MarkerOptions()
-                        // make it different from current loca
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-                        .position(new LatLng(lat_d, lon_d))
-                        .title("Good"));
-            }
-        }
-
-        // get completed locations
-        for (Event e: incompletedEvents) {
-            // make sure it has location
-            if (!e.location.equals("")) {
-                String lat = e.location.split("/")[1];
-                String lon = e.location.split("/")[2];
-                double lat_d = Double.valueOf(lat);
-                double lon_d = Double.valueOf(lon);
-                mMap.addMarker(new MarkerOptions()
-                        // make it different from current loca
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                        .position(new LatLng(lat_d, lon_d))
-                        .title("Good"));
-            }
-        }
-
+        addAllEventMarkers();
 
 
 //        mMap.setOnMapLongClickListener(this);
@@ -303,6 +248,98 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+
+    /**
+     * independet function for clear map and add markers back again
+     * @author: Limin Deng
+     */
+    public void addAllEventMarkers() {
+
+        if (mMap == null) return;
+        /**
+         * mark current location
+         * move camera here
+         */
+        // Add a marker in current location and move the camera
+        LatLng currentPlace = new LatLng(Constants.CURRENT_LAT, Constants.CURRENT_LON);
+        mMap.addMarker(new MarkerOptions()
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .position(currentPlace)
+                .title("You are here"));
+
+        // I don't want zoom
+//        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(sydney,15));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPlace,15)); // move camera to current location and zoom
+//        mMap.animateCamera(CameraUpdateFactory.zoomTo( 15.0f ) );
+
+
+        /**
+         * mark all event locations
+         */
+        // different markers to distinguish completedEvents and incompletedEvents
+        List<Event> completedEvents = er.getAllCompletedEvents();
+        List<Event> incompletedEvents = er.getAllIncompletedEvents();
+
+        // get completed locations
+        for (Event e: completedEvents) {
+            // make sure it has location
+            if (!e.location.equals("")) {
+                String lat = e.location.split("/")[1];
+                String lon = e.location.split("/")[2];
+                double lat_d = Double.valueOf(lat);
+                double lon_d = Double.valueOf(lon);
+                mMap.addMarker(new MarkerOptions()
+                        // make it different from current loca
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                        .position(new LatLng(lat_d, lon_d))
+                        .title("Good"));
+            }
+        }
+
+        // get completed locations
+        for (Event e: incompletedEvents) {
+            // make sure it has location
+            if (!e.location.equals("")) {
+                String lat = e.location.split("/")[1];
+                String lon = e.location.split("/")[2];
+                double lat_d = Double.valueOf(lat);
+                double lon_d = Double.valueOf(lon);
+                mMap.addMarker(new MarkerOptions()
+                        // make it different from current loca
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .position(new LatLng(lat_d, lon_d))
+                        .title("Good"));
+            }
+        }
+    }
+
+
+    /**
+     * independent function to draw geofence circles
+     * @author: Limin Deng
+     */
+    public void addAllGeofenceCircles() {
+        List<Event> events = er.getAllEvents();
+        for (Event e: events) {
+            if (!e.location.equals("")){
+
+                double lat = Double.valueOf(e.location.split("/")[1]);
+                double lon = Double.valueOf(e.location.split("/")[2]);
+
+                CircleOptions circleOptions = new CircleOptions()
+                        .center( new LatLng(lat, lon))
+                        .radius(Constants.GEOFENCE_RADIUS_IN_METERS)
+                        .fillColor(0x40ff0000)
+                        .strokeColor(Color.TRANSPARENT)
+                        .strokeWidth(10);
+                // Get back the mutable Circle
+                Circle circle = mMap.addCircle(circleOptions);
+            }
+        }
+
+    }
+
     @Override
     public void onMapLongClick(LatLng latLng) {
 
@@ -357,6 +394,50 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         intent.putExtra("location", locations );
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+
+
+
+    /**
+     * Add menu items to toolbar
+     * @author: u6734521
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.map_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+    /**
+     * toggle geoface virsualizing
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        /**
+         * callbacks on menu items
+         */
+        if(item.getItemId() == R.id.map_menu_geofence_show) {
+
+            mMap.clear();
+            addAllEventMarkers();
+            addAllGeofenceCircles();
+
+            return true;
+        } else if (item.getItemId() == R.id.map_menu_geofence_hide) {
+            mMap.clear();
+            addAllEventMarkers();
+            return true;
+
+        }
+
+        return false;
     }
 
 }
