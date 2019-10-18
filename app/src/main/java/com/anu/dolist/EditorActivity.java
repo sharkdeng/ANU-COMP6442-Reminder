@@ -207,8 +207,10 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // empty alert
-                if (editTitle.getText().toString().equals("")) {
-                    Snackbar.make(view, "Title cannot be empty!", Snackbar.LENGTH_LONG)
+                if (editTitle.getText().toString().equals("") ||
+                    editDate.getText().toString().equals("dd/MM/yy")||
+                        editTime.getText().toString().equals("00:00")){
+                    Snackbar.make(view, "Title, Date and Time cannot be empty!", Snackbar.LENGTH_LONG)
                             .setAction("Action", null)
                             .show();
 
@@ -234,6 +236,7 @@ public class EditorActivity extends AppCompatActivity {
                         newEvent.completed = false;
 
                         String dateTime =newEvent.date+" "+newEvent.time;
+                        System.out.println("show dateTime: "+dateTime);
                         long current = Calendar.getInstance().getTimeInMillis(); // current time
                         long scheduled = getTimeinMilli(dateTime); // schedule time
 
@@ -460,7 +463,9 @@ public class EditorActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // empty not allowed
-                if (editTitle.getText().toString().equals("")) {
+                if (editTitle.getText().toString().equals("") ||
+                        editDate.getText().toString().equals("dd/MM/yy")||
+                        editTime.getText().toString().equals("00:00")) {
                     // show alert
                     new AlertDialog.Builder(EditorActivity.this)
                             .setIcon(android.R.drawable.ic_dialog_alert)

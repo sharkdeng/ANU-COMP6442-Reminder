@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 
 import java.util.List;
 
-public class EventRepository {
+public class EventRepository  {
 
     private EventDao eventDao;
 
@@ -46,6 +46,10 @@ public class EventRepository {
 
     public Event getEventById(int id) {
         return eventDao.getEventById(id);
+    }
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents();
     }
 
     public Cursor getEventByKeywords(String keywords) {
