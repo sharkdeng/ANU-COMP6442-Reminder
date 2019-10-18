@@ -48,7 +48,6 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
 
 
-
         // Get the transition type.
         int geofenceTransition = geofencingEvent.getGeofenceTransition();
 
@@ -130,6 +129,8 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
                     channelName,
                     NotificationManager.IMPORTANCE_DEFAULT);
             channel.setShowBadge(true);
+            channel.enableLights(true);
+            channel.enableVibration(true);
 
 
             // 3: register this notification to manager

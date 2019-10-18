@@ -54,6 +54,12 @@ public interface EventDao {
     @Query("SELECT * FROM event WHERE _id=:id")
     Event getEventById(int id);
 
+
+    @Query("SELECT * FROM event WHERE title=:title AND time=:time AND date=:date")
+    Event getEventByTitleTimeDate(String title, String time, String date);
+
+
+
     @Query("SELECT * FROM event WHERE title LIKE '%' || :keywords|| '%'")
     Cursor getEventByKeywords(String keywords);
 

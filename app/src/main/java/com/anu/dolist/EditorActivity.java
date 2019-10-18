@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 
@@ -252,7 +253,13 @@ public class EditorActivity extends AppCompatActivity {
 
                         falseDatePicker = checkPastDateTime(current,scheduled);
                         if(!(falseDatePicker)) {
-                            er.insertOneEvent(newEvent);
+                            try {
+                                er.insertOneEvent(newEvent);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             if (eventOnCalendar) {
                                 writeCalendarEvent(newEvent, scheduled);
@@ -516,7 +523,13 @@ public class EditorActivity extends AppCompatActivity {
 
                         falseDatePicker = checkPastDateTime(current,scheduled);
                         if(!(falseDatePicker)) {
-                            er.insertOneEvent(newEvent);
+                            try {
+                                er.insertOneEvent(newEvent);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             // schedule notification
                             if (!editAlert.getText().toString().equals("None")) {

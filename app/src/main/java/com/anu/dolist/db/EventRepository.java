@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class EventRepository  {
 
@@ -19,9 +20,11 @@ public class EventRepository  {
         eventDao = database.eventDao();
     }
 
-    public void insertOneEvent(Event event) {
-        new insertAsyncTask(eventDao).execute(event);
+    public long insertOneEvent(Event event) throws ExecutionException, InterruptedException {
+        return new insertAsyncTask(eventDao).execute(event).get() ;
     }
+
+
 
     public void updateOneEvent(Event event) {
         new updateAsyncTask(eventDao).execute(event);
@@ -63,6 +66,11 @@ public class EventRepository  {
     }
 
 
+    // for test reason
+    public Event getEventByTitleTimeDate(String title, String time, String date) {
+        return eventDao.getEventByTitleTimeDate(title, time, date);
+    }
+
     public Cursor getEventByKeywords(String keywords) {
         return eventDao.getEventByKeywords(keywords);
     }
@@ -82,7 +90,7 @@ public class EventRepository  {
 
     // synchronically because dao doesn't allow executing in main thread
     // 3rd Void: return type
-    private static class insertAsyncTask extends android.os.AsyncTask<Event, Void, Void> {
+    private static class insertAsyncTask extends AsyncTask<Event, Void, Long> {
 
         // pass this to database manipulation
         private EventDao eventDao;
@@ -92,10 +100,8 @@ public class EventRepository  {
         }
 
         @Override
-        protected Void doInBackground(Event... events) {
-            this.eventDao.insertOneEvent(events[0]);
-
-            return null;
+        protected Long doInBackground(Event... events) {
+            return this.eventDao.insertOneEvent(events[0]);
         }
     }
 

@@ -28,6 +28,7 @@
     import static androidx.test.espresso.Espresso.onView;
     import static androidx.test.espresso.action.ViewActions.click;
     import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+    import static androidx.test.espresso.action.ViewActions.longClick;
     import static androidx.test.espresso.action.ViewActions.typeText;
     import static androidx.test.espresso.assertion.ViewAssertions.matches;
     import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -77,7 +78,6 @@
                     .check(matches(withText("ANU")));
 
 
-    //
         }
 
         @Test
@@ -111,7 +111,6 @@
 
             onView(withId(R.id.edit_event_url))
                     .check(matches(withText("https://www.anu.edu.au")));
-
 
         }
 
@@ -164,6 +163,13 @@
 
 
         }
+
+
+
+
+
+
+
 
 
     }
