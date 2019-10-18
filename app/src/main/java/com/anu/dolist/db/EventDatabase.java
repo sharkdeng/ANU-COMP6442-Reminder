@@ -82,20 +82,21 @@ public abstract class EventDatabase extends RoomDatabase {
 
 
             // fill in data
-//            Event one = new Event("COMP6442 Lab");
-//            one.location = "CSIT N111";
-//
-//            Event two = new Event("COMP6730 Lab");
-//            two.location = "CSIT N115";
-//
-//            Event three = new Event("COMP6240 Lab");
-//            three.location = "CSIT N109";
+            Event one = new Event("COMP6442 Lab");
+            one.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
+
+            Event two = new Event("COMP6730 Lab");
+            two.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
+
+            Event three = new Event("COMP6240 Lab");
+            three.location ="108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
 
 
 
-//            eventDao.insertOneEvent(one);
-//            eventDao.insertOneEvent(two);
-//            eventDao.insertOneEvent(three);
+            eventDao.insertOneEvent(one);
+            eventDao.insertOneEvent(two);
+            eventDao.insertOneEvent(three);
+
 
 
 
