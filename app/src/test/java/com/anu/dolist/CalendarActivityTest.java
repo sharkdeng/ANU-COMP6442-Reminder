@@ -1,7 +1,14 @@
 package com.anu.dolist;
 
+import com.anu.dolist.db.Event;
+
 import org.junit.Rule;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -27,6 +34,24 @@ public class CalendarActivityTest {
             assertArrayEquals(result,CalendarActivity.parseDate(tmp));
         }
 
+
+    }
+
+    @Test
+    public void registTest(){
+        String[] time = {"27/10","25/10","18/9"};
+        Map<String, List<String>> map = new HashMap<>();
+        for(int i=0;i<10;i++) {
+            Event a = new Event("a"+i);
+            if(i<4) a.date = time[0];
+            else if(i<8) a.date = time[1];
+            else a.date = time[2];
+            CalendarActivity.registevent(map,a);
+        }
+
+        assertArrayEquals(map.get(time[0]).toArray(),new String[]{"a0 ","a1 ","a2 ","a3 "} );
+        assertArrayEquals(map.get(time[1]).toArray(),new String[]{"a4 ","a5 ","a6 ","a7 "} );
+        assertArrayEquals(map.get(time[2]).toArray(),new String[]{"a8 ","a9 "} );
 
     }
 }

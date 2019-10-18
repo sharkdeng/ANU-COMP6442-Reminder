@@ -10,15 +10,22 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import sun.bob.mcalendarview.*;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
 import sun.bob.mcalendarview.vo.DateData;
 
 import com.anu.dolist.db.Event;
 import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -27,7 +34,8 @@ import java.util.List;
 public class CalendarActivity extends AppCompatActivity {
 
     private EventRepository er = new EventRepository(getApplication());
-
+    Map<String,List<String>> es = new HashMap<>();
+    TextView tv;
 
     public static int[] parseDate(String date){
         int[] time = new int[3];
@@ -36,6 +44,18 @@ public class CalendarActivity extends AppCompatActivity {
         time[1] = Integer.valueOf(tmp[1]);
         time[2] = Integer.valueOf(tmp[0]);
         return time;
+    }
+
+    public static  void registevent(Map<String,List<String>> map, Event a){
+        if(!map.containsKey(a.date)){
+            List<String > tmp = new ArrayList<>();
+
+            tmp.add(a.title+" " +a.time);
+            map.put(a.date,tmp);
+        }
+        else{
+            map.get(a.date).add(a.title+" "+a.time);
+        }
     }
 
     /**
@@ -64,11 +84,12 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         // get the reference of CalendarView
-        MCalendarView cv = ((MCalendarView) findViewById(R.id.cal));
+        MCalendarView cv =  findViewById(R.id.cal);
         List<Event> events = er.getAllEvents();
         for(Event a:events){
-            System.out.println(a.date);
+
             int [] tmp =parseDate(a.date);
+            registevent(es,a);
             if(!a.completed)
             cv.markDate(
                     new DateData(tmp[0], tmp[1], tmp[2]).setMarkStyle(new MarkStyle(  MarkStyle.BACKGROUND, Color.RED)
@@ -79,6 +100,21 @@ public class CalendarActivity extends AppCompatActivity {
                         ));
         }
 
+        cv.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+                String d = ""+date.getDay()+"/"+date.getMonth()+"/"+(date.getYear()-2000);
+                tv = findViewById(R.id.textView);
+                if(es.containsKey(d)) {
+                    List<String> show = es.get(d);
+                    String result = "";
+                    for (String a : show) result += (a + "\n");
+
+                    tv.setText(result);
+                }
+                else tv.setText("");
+            }
+        });
 //        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 //            @Override
 //            public void onSelectedDayChange(CalendarView calendarView, int year, int month, int date) {
