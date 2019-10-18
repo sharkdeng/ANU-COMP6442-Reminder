@@ -1,7 +1,9 @@
     package com.anu.dolist;
 
     import android.content.Context;
+    import android.graphics.Rect;
     import android.widget.DatePicker;
+    import android.widget.ListView;
     import android.widget.TimePicker;
 
     import androidx.room.Database;
@@ -10,6 +12,10 @@
     import androidx.test.filters.LargeTest;
     import androidx.test.rule.ActivityTestRule;
     import androidx.test.core.app.ApplicationProvider;
+    import androidx.test.uiautomator.UiDevice;
+    import androidx.test.uiautomator.UiObject;
+    import androidx.test.uiautomator.UiObjectNotFoundException;
+    import androidx.test.uiautomator.UiSelector;
 
     import com.anu.dolist.db.Event;
     import com.anu.dolist.db.EventDao;
@@ -33,6 +39,7 @@
     import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
     import static androidx.test.espresso.matcher.ViewMatchers.withId;
     import static androidx.test.espresso.matcher.ViewMatchers.withText;
+    import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
     import static org.hamcrest.MatcherAssert.assertThat;
     import static org.hamcrest.Matchers.equalTo;
 
