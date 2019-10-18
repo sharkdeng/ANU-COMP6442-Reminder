@@ -72,10 +72,12 @@ public class TestMainActivity {
         onView(withText("Show all"))
                 .perform(click());
 
-        // check
-        List<Event> events = er.getAllEvents();
-        assertThat(events.size(), equalTo(2));
 
+        // check
+        int rowCount = getRowCount(onView(allOf(withId(R.id.main_swipe_list))));
+        List<Event> events = er.getAllEvents();
+
+        assertThat(rowCount, equalTo(events.size()));
 
     }
 
@@ -84,17 +86,16 @@ public class TestMainActivity {
 
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-
         // Click the item.
         onView(withText("Show incompleted"))
                 .perform(click());
 
 
-
         // check
-
+        int rowCount = getRowCount(onView(allOf(withId(R.id.main_swipe_list))));
         List<Event> events = er.getAllIncompletedEvents();
-        assertThat(events.size(), equalTo(events.size()));
+
+        assertThat(rowCount, equalTo(events.size()));
 
 
     }
@@ -106,13 +107,15 @@ public class TestMainActivity {
         openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
         // Click the item.
-        onView(withText("Show all"))
+        onView(withText("Show completed"))
                 .perform(click());
 
 
         // check
-        List<Event> events = er.getAllEvents();
-        assertThat(events.size(), equalTo(2));
+        int rowCount = getRowCount(onView(allOf(withId(R.id.main_swipe_list))));
+        List<Event> events = er.getAllCompletedEvents();
+
+        assertThat(rowCount, equalTo(events.size()));
 
 
     }
@@ -279,10 +282,10 @@ public class TestMainActivity {
 
 
 
-    public int getRowCount(final DataInteraction dataInteraction) {
-        final int[] count = {};
+    public int getRowCount(final ViewInteraction viewInteraction) {
+        final int[] count = {0};
 
-        dataInteraction.perform(new ViewAction() {
+        viewInteraction.perform(new ViewAction() {
 
             // check if the matcher if TextView
             @Override
@@ -301,7 +304,6 @@ public class TestMainActivity {
             public void perform(UiController uiController, View view) {
                 SwipeMenuListView listView = (SwipeMenuListView)view;
                 count[0] = listView.getAdapter().getCount();
-//                text[0] = textView.getText().toString();
             }
         });
         return count[0];
