@@ -57,6 +57,9 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.1.0'
     annotationProcessor 'androidx.room:room-compiler:2.1.0'
 
+    //mCalendarView
+    implementation 'sun.bob:mcalendarview:1.0.0'
+
     // @NotNull
     implementation 'org.jetbrains:annotations-java5:15.0'
 
