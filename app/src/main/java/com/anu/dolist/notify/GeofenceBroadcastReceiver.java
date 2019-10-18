@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -19,6 +20,7 @@ import com.anu.dolist.R;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
@@ -44,6 +46,75 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         System.out.println("ninosnkonsongowg");
 
 
+
+
+
+        // Get the transition type.
+        int geofenceTransition = geofencingEvent.getGeofenceTransition();
+
+        // Test that the reported transition was of interest.
+        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
+                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
+
+            // Get the geofences that were triggered. A single event can trigger
+            // multiple geofences.
+            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+
+            // Get the transition details as a String.
+            String geofenceTransitionDetails = getGeofenceTransitionDetails(
+                    context,
+                    geofenceTransition,
+                    triggeringGeofences
+            );
+
+            // Send notification and log the transition details.
+            sendNotification(context, intent, geofenceTransitionDetails);
+
+
+//            Log.i(Constants.TAG, geofenceTransitionDetails);
+        } else {
+            // Log the error.
+//            Log.e(Constants.TAG, getString(R.string.geofence_transition_invalid_type,
+//                    geofenceTransition));
+
+
+            Log.e(Constants.TAG, "Geofence Error");
+        }
+
+    }
+
+
+    /**
+     * get location information
+     * @param context
+     * @param geofenceTransition
+     * @param triggeringGeofences
+     * @return
+     */
+    private String getGeofenceTransitionDetails(
+            Context context,
+            int geofenceTransition,
+            List<Geofence> triggeringGeofences) {
+
+        String geofenceTransitionString = String.valueOf(geofenceTransition);
+
+        // Get the Ids of each geofence that was triggered.
+        ArrayList triggeringGeofencesIdsList = new ArrayList();
+        for (Geofence geofence : triggeringGeofences) {
+            triggeringGeofencesIdsList.add(geofence.getRequestId());
+        }
+        String triggeringGeofencesIdsString = TextUtils.join(", ", triggeringGeofencesIdsList);
+
+        return geofenceTransitionString + " : " + triggeringGeofencesIdsString;
+    }
+
+
+    /**
+     * send location triggered notification
+     * @param context
+     * @param intent
+     */
+    public void sendNotification(Context context, Intent intent, String content) {
         // get content
         String channelId = String.valueOf(intent.getIntExtra(Constants.GEO_CHANNEL_ID , -1));
         String channelName = intent.getStringExtra(Constants.GEO_CHANNEL_NAME);
@@ -88,58 +159,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(1001, builder.build());
 
-
-
-
-
-
-
-
-
-
-
-
-
-        // Get the transition type.
-        int geofenceTransition = geofencingEvent.getGeofenceTransition();
-
-        // Test that the reported transition was of interest.
-        if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ||
-                geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT) {
-
-            // Get the geofences that were triggered. A single event can trigger
-            // multiple geofences.
-            List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
-
-            // Get the transition details as a String.
-//            String geofenceTransitionDetails = getGeofenceTransitionDetails(
-//                    this,
-//                    geofenceTransition,
-//                    triggeringGeofences
-//            );
-
-            // Send notification and log the transition details.
-//            sendNotification(geofenceTransitionDetails);
-
-
-//            Log.i(Constants.TAG, geofenceTransitionDetails);
-        } else {
-            // Log the error.
-//            Log.e(Constants.TAG, getString(R.string.geofence_transition_invalid_type,
-//                    geofenceTransition));
-
-
-            Log.e(Constants.TAG, "Geofence Error");
-        }
-    
-    
-
     }
-
-
-
-
-
 
 
 }
