@@ -129,6 +129,24 @@
         @Test
         public void saveButton() {
 
+            onView(withId(R.id.edit_event_title))
+                    .perform(typeText(title), closeSoftKeyboard());
+
+            onView(withId(R.id.edit_event_date)).perform(click());
+            onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2019, 10, 31));
+            onView(withId(android.R.id.button1)).perform(click());
+
+
+            onView(withId(R.id.edit_event_time)).perform(click());
+            onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(4, 15));
+            onView(withId(android.R.id.button1)).perform(click());
+
+            onView(withId(R.id.edit_event_url))
+                    .perform(typeText(url), closeSoftKeyboard());
+
+            onView(withId(R.id.edit_event_notes))
+                    .perform(typeText(notes), closeSoftKeyboard());
+
             onView(withId(R.id.edit_tb_right)).perform(click());
 
             List<Event> events = er.getAllEvents();
@@ -143,8 +161,6 @@
             assertThat(etime, equalTo(time));
             assertThat(eurl, equalTo(url));
             assertThat(enotes, equalTo(notes));
-
-
 
 
         }

@@ -27,7 +27,6 @@ public abstract class EventDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "events.db";
 
-
     // synchorinzed means only one thread can access this method when there are multiple threads
     public static synchronized EventDatabase getDatabase(final Context context) {
 
@@ -84,19 +83,20 @@ public abstract class EventDatabase extends RoomDatabase {
 
             // fill in data
 //            Event one = new Event("COMP6442 Lab");
-//            one.location = "CSIT N111";
+//            one.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
 //
 //            Event two = new Event("COMP6730 Lab");
-//            two.location = "CSIT N115";
+//            two.location = "108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
 //
 //            Event three = new Event("COMP6240 Lab");
-//            three.location = "CSIT N109";
-
-
-
+//            three.location ="108 North Rd, Acton ACT 2601/-35.275278/ 149.120607";
+//
+//
+//
 //            eventDao.insertOneEvent(one);
 //            eventDao.insertOneEvent(two);
 //            eventDao.insertOneEvent(three);
+
 
 
 

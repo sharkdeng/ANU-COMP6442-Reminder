@@ -61,7 +61,7 @@ import static com.anu.dolist.MainActivity.arrayAdapter;
 
 
 /**
- * @author: Limin Deng(u6849956)
+ * @author Limin Deng(u6849956)
  */
 public class EditorActivity extends AppCompatActivity {
 
@@ -69,10 +69,7 @@ public class EditorActivity extends AppCompatActivity {
     private int eventId = -1;
     private Intent go; // received information
 
-    int noteId;
-    public static final String NOTIFICATION_CHANNEL_ID = "10001" ;
-    private final static String default_notification_channel_id = "default" ;
-    public static final int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
+
     Context context;
     boolean eventOnCalendar =false;
     boolean falseDatePicker = false;
@@ -80,7 +77,10 @@ public class EditorActivity extends AppCompatActivity {
     private String newLocation = ""; // container to store the selected place
 
 
-
+    /**
+     * Perform initialization of all fragments.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,7 +135,9 @@ public class EditorActivity extends AppCompatActivity {
                 Log.i(Constants.TAG.toString(), "Place: " + place.getName() + ", " + place.getId());
                 double myLatitude = place.getLatLng().latitude;
                 double myLongititude = place.getLatLng().longitude;
-                newLocation = myLatitude + " " + myLongititude;
+                // name, latitude, longititude
+                newLocation = place.getName() + "/" + myLatitude + "/" + myLongititude;
+
             }
 
             @Override
@@ -162,7 +164,6 @@ public class EditorActivity extends AppCompatActivity {
             Event selectedEvent = er.getEventById(eventId);
             String eventTitle = selectedEvent.title;
             String eventLocation = selectedEvent.location;
-            Log.d(Constants.TAG.toString(), eventLocation);
             String eventDate = selectedEvent.date;
             String eventTime = selectedEvent.time;
             String eventAlert = selectedEvent.alert;
@@ -175,7 +176,16 @@ public class EditorActivity extends AppCompatActivity {
                 editTitle.setText(eventTitle);
             }
             if (eventLocation != null) {
-                editLocation.setText(eventLocation);
+
+                if (!eventLocation.equals("")) {
+                    String placeName = eventLocation.split("/")[0];
+                    editLocation.setHint(placeName);
+                } else {
+                    // if there is not location
+                    editLocation.setHint("Search a place");
+                }
+
+//                editLocation.setText(eventLocation); // this doesn't work
             }
             if (eventDate != null) {
                 editDate.setText(eventDate);
@@ -277,6 +287,7 @@ public class EditorActivity extends AppCompatActivity {
                         selectedEvent.title = editTitle.getText().toString();
                         // TODO
 //                        selectedEvent.location = editLocation.getText().toString();
+                        selectedEvent.location = newLocation;
                         selectedEvent.date = editDate.getText().toString();
                         selectedEvent.time = editTime.getText().toString();
                         selectedEvent.alert = editAlert.getText().toString();
@@ -540,6 +551,7 @@ public class EditorActivity extends AppCompatActivity {
                         updatedEvent.title = editTitle.getText().toString();
                         //TODO
 //                        updatedEvent.location = editLocation.getText().toString();
+                        updatedEvent.location = newLocation;
                         updatedEvent.date = editDate.getText().toString();
                         updatedEvent.time = editTime.getText().toString();
                         updatedEvent.alert = editAlert.getText().toString();
@@ -622,14 +634,19 @@ public class EditorActivity extends AppCompatActivity {
      * @return
      */
     private Notification getNotification (String content) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, default_notification_channel_id ) ;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder( EditorActivity.this, Constants.default_notification_channel_id ) ;
         builder.setContentTitle( "Reminder" ) ;
         builder.setContentText(content) ;
         builder.setSmallIcon(R.drawable. ic_launcher_foreground ) ;
         builder.setAutoCancel( true ) ;
-        builder.setChannelId( NOTIFICATION_CHANNEL_ID );
+        builder.setChannelId( Constants.NOTIFICATION_CHANNEL_ID );
         return builder.build() ;
     }
+
+    /**
+     * check for WRITE_CALENDAR permission
+     * @return true if successfully gain permission
+     */
 
     public boolean checkPermission()
     {
@@ -645,13 +662,13 @@ public class EditorActivity extends AppCompatActivity {
                     alertBuilder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                            ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
                         }
                     });
                     AlertDialog alert = alertBuilder.create();
                     alert.show();
                 } else {
-                    ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
+                    ActivityCompat.requestPermissions((Activity)context, new String[]{Manifest.permission.WRITE_CALENDAR}, Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR);
                 }
                 return false;
             } else {
@@ -661,10 +678,17 @@ public class EditorActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    /**
+     * Callback for the result from requesting permissions. If permission gained, we will be able to write events on calendar.
+     * @param requestCode The request code passed in requestPermissions
+     * @param permissions The requested permissions
+     * @param grantResults The grant results for the corresponding permissions which is either PERMISSION_GRANTED or PERMISSION_DENIED.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_CALENDAR:
+            case Constants.MY_PERMISSIONS_REQUEST_WRITE_CALENDAR:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     eventOnCalendar = true;
                      // writeCalendarEvent(events, mCalendar);
@@ -674,6 +698,12 @@ public class EditorActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /**
+     *
+     * @param events the event will be recorded
+     * @param timeInMilli The time when it is scheduled
+     */
     private void writeCalendarEvent(Event events, long timeInMilli) {
         final ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -699,6 +729,12 @@ public class EditorActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Event Created", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * check scheduled time for not setting a past event
+     * @param current current time
+     * @param scheduled scheduled time, it must be later than current time
+     * @return true if schedule time is later than current time.
+     */
     private boolean checkPastDateTime(long current, long scheduled) {
         if (scheduled <= current) {
             new AlertDialog.Builder(EditorActivity.this)
@@ -713,6 +749,11 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param dateTimeString transform String type time to long type time, which is represented by the number of microseconds which has been passed
+     * @return transformed number which represent passed microseconds.
+     */
     private long getTimeinMilli(String dateTimeString) {
         Calendar calendarUpdate = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy hh:mm");

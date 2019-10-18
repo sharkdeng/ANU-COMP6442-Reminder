@@ -25,6 +25,7 @@ public class Event {
     @ColumnInfo(name = "title")
     @NotNull public String title;
 
+    // name, latitude, longtitude
     @ColumnInfo(name = "location")
     public String location;
 

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/map_menu_geofence_show"
+        android:title="Show Geofence"></item>
+
+    <item
+        android:id="@+id/map_menu_geofence_hide"
+        android:title="Hide Geofence"></item>
+
+</menu>

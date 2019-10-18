@@ -25,5 +25,12 @@
         android:title="@string/delete_all">
     </item>
 
+    <!-- for demonstration -->
+    <item
+        android:id="@+id/main_popluate"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="@string/populate_data">
+    </item>
+
 
 </menu>

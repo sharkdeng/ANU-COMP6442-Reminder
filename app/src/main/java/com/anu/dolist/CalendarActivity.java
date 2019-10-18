@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -17,13 +16,14 @@ import java.util.Calendar;
 
 
 /**
- * @author: Limin Deng(u6849956)
+ * @author Limin Deng(u6849956)
  */
 public class CalendarActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Limin
+     * Perform initialization of all fragments.
+     * @author Limin
      * @param savedInstanceState
      */
     @Override
@@ -131,12 +131,11 @@ public class CalendarActivity extends AppCompatActivity {
         // select current day
         Calendar now = Calendar.getInstance();
         cv.setDate(now.getTimeInMillis());
-        cv.setSelectedDateVerticalBar(getResources().getDrawable(R.drawable.common_google_signin_btn_icon_dark));
+
 
         // set Monday as the first day of the week
         cv.setFirstDayOfWeek(2);
 
-        final int firstDayOfWeek= cv.getFirstDayOfWeek(); // get first day of the week
 
 
 
@@ -144,8 +143,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Done: how to avoid conflicts
         // because setSelectedItem is not changed
+
         /**
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
         BottomNavigationView bnv = findViewById(R.id.cal_nav);

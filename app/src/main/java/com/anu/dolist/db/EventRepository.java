@@ -32,12 +32,26 @@ public class EventRepository  {
 //        eventDao.deleteOneEvent(event); // main thread
     }
 
+
+    public List<Event> getAllEvents() {
+        return eventDao.getAllEvents();
+    }
+
     public Cursor getAllEventsCursor() {
         return eventDao.getAllEventsCursor();
     }
 
+    public List<Event> getAllCompletedEvents() {
+
+        return eventDao.getAllCompletedEvents();
+    }
+
     public Cursor getAllCompletedEventsCursor() {
         return eventDao.getAllCompletedEventsCursor();
+    }
+
+    public List<Event> getAllIncompletedEvents() {
+        return eventDao.getAllIncompletedEvents();
     }
 
     public Cursor getAllIncompletedEventsCursor() {
@@ -48,9 +62,6 @@ public class EventRepository  {
         return eventDao.getEventById(id);
     }
 
-    public List<Event> getAllEvents() {
-        return eventDao.getAllEvents();
-    }
 
     public Cursor getEventByKeywords(String keywords) {
         return eventDao.getEventByKeywords(keywords);

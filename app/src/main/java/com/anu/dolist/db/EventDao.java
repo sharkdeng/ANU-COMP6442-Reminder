@@ -29,12 +29,23 @@ public interface EventDao {
 
 
     @Query("SELECT * FROM event")
+    List<Event> getAllEvents();
+
+
+    @Query("SELECT * FROM event")
     Cursor getAllEventsCursor();
+
+
+    @Query("SELECT * FROM event WHERE completed")
+    List<Event> getAllCompletedEvents();
 
 
     @Query("SELECT * FROM event WHERE completed")
     Cursor getAllCompletedEventsCursor();
 
+
+    @Query("SELECT * FROM event WHERE not completed")
+    List<Event> getAllIncompletedEvents();
 
     @Query("SELECT * FROM event WHERE not completed")
     Cursor getAllIncompletedEventsCursor();
@@ -46,8 +57,6 @@ public interface EventDao {
     @Query("SELECT * FROM event WHERE title LIKE '%' || :keywords|| '%'")
     Cursor getEventByKeywords(String keywords);
 
-    @Query("SELECT * FROM event")
-    List<Event> getAllEvents();
 
 
     @Query("DELETE FROM event")
