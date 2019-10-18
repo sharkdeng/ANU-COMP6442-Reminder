@@ -6,20 +6,70 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.CalendarView;
+import android.view.View;
+import android.widget.TextView;
 
+import sun.bob.mcalendarview.*;
+import sun.bob.mcalendarview.listeners.OnDateClickListener;
+import sun.bob.mcalendarview.vo.DateData;
+
+import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
- * @author Limin Deng(u6849956)
+ * @author Limin Deng(u6849956), Ran Zhang(u6760490)
+ *
+ * CalendarActivity is second calendar view of events for user.
  */
 public class CalendarActivity extends AppCompatActivity {
 
+    private EventRepository er = new EventRepository(getApplication());
+    Map<String,List<String>> es = new HashMap<>();
+    TextView tv;
+    private DateData day;
+
+    /**
+     *  parse date into array for setting marks on calendar
+     * @param date date which need to be parsed
+     * @return parsed date in array type
+     */
+    public static int[] parseDate(String date){
+        int[] time = new int[3];
+        String[] tmp = date.split("/");
+        time[0] = Integer.valueOf(tmp[2])+2000;
+        time[1] = Integer.valueOf(tmp[1]);
+        time[2] = Integer.valueOf(tmp[0]);
+        return time;
+    }
+
+    /**
+     * record events which are in the same day for showing
+     * @param map place to store events
+     * @param a event need to be stored
+     */
+    public static  void registevent(Map<String,List<String>> map, Event a){
+        if(!map.containsKey(a.date)){
+            List<String > tmp = new ArrayList<>();
+
+            tmp.add(a.title+" " +a.time);
+            map.put(a.date,tmp);
+        }
+        else{
+            map.get(a.date).add(a.title+" "+a.time);
+        }
+    }
 
     /**
      * Perform initialization of all fragments.
@@ -28,6 +78,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
@@ -47,99 +98,47 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         // get the reference of CalendarView
-        CalendarView cv = findViewById(R.id.cal);
+        MCalendarView cv =  findViewById(R.id.cal);
+        cv.getMarkedDates().removeAdd();
 
-//        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-//            @Override
-//            public void onSelectedDayChange(CalendarView calendarView, int year, int month, int date) {
-//
-//                // to next activity
-//                Intent go = new Intent(CalendarActivity.this, DayActivity.class);
-//
-//                // get selected date
-//                // working
-//                String selectedDate = date + "/" + month + "/" + year;
-//
-//                // pop up window
-//                Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();
-//
-//
-//                Calendar c = Calendar.getInstance();
-//                c.set(year, month, date);
-//                long eventOccursOn = c.getTimeInMillis(); //this is what you want to use later
-//
-//
-//                // get selected date
-//                // not working
-//                // return null
-////                long selectedDate = calendarView.getDate();
-////                Date sd = new Date(selectedDate);
-//
-//                String monthString = "";
-//                switch (month) {
-//                    case 1:
-//                        monthString = "January";
-//                        break;
-//                    case 2:
-//                        monthString = "February";
-//                        break;
-//                    case 3:
-//                        monthString = "March";
-//                        break;
-//                    case 4:
-//                        monthString = "April";
-//                        break;
-//                    case 5:
-//                        monthString = "May";
-//                        break;
-//                    case 6:
-//                        monthString = "June";
-//                        break;
-//                    case 7:
-//                        monthString = "July";
-//                        break;
-//                    case 8:
-//                        monthString = "August";
-//                        break;
-//                    case 9:
-//                        monthString = "September";
-//                        break;
-//                    case 10:
-//                        monthString = "October";
-//                        break;
-//                    case 11:
-//                        monthString = "November";
-//                        break;
-//                    case 12:
-//                        monthString = "December";
-//                        break;
-//                }
-//                // pass data to next activity first
-//                go.putExtra("SelectedDate", selectedDate);
-//                go.putExtra("Month", monthString);
-//
-//                // then transit
-//                startActivity(go);
-//
-//                // close current activity
-////                finish();
-//            }
-//        });
+        List<Event> events = er.getAllEvents();
+        for(Event a:events){
 
+            int [] tmp =parseDate(a.date);
+            registevent(es,a);
+            if(!a.completed)
+            cv.markDate(
+                    new DateData(tmp[0], tmp[1], tmp[2]).setMarkStyle(new MarkStyle(  MarkStyle.BACKGROUND, Color.RED)
+                    ));
+            else
+                cv.markDate(
+                        new DateData(tmp[0], tmp[1], tmp[2]).setMarkStyle(new MarkStyle(  MarkStyle.BACKGROUND, Color.GREEN)
+                        ));
+        }
 
+        cv.setOnDateClickListener(new OnDateClickListener() {
+            @Override
+            public void onDateClick(View view, DateData date) {
+                String d = ""+date.getDay()+"/"+date.getMonth()+"/"+(date.getYear()-2000);
+                tv = findViewById(R.id.textView);
+                ((MCalendarView)findViewById(R.id.cal)).travelTo(date);
 
-        // select current day
-        Calendar now = Calendar.getInstance();
-        cv.setDate(now.getTimeInMillis());
+                if(day!=null) {
+                    System.out.println(day.getDay());
+                    ((MCalendarView) findViewById(R.id.cal)).unMarkDate(day);
+                }
+                day = date;
+                ((MCalendarView)findViewById(R.id.cal)).markDate(day).setMarkedStyle(MarkStyle.LEFTSIDEBAR);
+                if(es.containsKey(d)) {
+                    List<String> show = es.get(d);
+                    String result = "";
+                    for (String a : show) result += (a + "\n");
 
-
-        // set Monday as the first day of the week
-        cv.setFirstDayOfWeek(2);
-
-
-
-
-
+                    tv.setText(result);
+                }
+                else tv.setText("");
+            }
+        });
 
         // Done: how to avoid conflicts
         // because setSelectedItem is not changed

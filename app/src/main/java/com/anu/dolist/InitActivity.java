@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * author: Limin Deng(u6849956)
+ * Populates welcome page for our app
  */
 public class InitActivity extends AppCompatActivity {
 

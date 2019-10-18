@@ -10,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * @author: Limin
+ * @author: Limin (U6849956)
+ * Event is the table created for storing notes.
  */
 @Entity(tableName = "event",
         indices = {@Index("title"), @Index("location"), @Index("date"), @Index("time"), @Index("alert"), @Index("url"), @Index("notes"),
@@ -63,7 +64,7 @@ public class Event {
     /**
      * Error: Room cannot pick a constructor since multiple constructors are suitable.
      * use @Ignore to silence multiple constructor
-     * @param title
+     * @param title : title for your note.
      */
 
     public Event(@NotNull String title) {

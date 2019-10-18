@@ -12,7 +12,10 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 
-
+/**
+ * @author: Limin (U6849956)
+ * EventDatbase to store all the note events.
+ */
 
 @Database(entities = {Event.class},
         version = 1,

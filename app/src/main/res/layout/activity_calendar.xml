@@ -9,19 +9,19 @@
     tools:context=".MainActivity">
 
 
-    <CalendarView
+    <sun.bob.mcalendarview.MCalendarView
         android:id="@+id/cal"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="387dp"
+        android:layout_height="547dp"
+        android:firstDayOfWeek="2"
         android:isScrollContainer="true"
         app:layout_constraintBottom_toTopOf="@id/cal_nav_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </CalendarView>
 
-
+    </sun.bob.mcalendarview.MCalendarView>
 
     <!-- Bottom Nav Menu -->
     <FrameLayout
@@ -36,27 +36,32 @@
 
 
         <!-- Bottom Nav Menu -->
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/cal_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/controlNormal"
-            app:itemIconTint="@color/white"
-            app:itemTextColor="@color/white"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/main_bottom_nav">
-
-        </com.google.android.material.bottomnavigation.BottomNavigationView>
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="382dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/cal_nav"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/cal_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/controlNormal"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/main_bottom_nav"
+        tools:layout_editor_absoluteX="0dp">
 
-
-
-
-
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

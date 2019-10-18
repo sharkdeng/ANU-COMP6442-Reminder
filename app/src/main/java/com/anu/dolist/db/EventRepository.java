@@ -9,6 +9,12 @@ import android.os.AsyncTask;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+
+/**
+ * @author: Limin (U6849956)
+ * EventRepo to execute DAO.
+ */
+
 public class EventRepository  {
 
     private EventDao eventDao;

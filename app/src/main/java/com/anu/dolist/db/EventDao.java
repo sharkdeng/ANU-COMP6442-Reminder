@@ -11,6 +11,10 @@ import androidx.room.Update;
 
 import java.util.List;
 
+/**
+ * @author: Limin (U6849956)
+ * DAO for EventDatabase to implement queries.
+ */
 
 @Dao
 public interface EventDao {

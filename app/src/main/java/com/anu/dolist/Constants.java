@@ -10,8 +10,11 @@ public class Constants {
     public static double CURRENT_LAT;
     public static double CURRENT_LON;
 
+    // Notification codes
     public final static String NOTIFICATION_CHANNEL_ID = "10001" ;
     public final static String default_notification_channel_id = "default" ;
+
+    //Calendar code
     public final static int MY_PERMISSIONS_REQUEST_WRITE_CALENDAR = 123;
 
 

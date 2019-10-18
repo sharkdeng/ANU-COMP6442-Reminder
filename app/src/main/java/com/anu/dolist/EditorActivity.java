@@ -62,11 +62,12 @@ import static com.anu.dolist.MainActivity.arrayAdapter;
 
 
 /**
- * @author Limin Deng(u6849956)
+ * @author Limin Deng(u6849956), Supriya Kamble(u6734521)
+ * EditorActivity: Add Event, edit event, delete event, notification alert transmitter location set happens here.
  */
 public class EditorActivity extends AppCompatActivity {
 
-
+    //global varibles declared.
     private int eventId = -1;
     private Intent go; // received information
 
@@ -90,7 +91,9 @@ public class EditorActivity extends AppCompatActivity {
 
 
         context = EditorActivity.this;
-        // UI
+        /* UI declared.
+
+        */
         final EditText editTitle = findViewById(R.id.edit_event_title);
         // it has been changed to places autocomplete
         //final EditText editLocation = findViewById(R.id.edit_event_location);
@@ -240,7 +243,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
         /**
-         * select date
+         * get the date from user
          */
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,7 +291,7 @@ public class EditorActivity extends AppCompatActivity {
 
         /**
          * Callbacks for cancel and add actions
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,7 +303,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
         /**
-         * alert
+         * get to know from user if they want the alarm for note.
          */
         editAlert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,6 +329,10 @@ public class EditorActivity extends AppCompatActivity {
 
             }
         });
+
+        /**
+         * Add event to google calenadar
+         */
 
         calEvent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -479,7 +486,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Supriya Kamble
+     * @author Supriya Kamble
      * @param notification
      * @param delay: time to shoot notification
      * @param id: notification id
@@ -497,7 +504,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Supriya Kamble
+     * @author Supriya Kamble
      * @param content
      * @return
      */
