@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
         // enable geofence
         // for location triggered notificaton
-//        enableGeofence();
+        enableGeofence();
 
 
         /**
