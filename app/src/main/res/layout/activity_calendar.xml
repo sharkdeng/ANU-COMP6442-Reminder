@@ -9,19 +9,17 @@
     tools:context=".MainActivity">
 
 
-    <CalendarView
+
+    <sun.bob.mcalendarview.MCalendarView
         android:id="@+id/cal"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:firstDayOfWeek="2"
         android:isScrollContainer="true"
         app:layout_constraintBottom_toTopOf="@id/cal_nav_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </CalendarView>
-
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Bottom Nav Menu -->
     <FrameLayout

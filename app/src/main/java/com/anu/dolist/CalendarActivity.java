@@ -6,13 +6,19 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.CalendarView;
+import sun.bob.mcalendarview.*;
+import sun.bob.mcalendarview.vo.DateData;
 
+import com.anu.dolist.db.Event;
+import com.anu.dolist.db.EventRepository;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -20,6 +26,17 @@ import java.util.Calendar;
  */
 public class CalendarActivity extends AppCompatActivity {
 
+    private EventRepository er = new EventRepository(getApplication());
+
+
+    public static int[] parseDate(String date){
+        int[] time = new int[3];
+        String[] tmp = date.split("/");
+        time[0] = Integer.valueOf(tmp[2])+2000;
+        time[1] = Integer.valueOf(tmp[1]);
+        time[2] = Integer.valueOf(tmp[0]);
+        return time;
+    }
 
     /**
      * Perform initialization of all fragments.
@@ -47,7 +64,20 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         // get the reference of CalendarView
-        CalendarView cv = findViewById(R.id.cal);
+        MCalendarView cv = ((MCalendarView) findViewById(R.id.cal));
+        List<Event> events = er.getAllEvents();
+        for(Event a:events){
+            System.out.println(a.date);
+            int [] tmp =parseDate(a.date);
+            if(!a.completed)
+            cv.markDate(
+                    new DateData(tmp[0], tmp[1], tmp[2]).setMarkStyle(new MarkStyle(  MarkStyle.BACKGROUND, Color.RED)
+                    ));
+            else
+                cv.markDate(
+                        new DateData(tmp[0], tmp[1], tmp[2]).setMarkStyle(new MarkStyle(  MarkStyle.BACKGROUND, Color.GREEN)
+                        ));
+        }
 
 //        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 //            @Override
@@ -129,12 +159,11 @@ public class CalendarActivity extends AppCompatActivity {
 
 
         // select current day
-        Calendar now = Calendar.getInstance();
-        cv.setDate(now.getTimeInMillis());
+
 
 
         // set Monday as the first day of the week
-        cv.setFirstDayOfWeek(2);
+
 
 
 
