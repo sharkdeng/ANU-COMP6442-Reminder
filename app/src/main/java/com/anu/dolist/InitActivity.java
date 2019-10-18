@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * author: Limin Deng(u6849956)
+ * author Limin Deng(u6849956)
  */
 public class InitActivity extends AppCompatActivity {
 

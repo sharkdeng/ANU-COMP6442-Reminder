@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 
 /**
- * @author: Limin
+ * @author Limin
  */
 @Entity(tableName = "event",
         indices = {@Index("title"), @Index("location"), @Index("date"), @Index("time"), @Index("alert"), @Index("url"), @Index("notes"),

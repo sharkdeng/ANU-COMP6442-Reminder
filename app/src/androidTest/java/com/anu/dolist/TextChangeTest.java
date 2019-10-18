@@ -12,10 +12,7 @@
     import androidx.test.filters.LargeTest;
     import androidx.test.rule.ActivityTestRule;
     import androidx.test.core.app.ApplicationProvider;
-    import androidx.test.uiautomator.UiDevice;
-    import androidx.test.uiautomator.UiObject;
-    import androidx.test.uiautomator.UiObjectNotFoundException;
-    import androidx.test.uiautomator.UiSelector;
+
 
     import com.anu.dolist.db.Event;
     import com.anu.dolist.db.EventDao;
@@ -44,7 +41,7 @@
     import static org.hamcrest.Matchers.equalTo;
 
     /**
-     * author: u6734521(Supriya Kamble)
+     * author u6734521(Supriya Kamble)
      */
 
     @LargeTest

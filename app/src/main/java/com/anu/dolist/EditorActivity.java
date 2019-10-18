@@ -418,7 +418,7 @@ public class EditorActivity extends AppCompatActivity {
 
         /**
          * Callbacks for cancel and add actions
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -611,7 +611,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Supriya Kamble
+     * @author Supriya Kamble
      * @param notification
      * @param delay: time to shoot notification
      * @param id: notification id
@@ -629,7 +629,7 @@ public class EditorActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Supriya Kamble
+     * @author Supriya Kamble
      * @param content
      * @return
      */

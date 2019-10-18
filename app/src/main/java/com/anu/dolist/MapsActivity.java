@@ -125,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         /**
          * BottomNavigationView
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
         BottomNavigationView bnv = findViewById(R.id.map_nav);
@@ -252,7 +252,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * independet function for clear map and add markers back again
-     * @author: Limin Deng
+     * @author Limin Deng
      */
     public void addAllEventMarkers() {
 
@@ -317,7 +317,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * independent function to draw geofence circles
-     * @author: Limin Deng
+     * @author Limin Deng
      */
     public void addAllGeofenceCircles() {
         List<Event> events = er.getAllEvents();
@@ -401,7 +401,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Add menu items to toolbar
-     * @author: u6734521
+     * @author u6734521
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

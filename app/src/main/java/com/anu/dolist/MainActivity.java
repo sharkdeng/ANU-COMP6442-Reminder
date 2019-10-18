@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Add menu items to toolbar
-     * @author: u6734521
+     * @author u6734521
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * callback for menu
      * @param item
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -160,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * @author: u6734521
+     * @author u6734521
      * listView for notes taking with an example note
      * SharedPreferences to store data
      */
@@ -307,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * if the event is completed, cannot modify it
          * if the event is incomplete, mark as complete or modify it
-         * @author: u6734521
+         * @author u6734521
          * to jump to editor activity when the list item is pressed.
          */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -341,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         /*
-        @author: u6734521
+        @author u6734521
         when the list is long pressed, pop up delete alert confirmation.
         if opted yes, delete else keep data as such.
         sharedPreference to update delete
@@ -380,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * BottomNavigationView
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
         BottomNavigationView bnv = findViewById(R.id.main_nav);
@@ -418,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * check completed and update database
          * load data
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         myCursor = er.getAllEventsCursor();
         MyCursor ca = new MyCursor(getApplicationContext(), myCursor);
@@ -430,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * get current location
-     * @author: Limin Deng
+     * @author Limin Deng
      */
 //    public void getCurrentLocation() {
 //
@@ -510,7 +509,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //    /**
 //     * code snipt to get permission for retrieving current location
-//     * @author: Limin Deng
+//     * @author Limin Deng
 //     */
 //    private void getLocationPermission() {
 //
@@ -542,7 +541,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //    /**
 //     * one more permission for geofence
-//     * @author: Limin Deng
+//     * @author Limin Deng
 //     */
 //    private void getBackLocPermission() {
 //
@@ -573,7 +572,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //    /**
 //     * geofence - 3 get pending intent
-//     * @author: Limin Deng
+//     * @author Limin Deng
 //     */
 //    private PendingIntent geofencePendingIntent;
 //    private PendingIntent getGeofencePendingIntent(Event event) {
@@ -596,7 +595,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //
 //    /**
-//     * @author: Limin Deng
+//     * @author Limin Deng
 //     */
 //    public void enableGeofence() {
 //        /**
