@@ -36,6 +36,7 @@ public class CalendarActivity extends AppCompatActivity {
     private EventRepository er = new EventRepository(getApplication());
     Map<String,List<String>> es = new HashMap<>();
     TextView tv;
+    private DateData day;
 
     /**
      *  parse date into array for setting marks on calendar
@@ -75,6 +76,7 @@ public class CalendarActivity extends AppCompatActivity {
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("create");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
@@ -95,6 +97,8 @@ public class CalendarActivity extends AppCompatActivity {
 
         // get the reference of CalendarView
         MCalendarView cv =  findViewById(R.id.cal);
+        cv.getMarkedDates().removeAdd();
+
         List<Event> events = er.getAllEvents();
         for(Event a:events){
 
@@ -115,6 +119,14 @@ public class CalendarActivity extends AppCompatActivity {
             public void onDateClick(View view, DateData date) {
                 String d = ""+date.getDay()+"/"+date.getMonth()+"/"+(date.getYear()-2000);
                 tv = findViewById(R.id.textView);
+                ((MCalendarView)findViewById(R.id.cal)).travelTo(date);
+
+                if(day!=null) {
+                    System.out.println(day.getDay());
+                    ((MCalendarView) findViewById(R.id.cal)).unMarkDate(day);
+                }
+                day = date;
+                ((MCalendarView)findViewById(R.id.cal)).markDate(day).setMarkedStyle(MarkStyle.LEFTSIDEBAR);
                 if(es.containsKey(d)) {
                     List<String> show = es.get(d);
                     String result = "";
