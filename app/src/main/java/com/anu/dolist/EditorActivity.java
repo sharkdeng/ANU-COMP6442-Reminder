@@ -61,7 +61,7 @@ import static com.anu.dolist.MainActivity.arrayAdapter;
 
 
 /**
- * @author: Limin Deng(u6849956)
+ * @author Limin Deng(u6849956)
  */
 public class EditorActivity extends AppCompatActivity {
 
@@ -77,7 +77,10 @@ public class EditorActivity extends AppCompatActivity {
     private String newLocation = ""; // container to store the selected place
 
 
-
+    /**
+     * Perform initialization of all fragments.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -635,6 +638,11 @@ public class EditorActivity extends AppCompatActivity {
         return builder.build() ;
     }
 
+    /**
+     * check for WRITE_CALENDAR permission
+     * @return true if successfully gain permission
+     */
+
     public boolean checkPermission()
     {
         int currentAPIVersion = Build.VERSION.SDK_INT;
@@ -665,6 +673,13 @@ public class EditorActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    /**
+     * Callback for the result from requesting permissions. If permission gained, we will be able to write events on calendar.
+     * @param requestCode The request code passed in requestPermissions
+     * @param permissions The requested permissions
+     * @param grantResults The grant results for the corresponding permissions which is either PERMISSION_GRANTED or PERMISSION_DENIED.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -678,6 +693,12 @@ public class EditorActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    /**
+     *
+     * @param events the event will be recorded
+     * @param timeInMilli The time when it is scheduled
+     */
     private void writeCalendarEvent(Event events, long timeInMilli) {
         final ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -703,6 +724,12 @@ public class EditorActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Event Created", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * check scheduled time for not setting a past event
+     * @param current current time
+     * @param scheduled scheduled time, it must be later than current time
+     * @return true if schedule time is later than current time.
+     */
     private boolean checkPastDateTime(long current, long scheduled) {
         if (scheduled <= current) {
             new AlertDialog.Builder(EditorActivity.this)
@@ -717,6 +744,11 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
+    /**
+     *
+     * @param dateTimeString transform String type time to long type time, which is represented by the number of microseconds which has been passed
+     * @return transformed number which represent passed microseconds.
+     */
     private long getTimeinMilli(String dateTimeString) {
         Calendar calendarUpdate = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yy hh:mm");

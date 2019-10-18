@@ -16,13 +16,14 @@ import java.util.Calendar;
 
 
 /**
- * @author: Limin Deng(u6849956)
+ * @author Limin Deng(u6849956)
  */
 public class CalendarActivity extends AppCompatActivity {
 
 
     /**
-     * @author: Limin
+     * Perform initialization of all fragments.
+     * @author Limin
      * @param savedInstanceState
      */
     @Override
@@ -142,8 +143,9 @@ public class CalendarActivity extends AppCompatActivity {
 
         // Done: how to avoid conflicts
         // because setSelectedItem is not changed
+
         /**
-         * @author: Limin Deng(u6849956)
+         * @author Limin Deng(u6849956)
          */
         // callback when item on BottomNavigationView is selected
         BottomNavigationView bnv = findViewById(R.id.cal_nav);
