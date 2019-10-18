@@ -10,7 +10,9 @@ import android.content.Intent ;
 
 import com.anu.dolist.Constants;
 
-
+/**
+ * reference: https://www.tutorialspoint.com/how-to-create-everyday-notifications-at-certain-time-in-android
+ */
 public class MyNotificationPublisher extends BroadcastReceiver {
     public static String NOTIFICATION_ID = "notification-id" ;
     public static String NOTIFICATION = "notification" ;

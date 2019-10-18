@@ -23,6 +23,9 @@ import com.google.android.gms.location.GeofencingEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * author: Limin Deng(U6849956)
+ */
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
