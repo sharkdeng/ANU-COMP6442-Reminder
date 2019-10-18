@@ -97,9 +97,7 @@ public class TestMainActivity {
 
         assertThat(rowCount, equalTo(events.size()));
 
-
     }
-
 
     @Test
     public void testMainShowAllComplete() {
@@ -119,7 +117,6 @@ public class TestMainActivity {
 
 
     }
-
 
     /**
      * Test delete all events
@@ -141,35 +138,6 @@ public class TestMainActivity {
 
     }
 
-
-    @Test
-    public void testMainPopulate() {
-
-    }
-
-
-
-    @Test
-    public void testMainMarkComplete() {
-
-    }
-
-
-
-    @Test
-    public void testMainMarkIncomplete() {
-
-    }
-
-    @Test
-    public void testMainEdit() {
-
-    }
-
-    @Test
-    public void testMainAdd() {
-
-    }
 
 
     /**
