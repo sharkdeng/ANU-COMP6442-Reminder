@@ -28,6 +28,12 @@ import java.util.List;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
+
+/**
+ * @author Supriya Kamble(U6734521)
+ * Testcases for database add, update and delete.
+ */
+
 @RunWith(AndroidJUnit4.class)
 public class TestDao {
     private EventRepository er;
@@ -43,6 +49,9 @@ public class TestDao {
         er= new EventRepository(activityRule.getActivity().getApplication());
     }
 
+    /**
+     * Insert into database test case
+     */
 
     @Test
     public void insertTestDb() {
@@ -67,7 +76,11 @@ public class TestDao {
         assertThat(events.get(0).notes, equalTo(one.notes));
         assertThat(events.get(0).location, equalTo(one.location));
 
+
     }
+    /**
+     * Update database test case
+     */
 
     @Test
     public void updateTestDb() {
@@ -80,6 +93,9 @@ public class TestDao {
         assertThat(events.get(0).title, equalTo(one.title));
         assertThat(events.get(0).date, equalTo(one.date));
     }
+    /**
+     * Delete database test case
+     */
 
     @Test
     public void deleteTestDb() {

@@ -12,7 +12,10 @@
     import androidx.test.filters.LargeTest;
     import androidx.test.rule.ActivityTestRule;
     import androidx.test.core.app.ApplicationProvider;
-
+    import androidx.test.uiautomator.UiDevice;
+    import androidx.test.uiautomator.UiObject;
+    import androidx.test.uiautomator.UiObjectNotFoundException;
+    import androidx.test.uiautomator.UiSelector;
 
     import com.anu.dolist.db.Event;
     import com.anu.dolist.db.EventDao;
@@ -41,7 +44,8 @@
     import static org.hamcrest.Matchers.equalTo;
 
     /**
-     * author u6734521(Supriya Kamble)
+     * author: u6734521(Supriya Kamble)
+     * Test cases for note edit and save
      */
 
     @LargeTest
@@ -71,6 +75,10 @@
         public void createDb() {
             er= new EventRepository(activityRule.getActivity().getApplication());
         }
+
+        /**
+         * title edit test
+         */
         @Test
         public void changeTitleText() {
 
@@ -84,6 +92,10 @@
     //
         }
 
+        /**
+         * date test
+         */
+
         @Test
         public void changeDateText() {
 
@@ -93,6 +105,9 @@
                 onView(withId(R.id.edit_event_date))
                         .check(matches(withText(mDate)));
             }
+        /**
+         * time test
+         */
 
             @Test
             public void changeTimeText() {
@@ -106,6 +121,9 @@
 
 
         }
+        /**
+         * url test
+         */
 
         @Test
         public void changeUrlText() {
@@ -118,7 +136,9 @@
 
 
         }
-
+        /**
+         * notes test
+         */
 
         @Test
         public void changeNotesText() {
@@ -129,6 +149,10 @@
             onView(withId(R.id.edit_event_notes))
                     .check(matches(withText("Welcome to Australian National University")));
         }
+
+        /**
+         * save button test
+         */
 
         @Test
         public void saveButton() {

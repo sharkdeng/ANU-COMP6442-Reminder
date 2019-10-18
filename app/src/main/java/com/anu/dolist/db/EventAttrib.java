@@ -1,6 +1,9 @@
 package com.anu.dolist.db;
 
-
+/**
+ *@author: Limin (U6849956)
+ * EventAttribute constants used for activity change
+ */
 
 public enum EventAttrib {
 

@@ -29,7 +29,9 @@ import java.util.Map;
 
 
 /**
- * @author Limin Deng(u6849956) Ran Zhang(u6760490)
+ * @author Limin Deng(u6849956), Ran Zhang(u6760490)
+ *
+ * CalendarActivity is second calendar view of events for user.
  */
 public class CalendarActivity extends AppCompatActivity {
 

@@ -12,6 +12,11 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+
+/**
+ * @author Ran Zhang(u6760490)
+ * Calendar insertion test
+ */
 public class CalendarActivityTest {
     int CaseSize = 10;
 

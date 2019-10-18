@@ -2,7 +2,8 @@
     <string name="app_name">Reminder</string>
     <string name="init_welcome">Welcome Reminder</string>
     <string name="init_btn_content">Welcome</string>
-    <string name="init_authors">Supriya Kamble(),\nLimin Deng(u6849956),\n presents @2019</string>
+    <string name="init_authors">Supriya Kamble(u6734521),\nLimin Deng(u6849956),
+        \nYun Guan(u3425167),  \nRan Zhang(u6760490),\n presents @2019</string>
     <string name="main_item_2">Calendar</string>
     <string name="main_item_3">Location</string>
     <string name="main_item_1">ToDoList</string>

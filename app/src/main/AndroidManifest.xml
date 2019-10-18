@@ -43,7 +43,7 @@
             android:value="@string/google_maps_key" />
 
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".InitActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -62,7 +62,7 @@
 
         <activity android:name=".CalendarActivity" />
 
-        <activity android:name=".InitActivity" />
+        <activity android:name=".MainActivity" />
 
 
         <!-- Notification -->
