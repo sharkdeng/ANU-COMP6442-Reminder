@@ -56,6 +56,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.ExecutionException;
 
 import static com.anu.dolist.MainActivity.arrayAdapter;
 
@@ -213,137 +214,6 @@ public class EditorActivity extends AppCompatActivity {
 
 
         /**
-         * Floating Action Bar
-         */
-        FloatingActionButton fab = findViewById(R.id.edit_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // empty alert
-                if (editTitle.getText().toString().equals("") ||
-                    editDate.getText().toString().equals("dd/MM/yy")||
-                        editTime.getText().toString().equals("00:00")){
-                    Snackbar.make(view, "Title, Date and Time cannot be empty!", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null)
-                            .show();
-
-                } else {
-
-
-
-                    final EventRepository er = new EventRepository(getApplication());
-
-
-                    // insert one record
-                    if (eventId == -1) {
-
-                        Event newEvent = new Event(editTitle.getText().toString());
-                        //FIXED
-//                        newEvent.location = editLocation.getText().toString();
-                        newEvent.location = newLocation;
-                        newEvent.date = editDate.getText().toString();
-                        newEvent.time = editTime.getText().toString();
-                        newEvent.alert = editAlert.getText().toString();
-                        newEvent.url = editUrl.getText().toString();
-                        newEvent.notes = editNote.getText().toString();
-                        newEvent.completed = false;
-
-                        String dateTime =newEvent.date+" "+newEvent.time;
-                        System.out.println("show dateTime: "+dateTime);
-                        long current = Calendar.getInstance().getTimeInMillis(); // current time
-                        long scheduled = getTimeinMilli(dateTime); // schedule time
-
-                        falseDatePicker = checkPastDateTime(current,scheduled);
-                        if(!(falseDatePicker)) {
-                            er.insertOneEvent(newEvent);
-
-                            if (eventOnCalendar) {
-                                writeCalendarEvent(newEvent, scheduled);
-                            }
-
-                            // schedule notification
-                            if (!editAlert.getText().toString().equals("None")) {
-                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
-                            }
-
-                            // show info
-                            Context context = getApplicationContext();
-                            CharSequence text = "Add completely";
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-
-
-                            // after toast, finish the activity
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                    EditorActivity.this.finish();
-                                }
-                            }, 1000);
-                        }
-                        // update
-                    } else {
-
-                        Event selectedEvent = er.getEventById(eventId);
-                        selectedEvent.title = editTitle.getText().toString();
-                        // TODO
-//                        selectedEvent.location = editLocation.getText().toString();
-                        selectedEvent.location = newLocation;
-                        selectedEvent.date = editDate.getText().toString();
-                        selectedEvent.time = editTime.getText().toString();
-                        selectedEvent.alert = editAlert.getText().toString();
-                        selectedEvent.url = editUrl.getText().toString();
-                        selectedEvent.notes = editNote.getText().toString();
-                        selectedEvent.completed = false;
-
-                        String dateTime =selectedEvent.date+" "+selectedEvent.time;
-                        long current = Calendar.getInstance().getTimeInMillis(); // current time
-                        long scheduled = getTimeinMilli(dateTime); // schedule time
-
-                        falseDatePicker = checkPastDateTime(current,scheduled);
-                        if(!(falseDatePicker)) {
-
-                            er.updateOneEvent(selectedEvent);
-
-                            if (eventOnCalendar) {
-                                writeCalendarEvent(selectedEvent, scheduled);
-                            }
-
-                            // schedule notification
-                            if (!editAlert.getText().toString().equals("None")) {
-                                scheduleNotification(getNotification(editTitle.getText().toString()), scheduled, eventId);
-                            }
-
-                            // show info
-                            Context context = getApplicationContext();
-                            CharSequence text = "Update completely";
-                            int duration = Toast.LENGTH_SHORT;
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
-
-
-                            // after toast, finish the activity
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    startActivity(new Intent(EditorActivity.this, MainActivity.class));
-                                    EditorActivity.this.finish();
-                                }
-                            }, 1000);
-                        }
-
-                    }
-
-                }
-
-
-            }
-        });
-
-
-        /**
          * select time
          */
         editTime.setOnClickListener(new View.OnClickListener() {
@@ -485,16 +355,8 @@ public class EditorActivity extends AppCompatActivity {
                         editDate.getText().toString().equals("dd/MM/yy")||
                         editTime.getText().toString().equals("00:00")) {
                     // show alert
-                    new AlertDialog.Builder(EditorActivity.this)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("Title cannot be empty")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    System.out.println("do nothing");
-                                }
-                            })
-                            //.setNegativeButton("No",null)
+                    Snackbar.make(view, "Title, Date and Time cannot be empty!", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null)
                             .show();
 
                 } else {
@@ -523,7 +385,13 @@ public class EditorActivity extends AppCompatActivity {
 
                         falseDatePicker = checkPastDateTime(current,scheduled);
                         if(!(falseDatePicker)) {
-                            er.insertOneEvent(newEvent);
+                            try {
+                                er.insertOneEvent(newEvent);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             // schedule notification
                             if (!editAlert.getText().toString().equals("None")) {
@@ -558,7 +426,7 @@ public class EditorActivity extends AppCompatActivity {
                         updatedEvent.title = editTitle.getText().toString();
                         //TODO
 //                        updatedEvent.location = editLocation.getText().toString();
-                        updatedEvent.location = newLocation;
+                        updatedEvent.location = newLocation.substring(0, 20); // substring to make the UI beautiful
                         updatedEvent.date = editDate.getText().toString();
                         updatedEvent.time = editTime.getText().toString();
                         updatedEvent.alert = editAlert.getText().toString();
@@ -574,7 +442,13 @@ public class EditorActivity extends AppCompatActivity {
 
                         falseDatePicker = checkPastDateTime(current,scheduled);
                         if(!(falseDatePicker)) {
-                            er.updateOneEvent(updatedEvent);
+                            try {
+                                er.updateOneEvent(updatedEvent);
+                            } catch (ExecutionException e) {
+                                e.printStackTrace();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                             if(eventOnCalendar) {
                                 writeCalendarEvent(updatedEvent, scheduled);
